@@ -5,7 +5,7 @@ const func = require('./functions.js')
 const app = express();
 
 const PATH = 'DummyData/'
-const PORT = 3000;
+const PORT = 8061;
 
 app.use(express.json());
 
