@@ -1,0 +1,16 @@
+import "hashes/sha256/sha256Padded" as sha256;
+
+def main<N>(u8[N] input, u8[32] nonce, u32[8] commitment) -> bool{
+    // concatenate the input and the nonce
+    u8[N+32] inputWithNonce = [...nonce, ...input];
+    log("inputWithNonce is {}", inputWithNonce);
+
+    u32[8] h = sha256(inputWithNonce);
+
+    for u32 i in 0..8 {
+        assert(h[i] == commitment[i]);
+    }
+
+    log("h is {}", h);
+    return true;
+}
