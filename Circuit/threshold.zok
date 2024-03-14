@@ -1,0 +1,11 @@
+const u16 MAX_VALUE = 850;
+
+def main(private u16 a, u16 t) -> bool{
+    // Check if A and T are within bounds
+    assert(a <= MAX_VALUE);
+    assert(t <= MAX_VALUE);
+
+    assert(a >= t);
+    return true;
+}
+
