@@ -17,13 +17,33 @@
         "size": 32,
         "type": "u8"
       }
+    },
+    {
+      "name": "creditScore",
+      "public": false,
+      "type": "u16"
+    },
+    {
+      "name": "t",
+      "public": true,
+      "type": "u16"
     }
   ],
   "output": {
-    "type": "array",
+    "type": "tuple",
     "components": {
-      "size": 8,
-      "type": "u32"
+      "elements": [
+        {
+          "type": "array",
+          "components": {
+            "size": 8,
+            "type": "u32"
+          }
+        },
+        {
+          "type": "bool"
+        }
+      ]
     }
   }
 }
