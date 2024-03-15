@@ -14,16 +14,16 @@
       "public": false,
       "type": "array",
       "components": {
-        "size": 32,
+        "size": 256,
         "type": "u8"
       }
     },
     {
-      "name": "msg_hash",
+      "name": "msg",
       "public": false,
       "type": "array",
       "components": {
-        "size": 32,
+        "size": 576,
         "type": "u8"
       }
     },
@@ -32,7 +32,7 @@
       "public": false,
       "type": "array",
       "components": {
-        "size": 32,
+        "size": 256,
         "type": "u8"
       }
     }
