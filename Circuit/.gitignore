@@ -1,6 +1,7 @@
+out
+witness 
+proof.json
 *.wtns
 *.r1cs
-out
-proof.json
+*.sol
 *.key
-witness 
