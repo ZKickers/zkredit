@@ -1,0 +1,6 @@
+*.wtns
+*.r1cs
+out
+proof.json
+*.key
+witness
