@@ -1,6 +1,6 @@
 from "./commitment.zok" import main as commitment_func;
 
-def main(private u8[26] input, private u8[32] nonce) -> u32[8]{
-    u32[8] id = commitment_func(input, nonce);
+def main(private u8[26] clientData, private u8[32] nonce) -> u32[8]{
+    u32[8] id = commitment_func(clientData, nonce);
     return id;
 }

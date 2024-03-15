@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Compile
 zokrates compile -i root.zok
 
