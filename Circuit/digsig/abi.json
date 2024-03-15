@@ -1,0 +1,47 @@
+{
+  "inputs": [
+    {
+      "name": "e",
+      "public": false,
+      "type": "array",
+      "components": {
+        "size": 3,
+        "type": "u8"
+      }
+    },
+    {
+      "name": "n",
+      "public": false,
+      "type": "array",
+      "components": {
+        "size": 32,
+        "type": "u8"
+      }
+    },
+    {
+      "name": "msg_hash",
+      "public": false,
+      "type": "array",
+      "components": {
+        "size": 32,
+        "type": "u8"
+      }
+    },
+    {
+      "name": "sig",
+      "public": false,
+      "type": "array",
+      "components": {
+        "size": 32,
+        "type": "u8"
+      }
+    }
+  ],
+  "output": {
+    "type": "array",
+    "components": {
+      "size": 8,
+      "type": "u32"
+    }
+  }
+}
