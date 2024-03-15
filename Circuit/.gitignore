@@ -2,5 +2,6 @@
 *.r1cs
 out
 proof.json
-*.key
+proving.key
+verification.key
 witness
