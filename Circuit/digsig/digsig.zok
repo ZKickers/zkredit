@@ -1,0 +1,21 @@
+import "hashes/sha256/sha256Padded" as sha256;
+
+def verifyRSA<N_K, N>(u8[3] e, u8[N_K] n, u8[N] msg, u8[N_K] sig) -> bool{
+    u32[8] msg_hash = sha256(msg);
+
+    u32[8] decoded_hash = modexp(sig, e, n);
+
+    for u32 i in 0..8 {
+        assert(msg_hash[i] == decoded_hash[i]);
+    }
+    return true;
+}
+
+def modexp<N_K>(u8[N_K] base, u8[3] e, u8[N_K] modulus) -> u32[8] {
+    
+}
+
+
+def main(u8[3] e, u8[256] n, u8[576] msg, u8[256] sig) -> bool{
+    return verifyRSA(e,n,msg,sig);
+}

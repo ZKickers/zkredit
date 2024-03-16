@@ -2,7 +2,7 @@
   "inputs": [
     {
       "name": "e",
-      "public": false,
+      "public": true,
       "type": "array",
       "components": {
         "size": 3,
@@ -11,7 +11,7 @@
     },
     {
       "name": "n",
-      "public": false,
+      "public": true,
       "type": "array",
       "components": {
         "size": 256,
@@ -20,7 +20,7 @@
     },
     {
       "name": "msg",
-      "public": false,
+      "public": true,
       "type": "array",
       "components": {
         "size": 576,
@@ -29,7 +29,7 @@
     },
     {
       "name": "sig",
-      "public": false,
+      "public": true,
       "type": "array",
       "components": {
         "size": 256,
@@ -38,6 +38,6 @@
     }
   ],
   "output": {
-    "type": "field"
+    "type": "bool"
   }
 }

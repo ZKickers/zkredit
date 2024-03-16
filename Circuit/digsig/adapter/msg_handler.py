@@ -11,10 +11,10 @@ def sigToU8(x):
 
 
 with open("./Circuit/digsig/adapter/response.json", "r") as json_file:
-    msg = json.load(json_file)
+    msg_og = json.load(json_file)
 
-sig = msg["signature"]
-del msg["signature"]
+sig_og = msg_og["signature"]
+del msg_og["signature"]
 
-msg = objToU8(msg)
-sig = sigToU8(sig)
+msg = objToU8(msg_og)
+sig = sigToU8(sig_og)

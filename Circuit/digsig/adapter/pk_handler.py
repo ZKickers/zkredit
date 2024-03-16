@@ -12,5 +12,7 @@ with open("./Circuit/digsig/adapter/publicKey.pem", "rb") as key_file:
         backend=default_backend()
     )
 
-n = intToU8(public_key.public_numbers().n)
-e = intToU8(public_key.public_numbers().e)
+n_og = public_key.public_numbers().n
+e_og = public_key.public_numbers().e
+n = intToU8(n_og)
+e = intToU8(e_og)
