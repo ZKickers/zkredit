@@ -1,18 +1,15 @@
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import serialization
-import json
+import ecdsa
 
-def intToU8(x):
-    x_bytes = x.to_bytes((x.bit_length() + 7) // 8, byteorder='big')
-    return [str(int(byte)) for byte in x_bytes]
+def read_public_key_from_pem(pem_file):
+    with open(pem_file, 'r') as f:
+        pem_data = f.read()
+        return ecdsa.VerifyingKey.from_pem(pem_data)
 
-with open("./Circuit/digsig/adapter/publicKey.pem", "rb") as key_file:
-    public_key = serialization.load_pem_public_key(
-        key_file.read(),
-        backend=default_backend()
-    )
+def extract_A(public_key):
+    return [int(public_key.pubkey.point.x()), int(public_key.pubkey.point.y())]
 
-n_og = public_key.public_numbers().n
-e_og = public_key.public_numbers().e
-n = intToU8(n_og)
-e = intToU8(e_og)
+public_key_file = './Circuit/digsig/adapter/publicKey.pem'
+
+public_key = read_public_key_from_pem(public_key_file)
+
+A = extract_A(public_key)

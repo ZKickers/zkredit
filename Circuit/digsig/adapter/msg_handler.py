@@ -4,9 +4,11 @@ import base64
 def objToU8(x):
     return [str(ord(char)) for char in x]
 
-def sigToU8(x):
-    byte_array = base64.b64decode(x)
-    return [str(int(byte)) for byte in byte_array]
+
+def read_message_from_json(json_file):
+    with open(json_file, 'r') as f:
+        obj = json.load(f)
+        return json.dumps(obj, separators=(',', ':'))
 
 
 with open("./Circuit/digsig/adapter/response.json", "r") as json_file:
@@ -17,4 +19,4 @@ del msg_og["signature"]
 msg_og = json.dumps(msg_og, separators=(',', ':'))
 
 msg = objToU8(msg_og)
-sig = sigToU8(sig_og)
+sig_bytes = base64.b64decode(sig_og)
