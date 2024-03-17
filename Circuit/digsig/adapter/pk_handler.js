@@ -29,4 +29,4 @@ function pemToPoint(path){
 
 const A_big = pemToPoint('publicKeyBJJ.pem')
 const A = A_big.map(int => int.toString());
-module.exports = {A}
+module.exports = {A,A_big}

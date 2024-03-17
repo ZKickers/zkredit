@@ -5,7 +5,7 @@ zokrates compile -i root.zok
 zokrates setup
 
 # Execute the program
-zokrates compute-witness --abi --stdin < digsig_test.json
+zokrates compute-witness --abi --stdin < digsig_test_zok.json
 
 # Generate a proof of computation
 zokrates generate-proof

@@ -7,4 +7,4 @@ const msg = Array.from(JSON.stringify(json_msg)).map(char => char.charCodeAt(0).
 const {r , s } = signature
 const R = r.map(int => int.toString());
 const S = s.toString()
-module.exports = {R, S, msg}
+module.exports = {R, S, msg, r, s, json_msg}
