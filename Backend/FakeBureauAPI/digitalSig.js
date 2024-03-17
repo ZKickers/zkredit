@@ -65,15 +65,14 @@ function invertModN(num, mod) {
 
 function signBJJ(message, privateKey) {
     const secret = pemToBigInt(privateKey);
-    console.log(jubjub.order)
     const h = sha256(message); // Hashed message
     const [k,inv_k_mod_n] = generateSecureRandomK(jubjub.order); // Secure random k
     const R = jubjub.mulPointEscalar(jubjub.Base8,k) // Random point R = k * G
-    const r = R[0]; // x-coordinate of R
-    const s = inv_k_mod_n * (h + secret * r) % jubjub.order;
-    const s_str = s.toString() + "n"
-    const r_str = r.toString() + "n"
-    return { r_str, s_str };
+    const r_int = R[0]; // x-coordinate of R
+    const s_int = inv_k_mod_n * (h + secret * r_int) % jubjub.order;
+    const s = s_int.toString()
+    const r = r_int.toString()
+    return { r, s };
 }
 
 module.exports = { signBJJ }
