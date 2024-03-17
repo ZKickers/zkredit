@@ -28,11 +28,15 @@
       "public": false,
       "type": "array",
       "components": {
-        "size": 565,
+        "size": 125,
         "type": "u8"
       }
     }
   ],
   "output": {
+    "type": "tuple",
+    "components": {
+      "elements": []
+    }
   }
 }
