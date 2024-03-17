@@ -1,19 +1,14 @@
-import "signatures\verifyEddsa" as sha256;
-from "ecc/babyjubjubParams" import BabyJubJubParams;
+import "signatures\verifyEddsa" as verifyEddsa;
+from "ecc/babyjubjubParams" import BABYJUBJUB_PARAMS;
 
-def verifyRSA<N_K, N>(u8[3] e, u8[N_K] n, u8[N] msg, u8[N_K] sig) -> bool{
-    u32[8] msg_hash = sha256(msg);
-    u32[8] decoded_hash = modexp(sig, e, n);
-    for u32 i in 0..8
-        assert(msg_hash[i] == decoded_hash[i]);
-    return true;
+def verify<N>(field[2] R, field S, field[2] A, u8[N] M) -> bool{
+    u32[8] M0 = sha256(M);
+    u32[8] M1 = [0,0, 0,0 ,0,0, 0,0];
+    bool isVerified = verifyEddsa(R,S,A,M0,M1,BABYJUBJUB_PARAMS);
+    assert(isVerified);
+    return;
 }
 
-def modexp<N_K>(u8[N_K] base, u8[3] e, u8[N_K] modulus) -> u32[8] {
-    
-}
-
-
-def main(field[2] R, field S, field[2] A, u32[8] M0, u32[8] M1, BabyJubJubParams context) -> bool{
-    
+def main(field[2] R, field S, field[2] A, u8[565] M) -> bool{
+    assert(verify<565>(R,S,A,M))
 }

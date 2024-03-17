@@ -72,9 +72,10 @@ function signBJJ(message, privateKey) {
     const r1_int = R[1]; // y-coordinate of R
     const s_int = inv_k_mod_n * (h + secret * r0_int) % jubjub.order;
     const s = s_int.toString()
-    const r0 = r0_int.toString()
-    const r1 = r1_int.toString()
-    return { r0, r1, s };
+    const r = ["",""]
+    r[0] = r0_int.toString()
+    r[1] = r1_int.toString()
+    return { r, s };
 }
 
 module.exports = { signBJJ }

@@ -38,5 +38,6 @@ console.log(privateKey[0])
 
 // Multiply the base point by the x-coordinate of the secret scalar to get the public key.
 const publicKey = jubjub.mulPointEscalar(jubjub.Base8, privateKey[0])
-const packedPoint = jubjub.packPoint(publicKey)
+// const packedPoint = jubjub.packPoint(publicKey)
 // saveKey(packedPoint,PUBLIC)
+console.log(publicKey)

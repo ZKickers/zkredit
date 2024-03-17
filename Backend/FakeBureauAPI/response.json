@@ -6,8 +6,10 @@
     "score": 850,
     "credit_data": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, just",
     "signature": {
-        "r0": "404313139115423469869764133010092600547088066650478104908996006966924562822",
-        "r1": "5902936061438960276872431376283906469070444415823774756242547017292679702434",
-        "s": "18187444185932494538637401832732263520357116224909399866840473767403996779115"
+        "r": [
+            "737921462833745258840681101295362358175470866478691378559299288003135931180",
+            "15247673251042972699416782739933218479251805353751114528682873492165896259588"
+        ],
+        "s": "9073072650151261873190401757703644591577807851711199117447799954948869969609"
     }
 }
