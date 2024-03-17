@@ -1,5 +1,5 @@
 # Compile
-zokrates compile -i digsig.zok
+zokrates compile -i root.zok
 
 # Perform the setup phase
 zokrates setup

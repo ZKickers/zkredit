@@ -1,14 +1,9 @@
-import "signatures\verifyEddsa" as verifyEddsa;
+import "signatures/verifyEddsa" as verifyEddsa;
 from "ecc/babyjubjubParams" import BABYJUBJUB_PARAMS;
+import "hashes/sha256/sha256Padded" as sha256;
 
-def verify<N>(field[2] R, field S, field[2] A, u8[N] M) -> bool{
+def main<N>(u8[N] M, field[2] R, field S, field[2] A) -> bool{
     u32[8] M0 = sha256(M);
     u32[8] M1 = [0,0, 0,0 ,0,0, 0,0];
-    bool isVerified = verifyEddsa(R,S,A,M0,M1,BABYJUBJUB_PARAMS);
-    assert(isVerified);
-    return;
-}
-
-def main(field[2] R, field S, field[2] A, u8[565] M) -> bool{
-    assert(verify<565>(R,S,A,M))
+    return verifyEddsa(R,S,A,M0,M1,BABYJUBJUB_PARAMS);
 }
