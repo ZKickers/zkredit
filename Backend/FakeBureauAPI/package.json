@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "dependencies": {
+    "@zk-kit/baby-jubjub": "^0.3.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "elliptic": "^6.5.5",

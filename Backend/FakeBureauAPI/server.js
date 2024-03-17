@@ -13,10 +13,9 @@ app.post('/', (req, res) => {
     const userData = req.body;
     const dummyUser = JSON.parse(fs.readFileSync(PATH + 'dummyUser.json', 'utf8'));
     if (func.compareData(userData, dummyUser)) {
-        const privateKey = fs.readFileSync(PATH + 'privateKey.pem', 'utf8');
-        console.log(privateKey)
+        const privateKey = fs.readFileSync(PATH + 'privateKeyBJJ.pem', 'utf8');
         const dummyReport = JSON.parse(fs.readFileSync(PATH + 'dummyReport.json', 'utf8'));
-        const signature = digsig.signDS(JSON.stringify(dummyReport), privateKey);
+        const signature = digsig.signBJJ(JSON.stringify(dummyReport), privateKey);
         dummyReport.signature = signature;
         res.json(dummyReport);
     }else{
