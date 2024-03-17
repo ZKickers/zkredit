@@ -68,11 +68,13 @@ function signBJJ(message, privateKey) {
     const h = sha256(message); // Hashed message
     const [k,inv_k_mod_n] = generateSecureRandomK(jubjub.order); // Secure random k
     const R = jubjub.mulPointEscalar(jubjub.Base8,k) // Random point R = k * G
-    const r_int = R[0]; // x-coordinate of R
-    const s_int = inv_k_mod_n * (h + secret * r_int) % jubjub.order;
+    const r0_int = R[0]; // x-coordinate of R
+    const r1_int = R[1]; // y-coordinate of R
+    const s_int = inv_k_mod_n * (h + secret * r0_int) % jubjub.order;
     const s = s_int.toString()
-    const r = r_int.toString()
-    return { r, s };
+    const r0 = r0_int.toString()
+    const r1 = r1_int.toString()
+    return { r0, r1, s };
 }
 
 module.exports = { signBJJ }
