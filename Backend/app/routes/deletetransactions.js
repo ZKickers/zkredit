@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Transaction = require('../models/Transaction');
-
+const verifyToken = require('../Services/authMiddleware');
 // Route to delete a transaction by ID
-router.delete('/transactions/:transactionId', async (req, res) => {
+router.delete('/transactions/:transactionId', verifyToken, async (req, res) => {
     try {
         const deletedTransaction = await Transaction.findByIdAndDelete(req.params.transactionId);
         if (!deletedTransaction) {
