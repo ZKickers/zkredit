@@ -1,14 +1,22 @@
-import { TextField } from "@mui/material";
 import "./SignupForm.css";
+import { TextField } from "@mui/material";
 import { useRef, useState } from "react";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { checkKeyIcon, emailIcon, keyIcon, profileIcon } from "assets";
-import usePasswordValidation from "hooks/use-password-validation";
-import useOutsideClick from "hooks/use-modal-close";
+import {
+  useUsernameValidation,
+  useEmailValidation,
+  usePasswordValidation,
+  useOutsideClick,
+} from "hooks/signup-form-hooks/signup-form-hooks";
 
 export default function SignupForm({ show, handleClose }) {
   const [username, setUsername] = useState("");
+  const { usernameError, validateUsername } = useUsernameValidation();
+
   const [email, setEmail] = useState("");
+  const { emailError, validateEmail } = useEmailValidation();
+
   const {
     passwordError,
     passwordsMatch,
@@ -24,7 +32,11 @@ export default function SignupForm({ show, handleClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(validatePassword(username, email, confirmPassword)) {
+    if (
+      validateUsername(username) &&
+      validateEmail(email) &&
+      validatePassword(username, email, confirmPassword)
+    ) {
       handleClose();
     }
   };
@@ -57,6 +69,8 @@ export default function SignupForm({ show, handleClose }) {
             variant="outlined"
             fullWidth
             onChange={(e) => setUsername(e.target.value)}
+            error={usernameError !== ""}
+            helperText={usernameError}
             InputLabelProps={{ style: textStyle }}
             InputProps={{
               style: { borderRadius: "14px", ...textStyle },
@@ -77,6 +91,8 @@ export default function SignupForm({ show, handleClose }) {
             type="email"
             fullWidth
             onChange={(e) => setEmail(e.target.value)}
+            error={emailError !== ""}
+            helperText={emailError}
             InputLabelProps={{ style: textStyle }}
             InputProps={{
               style: { borderRadius: "14px", ...textStyle },
