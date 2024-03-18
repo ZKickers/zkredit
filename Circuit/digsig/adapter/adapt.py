@@ -24,12 +24,7 @@ msg = resp
 del msg['signature']
 msg = json_to_str(msg)
 msg = str_to_intArr(msg)
-M1 = msg[:32]
-M1 = u8_to_u32(M1)
-print(f"M1: {M1}")
-M2 = msg[-32:]
-M2 = u8_to_u32(M2)
-print(f"M2: {M2}")
+print("Msg:",msg)
 
-data = [R,S,A,M1,M2]
+data = [R,S,A,msg]
 save_json(data,'digsig_test.json')
