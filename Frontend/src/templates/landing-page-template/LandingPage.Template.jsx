@@ -1,13 +1,20 @@
 import classNames from "classnames";
+import { useState } from "react";
 import "./LandingPage.Template.css";
 import "../../index.css";
 import { checkMark, computer } from "assets";
 import LoginForm from "components/organisms/login-form/LoginForm";
 import Footer from "components/organisms/footer/Footer";
+import SignupModalPage from "pages/signup-modal-page/SignupModalPage";
 
 export default function LPTemplate() {
   const base = "container-fluid landing-page-template";
   const classes = classNames(base);
+
+  const [show, setShow] = useState(false);
+
+  const handleShow = () => setShow(true);
+  const handleClose = () => setShow(false);
 
   return (
     <div className={classes}>
@@ -48,6 +55,7 @@ export default function LPTemplate() {
               backgroundColor: "transparent",
               border: "none",
             }}
+            onClick={handleShow}
           >
             Not yet a user?{" "}
             <span style={{ fontWeight: "bold" }}> Sign up here </span>
@@ -57,6 +65,7 @@ export default function LPTemplate() {
       <div className="container-fluid p-0">
         <Footer />
       </div>
+      <SignupModalPage show={show} handleClose={handleClose} />
     </div>
   );
 }
