@@ -45,7 +45,14 @@ def json_to_str(obj):
 def ascii_to_hex(text):
     return ''.join(format(ord(char), '02x') for char in text)
 
-def str_to_intArr(input_string):
-    return [ord(char) for char in input_string]
+def str_to_intArr(str):
+    return [ord(char) for char in str]
 
-
+def u8_to_u32(u8Array):
+    while len(u8Array) % 4 != 0:
+        u8Array.append(0)
+    u32Array = []
+    for i in range(0, len(u8Array), 4):
+        value = (u8Array[i] << 24) | (u8Array[i+1] << 16) | (u8Array[i+2] << 8) | u8Array[i+3]
+        u32Array.append(str(value))
+    return u32Array
