@@ -1,16 +1,15 @@
 import "./SignupForm.css";
 import { TextField } from "@mui/material";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { checkKeyIcon, emailIcon, keyIcon, profileIcon } from "assets";
 import {
   useUsernameValidation,
   useEmailValidation,
   usePasswordValidation,
-  useOutsideClick,
 } from "hooks/signup-form-hooks/signup-form-hooks";
 
-export default function SignupForm({ show, handleClose }) {
+export default function SignupForm() {
   const [username, setUsername] = useState("");
   const { usernameError, validateUsername } = useUsernameValidation();
 
@@ -25,11 +24,6 @@ export default function SignupForm({ show, handleClose }) {
   } = usePasswordValidation();
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const ref = useRef();
-  useOutsideClick(ref, handleClose);
-
-  if (!show) return null;
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (
@@ -37,7 +31,7 @@ export default function SignupForm({ show, handleClose }) {
       validateEmail(email) &&
       validatePassword(username, email, confirmPassword)
     ) {
-      handleClose();
+      console.log("Passed all tests!")
     }
   };
 
@@ -47,10 +41,7 @@ export default function SignupForm({ show, handleClose }) {
   };
 
   return (
-    <div
-      ref={ref}
-      className="signup-form d-flex flex-column align-items-center"
-    >
+    <div className="signup-form d-flex flex-column align-items-center">
       <div className="form-header">
         <div className="form-header-text">
           <h1>sign up to ZKredit</h1>
