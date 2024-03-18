@@ -1,7 +1,7 @@
 {
   "inputs": [
     {
-      "name": "input",
+      "name": "clientData",
       "public": false,
       "type": "array",
       "components": {
