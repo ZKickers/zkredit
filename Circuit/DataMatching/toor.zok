@@ -5,7 +5,6 @@ struct Response<N, M> {
     u32[N][M] data;
 }
 
-
 def validate_input<N, M>(User<N, M> user, Response<N, M> response) -> bool {
     for u32 j in 0..N{
         for u32 i in 0..M {
@@ -18,6 +17,7 @@ def validate_input<N, M>(User<N, M> user, Response<N, M> response) -> bool {
     }
     return true;
 }
+
 def main(private User<3, 4> user, private Response<3, 4> response) -> bool{
     return validate_input(user, response);
 }
