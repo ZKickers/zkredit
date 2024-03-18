@@ -5,7 +5,8 @@ import "../../index.css";
 import { checkMark, computer } from "assets";
 import LoginForm from "components/organisms/login-form/LoginForm";
 import Footer from "components/organisms/footer/Footer";
-import SignupModalPage from "pages/signup-modal-page/SignupModalPage";
+import ModalPage from "pages/modal-page/ModalPage";
+import SignupForm from "components/organisms/sign-up-form/SignupForm";
 
 export default function LPTemplate() {
   const base = "container-fluid landing-page-template";
@@ -65,7 +66,9 @@ export default function LPTemplate() {
       <div className="container-fluid p-0">
         <Footer />
       </div>
-      <SignupModalPage show={show} handleClose={handleClose} />
+      <ModalPage show={show} handleClose={handleClose}>
+        <SignupForm />
+      </ModalPage>
     </div>
   );
 }
