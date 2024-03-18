@@ -1,6 +1,8 @@
-from "./commitment.zok" import main as commitment_func;
+from "./commitment.zok" import main as commitment;
+from "./threshold.zok" import main as threshold;
 
 def main(private u8[26] clientData, private u8[32] nonce) -> u32[8]{
     u32[8] id = commitment_func(clientData, nonce);
-    return id;
+    bool tCheck = threshold(creditScore, t);
+    return (id,tCheck) ;
 }
