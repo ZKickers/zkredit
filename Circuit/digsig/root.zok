@@ -1,5 +1,5 @@
 from "./digsig.zok" import main as verify;
 
 def main(private field[2] R, private field S, private field[2] A, private u8[125] M){
-    assert(verify(M,R,S,A));
+    assert(verify(R,S,A,M));
 }
