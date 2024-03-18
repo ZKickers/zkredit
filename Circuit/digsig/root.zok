@@ -1,7 +1,6 @@
-import "signatures/verifyEddsa" as verifyEddsa;
-from "ecc/babyjubjubParams" import BABYJUBJUB_PARAMS;
+from "./digsig.zok" import main as verify;
 
-def main(private field[2] R, private field S, private field[2] A,
-         private u32[8] M0, private u32[8] M1){
-    assert(verifyEddsa(R,S,A,M0,M1,BABYJUBJUB_PARAMS));
+def main(private field[2] R, private field S, 
+        private field[2] A, private u8[125] M){
+    assert(verify(R,S,A,M));
 }

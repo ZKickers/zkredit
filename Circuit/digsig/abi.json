@@ -24,21 +24,12 @@
       }
     },
     {
-      "name": "M0",
+      "name": "M",
       "public": false,
       "type": "array",
       "components": {
-        "size": 8,
-        "type": "u32"
-      }
-    },
-    {
-      "name": "M1",
-      "public": false,
-      "type": "array",
-      "components": {
-        "size": 8,
-        "type": "u32"
+        "size": 125,
+        "type": "u8"
       }
     }
   ],

@@ -1,6 +1,8 @@
 import json
 import base64
 import textwrap
+import hashlib
+
 
 PUBLIC = "PUBLIC KEY"
 PRIVATE = "PRIVATE KEY"
@@ -37,10 +39,18 @@ def read_json(json_path):
     with open(json_path, 'r') as f: return json.load(f)
 
 def save_json(data,path):
-    with open(path, 'w') as f: json.dump(data,f)
+    with open(path, 'w') as f: json.dump(data,f,indent=4)
 
 def json_to_str(obj):
     return json.dumps(obj,separators=(',', ':'))
 
 def ascii_to_hex(text):
     return ''.join(format(ord(char), '02x') for char in text)
+
+def sha256Padded(msg):
+    input_bytes = msg.encode('utf-8')
+    sha256_hash = hashlib.sha256()
+    sha256_hash.update(input_bytes)
+    hash = sha256_hash.hexdigest()
+    padded_hash = hash + '0' * 64
+    return padded_hash
