@@ -1,0 +1,20 @@
+{
+  "inputs": [
+    {
+      "name": "score",
+      "public": true,
+      "type": "u16"
+    },
+    {
+      "name": "threshold",
+      "public": true,
+      "type": "u16"
+    }
+  ],
+  "output": {
+    "type": "tuple",
+    "components": {
+      "elements": []
+    }
+  }
+}

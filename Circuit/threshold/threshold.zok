@@ -1,0 +1,7 @@
+const u16 MAX_VALUE = 1000;
+
+def main(u16 score, u16 threshold){
+    assert(score <= MAX_VALUE);
+    assert(threshold <= MAX_VALUE);
+    assert (score >= threshold);
+}
