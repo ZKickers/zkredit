@@ -19,7 +19,7 @@ Run the following commands on UNIX OS
     birthdate: u8Array[8]
     ssn: u8Array[9]
 }
-2. Nonce (u8Array)
+2. Nonce (u8Array[32])
 3. Response from API {
     name: u8Array[N_name]
     address: u8Array[N_adr]
