@@ -1,0 +1,78 @@
+{
+  "inputs": [
+    {
+      "name": "clientData",
+      "public": false,
+      "type": "struct",
+      "components": {
+        "name": "ClientData",
+        "generics": [
+          70,
+          100,
+          10,
+          9
+        ],
+        "members": [
+          {
+            "name": "name",
+            "type": "array",
+            "components": {
+              "size": 70,
+              "type": "u8"
+            }
+          },
+          {
+            "name": "address",
+            "type": "array",
+            "components": {
+              "size": 100,
+              "type": "u8"
+            }
+          },
+          {
+            "name": "birthdate",
+            "type": "array",
+            "components": {
+              "size": 10,
+              "type": "u8"
+            }
+          },
+          {
+            "name": "ssn",
+            "type": "array",
+            "components": {
+              "size": 9,
+              "type": "u8"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "nonce",
+      "public": false,
+      "type": "array",
+      "components": {
+        "size": 32,
+        "type": "u8"
+      }
+    }
+  ],
+  "output": {
+    "type": "tuple",
+    "components": {
+      "elements": [
+        {
+          "type": "bool"
+        },
+        {
+          "type": "array",
+          "components": {
+            "size": 8,
+            "type": "u32"
+          }
+        }
+      ]
+    }
+  }
+}

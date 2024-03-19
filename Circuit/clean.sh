@@ -1,1 +1,1 @@
-rm out out.r1cs out.wtns proof.json proving.key verification.key verifier.sol witness
+rm out out.r1cs out.wtns proof.json witness
