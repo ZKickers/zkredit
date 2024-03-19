@@ -27,7 +27,7 @@ Run the following commands on UNIX OS
     ssn: u8Array[9]
     score: u8Array[2]
     signature{
-        R: field
+        R: field[2]
         S: field
     }
 }
