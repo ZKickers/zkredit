@@ -1,0 +1,31 @@
+.client-request-form {
+    width: 100%;
+}
+
+.form-header {
+    height: 30%;
+    border-bottom: 3px solid;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.form-header-text {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.form-header h1 {
+    text-transform: capitalize;
+    font-weight: bold;
+    font-size: 54px;
+}
+
+.form-header h2 {
+    text-transform: lowercase;
+    font-weight: lighter;
+    font-size: 40px;
+}
