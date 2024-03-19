@@ -25,14 +25,14 @@ Run the following commands on UNIX OS
     address: u8Array[N_adr]
     birthdate: u8Array[8]
     ssn: u8Array[9]
-    score: u16
+    score: u8Array[2]
     signature{
         R: field
         S: field
     }
 }
 4. Public Key (field[2])
-5. Threshold (u16)
+5. Threshold (u8Array[2])
 
 ## Commitment
 - ClientData #1
