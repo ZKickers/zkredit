@@ -1,6 +1,9 @@
-from zokrates_pycrypto.eddsa import PrivateKey, FQ
+from zokrates_pycrypto.eddsa import PrivateKey, FQ, Point
 from functions import pem_to_hex,PRIVATE,sha256Padded
 
+def decompress_point(p):
+    p = Point.decompress(bytes.fromhex(p))
+    return [p.x.n,p.y.n]
 
 def sign_bjj(msg,sk):
     sk_hex = pem_to_hex(sk,PRIVATE)
@@ -10,5 +13,5 @@ def sign_bjj(msg,sk):
     print("Message Hex:",msg)
     (r_int, s_int) = sk.sign(bytes.fromhex(msg))
     S = hex(s_int)[2:]
-    R = r_int.compress().hex()
+    R = [hex(r.n)[2:] for r in r_int]
     return {"R" : R , "S" : S}
