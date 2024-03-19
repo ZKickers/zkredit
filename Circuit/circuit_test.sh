@@ -1,11 +1,11 @@
 # Compile
-zokrates compile -i root.zok
+zokrates compile -i threshold.zok
 
 # Perform the setup phase
 zokrates setup
 
 # Execute the program
-zokrates compute-witness --abi --stdin < commit_test.json
+zokrates compute-witness --abi --stdin < input.json
 
 # Generate a proof of computation
 zokrates generate-proof
