@@ -18,6 +18,8 @@ const transactionSchema = new mongoose.Schema({
         enum: ['Insufficient', 'Pending_Threshold', 'Pending_Verification', 'Success', 'Fail'],
         default: 'Insufficient'
     }
+}, {
+    timestamps: true // Enable timestamps feature
 });
 
 
