@@ -8,10 +8,7 @@ const deletedTransaction = require('./routes/deleteTX')
 const ClientRequest = require('./routes/ClientRequest')
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://0.0.0.0:27017/zkredit', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose.connect('mongodb://0.0.0.0:27017/zkredit')
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.error('MongoDB connection error:', err));
 

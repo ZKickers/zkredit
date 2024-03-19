@@ -54,3 +54,5 @@ def sha256Padded(msg):
     hash = sha256_hash.hexdigest()
     padded_hash = hash + '0' * 64
     return padded_hash
+
+

@@ -5,7 +5,10 @@
     "ssn": "210734803",
     "score": 850,
     "signature": {
-        "R": "10994da8ba16dc949a0f499e3676cc2f8f7ece457720ad6ce15160549d6ce46d",
+        "R": [
+            "1a3aa52bdaf74562df9d268ab4e055aa00d4530bde7031fdec6cc4aa79238ed2",
+            "10994da8ba16dc949a0f499e3676cc2f8f7ece457720ad6ce15160549d6ce46d"
+        ],
         "S": "25018df8415d6f951311d184cb20cf384408bb31cd875f6e50e78ffd562f4771"
     }
 }

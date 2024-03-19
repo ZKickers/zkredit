@@ -1,8 +1,9 @@
 const axios = require('axios');
-const ManipulateData = require('./ManipulateData');
+const ManipulateData = require('./serializeResponse');
 const User = require('../models/User');
 const Transaction = require('../models/Transaction');
 const jwt = require('jsonwebtoken');
+
 async function sendClientInfo(clientInfo) {
     
     const url = 'http://localhost:8061/'; // Assuming the Flask server is running locally on port 8061
@@ -29,8 +30,8 @@ async function sendClientInfo(clientInfo) {
           const transaction = new Transaction(transactionData);
           await transaction.save();
         const clientData = ManipulateData(response.data);
-        console.log(clientData);
-
+        saveJSON(clientData)
+        // console.log(clientData);
     } catch (error) {
         console.error('Error sending client info:', error.response);
         const { creditorUserName, fullname } = clientInfo;
