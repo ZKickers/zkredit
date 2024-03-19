@@ -1,5 +1,5 @@
 # Compile
-zokrates compile -i threshold.zok
+zokrates compile -i root.zok
 
 # Perform the setup phase
 zokrates setup
