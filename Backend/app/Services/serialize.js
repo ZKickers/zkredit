@@ -79,10 +79,10 @@ module.exports = {
   clientData : serializeClientData,
   saveJSON };
 
-PATH = 'C:\\MyStuff\\GP\\zkredit\\FakeBureauAPI\\response.json'
-resp = readJSON(PATH)
-res = serializeResponse(resp)
-saveJSON(res,'response.json')
+// PATH = 'C:\\MyStuff\\GP\\zkredit\\FakeBureauAPI\\response.json'
+// resp = readJSON(PATH)
+// res = serializeResponse(resp)
+// saveJSON(res,'response.json')
 // PATH_X = 'C:\\MyStuff\\GP\\zkredit\\Backend\\app\\publicKeyBJJ_X.pem'
 // PATH_Y = 'C:\\MyStuff\\GP\\zkredit\\Backend\\app\\publicKeyBJJ_Y.pem'
 // pk = serializePK(PATH_X,PATH_Y)
