@@ -19,5 +19,6 @@ def validate_input<N, M>(User<N, M> user, Response<N, M> response) -> bool {
 }
 
 def main(private User<3, 4> user, private Response<3, 4> response) -> bool{
-    return validate_input(user, response);
+    bool isValid = assert(validate_input(user, response));
+    return isValid;
 }
