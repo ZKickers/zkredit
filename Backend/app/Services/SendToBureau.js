@@ -1,8 +1,9 @@
 const axios = require('axios');
-const ManipulateData = require('./serializeResponse');
+const Serial = require('./serialize');
 const User = require('../models/User');
 const Transaction = require('../models/Transaction');
 const jwt = require('jsonwebtoken');
+const CIRCUIT_INPUT_PATH = 'circuitInput/'
 
 async function sendClientInfo(clientInfo) {
     
@@ -29,9 +30,10 @@ async function sendClientInfo(clientInfo) {
           // Step 3: Save the transaction
           const transaction = new Transaction(transactionData);
           await transaction.save();
-        const clientData = ManipulateData(response.data);
-        saveJSON(clientData)
-        // console.log(clientData);
+        const serialized_clientData = Serial.clientData(clientInfo)
+        saveJSON(serialized_clientData,CIRCUIT_INPUT_PATH + 'clientData.json')
+        const serialized_resp = Serial.response(response.data);
+        saveJSON(serialized_resp,CIRCUIT_INPUT_PATH + 'response.json')
     } catch (error) {
         console.error('Error sending client info:', error.response);
         const { creditorUserName, fullname } = clientInfo;
