@@ -4,7 +4,9 @@ const User = require('../models/User');
 const Transaction = require('../models/Transaction');
 const jwt = require('jsonwebtoken');
 const CIRCUIT_INPUT_PATH = 'circuitInput/';
-
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 8080 }); // WebSocket server
+const creditorConnections = {}; // Store WebSocket connections for each creditor
 async function createTransaction(clientInfo, creditorUser, clientId) {
     try
     {
@@ -46,6 +48,8 @@ async function createTransaction(clientInfo, creditorUser, clientId) {
 
 }
 
+
+
 async function serializeAndSaveData(clientInfo, responseData) {
 
         const serialized_clientData = Serial.clientData(clientInfo);
@@ -58,6 +62,18 @@ async function serializeAndSaveData(clientInfo, responseData) {
     
         console.log("Serialization completed");
  
+}
+
+function notifyCreditor(creditorId, transactionData) {
+    const ws = creditorConnections[creditorId];
+    if (ws) {
+        ws.send(JSON.stringify({ 
+            type: 'transaction_notification',
+            transactionData: transactionData
+        }));
+    } else {
+        console.log(`Creditor ${creditorId} is not connected`);
+    }
 }
 
 async function sendClientInfo(clientInfo, token) {
@@ -74,9 +90,23 @@ async function sendClientInfo(clientInfo, token) {
 
     const decodedToken = jwt.verify(token, 'secret');
     const clientId = decodedToken.accountId;
-
+    const creditorId = creditorUser.accountId;
     const transaction = await createTransaction(clientInfo, creditorUser, clientId);
     await serializeAndSaveData(clientInfo, response.data);
+    wss.on('connection', (ws) => {
+        console.log('WebSocket client connected');
+    
+        // Handle messages from WebSocket clients
+        ws.on('transaction', (transaction) => {
+            console.log(`Received message from client: ${transaction}`);
+        });
+    
+        // Store creditor's WebSocket connection
+        ws.on('creditorId', (creditorId) => {
+            creditorConnections[creditorId] = ws;
+        });
+    });
+    notifyCreditor(creditorId, transaction);
     return transaction;
 }
 
