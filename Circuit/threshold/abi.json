@@ -2,7 +2,7 @@
   "inputs": [
     {
       "name": "score",
-      "public": true,
+      "public": false,
       "type": "u16"
     },
     {
@@ -12,9 +12,6 @@
     }
   ],
   "output": {
-    "type": "tuple",
-    "components": {
-      "elements": []
-    }
+    "type": "bool"
   }
 }

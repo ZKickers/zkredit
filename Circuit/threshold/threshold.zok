@@ -1,7 +1,7 @@
-const u16 MAX_VALUE = 1000;
+const u16 MAX_VALUE = 850;
 
-def main(u16 score, u16 threshold){
+def main(private u16 score, u16 threshold) -> bool{
     assert(score <= MAX_VALUE);
     assert(threshold <= MAX_VALUE);
-    assert (score >= threshold);
+    return score >= threshold;
 }
