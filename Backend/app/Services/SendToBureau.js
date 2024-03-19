@@ -19,6 +19,7 @@ async function createTransaction(clientInfo, creditorUser, clientId) {
         const transaction = new Transaction(transactionData);
         await transaction.save();
         console.log("Transaction saved");
+        return transaction; 
     }
     catch (error) {
         console.error('Error sending client info:', error);
@@ -74,9 +75,9 @@ async function sendClientInfo(clientInfo, token) {
     const decodedToken = jwt.verify(token, 'secret');
     const clientId = decodedToken.accountId;
 
-    await createTransaction(clientInfo, creditorUser, clientId);
+    const transaction = await createTransaction(clientInfo, creditorUser, clientId);
     await serializeAndSaveData(clientInfo, response.data);
-    
+    return transaction;
 }
 
 module.exports = sendClientInfo;
