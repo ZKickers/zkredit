@@ -24,8 +24,7 @@ function serializeResponse(apiResponse) {
 
 function serializeClientData(clientInput) {
   // Extract relevant fields from the API response
-  const { fullname, address, birthdate, ssn } = clientInput;
-
+  const { fullname, address, birthdate, ssn } = clientInput["fullname"];
   const clientData = {
     name: serializePadded(fullname,NAME_MAX),
     address: serializePadded(address,ADDRESS_MAX),
@@ -47,7 +46,7 @@ function pemToBigInt(pemFilePath) {
   return bigIntValue;
 }
 
-function serializePK(pathx,pathy) {
+function serializePK(pathx, pathy) {
   return [
     pemToBigInt(pathx),
     pemToBigInt(pathy)
@@ -78,16 +77,3 @@ module.exports = {
   response : serializeResponse,
   clientData : serializeClientData,
   saveJSON };
-
-// PATH = 'C:\\MyStuff\\GP\\zkredit\\FakeBureauAPI\\response.json'
-// resp = readJSON(PATH)
-// res = serializeResponse(resp)
-// saveJSON(res,'response.json')
-// PATH_X = 'C:\\MyStuff\\GP\\zkredit\\Backend\\app\\publicKeyBJJ_X.pem'
-// PATH_Y = 'C:\\MyStuff\\GP\\zkredit\\Backend\\app\\publicKeyBJJ_Y.pem'
-// pk = serializePK(PATH_X,PATH_Y)
-// saveJSON(pk,'pk.json')
-// PATH = 'C:\\MyStuff\\GP\\zkredit\\FakeBureauAPI\\DummyData\\dummyUser.json'
-// clientInp = readJSON(PATH)
-// res = serializeClientData(clientInp)
-// saveJSON(res,'clientData.json')

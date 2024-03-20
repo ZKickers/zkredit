@@ -3,7 +3,7 @@ const Serial = require('../Services/serialize');
 const User = require('../models/User');
 const Transaction = require('../models/Transaction');
 const jwt = require('jsonwebtoken');
-const CIRCUIT_INPUT_PATH = 'circuitInput/';
+const ProofInput = require('../models/ProofInput');
 const WebSocket = require('ws');
 const wss = new WebSocket.Server({ port: 8080 }); // WebSocket server
 const creditorConnections = {}; // Store WebSocket connections for each creditor
@@ -50,40 +50,47 @@ async function createTransaction(clientInfo, creditorUser, clientId) {
 
 
 
-async function serializeAndSaveData(clientInfo, responseData) {
+async function serializeAndSaveData(clientInfo, responseData, transaction) {
 
         const serialized_clientData = Serial.clientData(clientInfo);
         console.log(serialized_clientData);
-        Serial.saveJSON(serialized_clientData, CIRCUIT_INPUT_PATH + 'clientData.json');
+
     
         const serialized_resp = Serial.response(responseData);
         console.log(serialized_resp);
-        Serial.saveJSON(serialized_resp, CIRCUIT_INPUT_PATH + 'response.json');
+
+        const newProofInput = new ProofInput({
+            clientId: serialized_clientData,
+            response: serialized_resp,
+            transactionId: transaction._id
+          });
+
+        console.log(newProofInput);
+        newProofInput.save()
     
         console.log("Serialization completed");
  
 }
 
-function notifyCreditor(creditorId, transactionData) {
+function notifyCreditor(creditorId, transactionData, clientFullName) {
     const ws = creditorConnections[creditorId];
     if (ws) {
         ws.send(JSON.stringify({ 
             type: 'transaction_notification',
-            transactionData: transactionData
+            transactionData: transactionData,
+            clientFullName: clientFullName
         }));
     } else {
         console.log(`Creditor ${creditorId} is not connected`);
     }
 }
 
-async function sendClientInfo(clientInfo, token) {
-    const url = 'http://localhost:8061/';
+async function sendClientInfo(clientInfo, creditorUserName, token) {
+    const url = 'http://127.0.0.1:8061/';
     const response = await axios.post(url, clientInfo);
     console.log('Response from server:');
     console.log(response.data);
-    const { creditorUserName } = clientInfo;
     const creditorUser = await User.findOne({ username: creditorUserName });
-
     if (!creditorUser) {
         throw new Error(`Creditor with username ${creditorUserName} not found`);
     }
@@ -92,7 +99,7 @@ async function sendClientInfo(clientInfo, token) {
     const clientId = decodedToken.accountId;
     const creditorId = creditorUser.accountId;
     const transaction = await createTransaction(clientInfo, creditorUser, clientId);
-    await serializeAndSaveData(clientInfo, response.data);
+    await serializeAndSaveData(clientInfo, response.data, transaction);
     wss.on('connection', (ws) => {
         console.log('WebSocket client connected');
     
@@ -106,7 +113,7 @@ async function sendClientInfo(clientInfo, token) {
             creditorConnections[creditorId] = ws;
         });
     });
-    notifyCreditor(creditorId, transaction);
+    notifyCreditor(creditorId, transaction, clientInfo['fullname']);
     return transaction;
 }
 
