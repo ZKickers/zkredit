@@ -20,7 +20,7 @@ const transactionSchema = new mongoose.Schema({
     }
 }, {
     timestamps: true // Enable timestamps feature
-});
+
 
 
 const Transaction = mongoose.model('Transaction', transactionSchema);
