@@ -3,12 +3,12 @@ import "./ClientRequestForm.css";
 import { TextField, Button } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { Home, CalendarMonth } from "@mui/icons-material";
 import { maskIcon, signatureIcon, idCardIcon } from "assets";
 
 import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from "@hookform/resolvers/yup";
 import { ClientRequestValidationSchema } from "utils/validators/ClientRequestValidationSchema";
 
 //  Sample JSON data for the form{
@@ -73,7 +73,7 @@ export default function ClientRequestForm() {
             }}
           />
         </div>
-        <div className="row mt-5 mx-auto w-100">
+        <div className="row mt-2 mx-auto w-100">
           <TextField
             label="Creditor User Name"
             variant="outlined"
@@ -94,7 +94,7 @@ export default function ClientRequestForm() {
             }}
           />
         </div>
-        <div className="row mt-5 mx-auto w-100">
+        <div className="row mt-2 mx-auto w-100">
           <TextField
             label="Address"
             variant="outlined"
@@ -111,46 +111,48 @@ export default function ClientRequestForm() {
             }}
           />
         </div>
-
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <Controller
-            name="Birthdate"
-            control={control}
-            shouldValidate={true}
-            defaultValue={null}
-            render={() => (
-              <DateTimePicker
-                onChange={(date) => {
-                  if (date) {
-                    const formattedDate = dayjs(date).format("MM-DD-YYYY");
-                    setValue("birthdate", formattedDate);
-                    clearErrors("birthdate");
-                  }
-                }}
-                slotProps={{
-                  textField: {
-                    fullWidth: true,
-                    error: !!errors.birthdate,
-                    helperText: errors.birthdate?.message || "",
-                    InputLabelProps: { style: textStyle },
-                    InputProps: {
-                      style: { borderRadius: "14px", ...textStyle },
-                      startAdornment: (
-                        <CalendarMonth
-                          style={{ marginRight: "10px", ...textStyle }}
-                        />
-                      ),
+        <div className="row mt-3 mx-auto w-100">
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Controller
+              name="Birthdate"
+              control={control}
+              shouldValidate={true}
+              defaultValue={null}
+              render={() => (
+                <DatePicker
+                  className="date-picker"
+                  onChange={(date) => {
+                    if (date) {
+                      const formattedDate = dayjs(date).format("MM-DD-YYYY");
+                      setValue("birthdate", formattedDate);
+                      clearErrors("birthdate");
+                    }
+                  }}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      label: "Birthdate",
+                      error: !!errors.birthdate,
+                      helperText: errors.birthdate?.message || "",
+                      InputLabelProps: { style: textStyle },
+                      InputProps: {
+                        style: { borderRadius: "14px", ...textStyle },
+                        startAdornment: (
+                          <CalendarMonth
+                            style={{ marginRight: "10px", ...textStyle }}
+                          />
+                        ),
+                      },
                     },
-                  },
-                }}
-                closeOnSelect={true}
-                minDateTime={dayjs("1900-01-01")}
-              />
-            )}
-          />
-        </LocalizationProvider>
-
-        <div className="row gap-sm-4 gap-md-0 mx-auto w-100 d-flex justify-content-between">
+                  }}
+                  closeOnSelect={true}
+                  minDateTime={dayjs("1900-01-01")}
+                />
+              )}
+            />
+          </LocalizationProvider>
+        </div>
+        <div className="row mt-3 gap-sm-4 gap-md-0 mx-auto w-100 d-flex justify-content-between">
           <div className="col-md-6 col-sm-12 p-0 pe-md-2">
             <TextField
               label="SSN"
