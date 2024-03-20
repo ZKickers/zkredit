@@ -1,0 +1,11 @@
+from "./interface.zok" import Response;
+
+def respConcat <N_name, N_adr, N_bd, N_ssn, N_score,N>(
+      Response <N_name, N_adr, N_bd, N_ssn, N_score> response
+    ) -> u8[N]{
+        assert(N == N_name + N_adr + N_bd + N_ssn + N_score);
+        u8[N] res = [...response.name, ...response.address,
+                        ...response.birthdate,...response.ssn,
+                        ...response.score];
+        return res;
+}

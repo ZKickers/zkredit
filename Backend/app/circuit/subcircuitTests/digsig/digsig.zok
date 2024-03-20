@@ -1,0 +1,21 @@
+from "ecc/babyjubjubParams" import BABYJUBJUB_PARAMS;
+import "hashes/sha256/sha256Padded" as sha256;
+import "signatures/verifyEddsa" as verifyEddsa;
+from "./concat.zok" import respConcat;
+from "./interface.zok" import Response,Signature;
+
+def verify<N>(field[2] R, field S, field[2] A, u8[N] M) -> bool{
+    u32[8] M0 = sha256(M);
+    u32[8] M1 = [0;8];
+    return verifyEddsa(R,S,A,M0,M1,BABYJUBJUB_PARAMS);
+}
+
+def main<N_name,N_adr,N_bd,N_ssn,N_score>(
+        Response<N_name,N_adr,N_bd,N_ssn,N_score> resp,
+        field[2] publicKey
+    ) -> bool {
+        u32 N = N_name + N_adr + N_bd + N_ssn + N_score;
+        u8[N] respConc = respConcat(resp);
+        assert(verify(resp.sig.R,resp.sig.S,publicKey,respConc));
+        return true;       
+}

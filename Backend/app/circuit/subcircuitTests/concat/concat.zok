@@ -1,0 +1,10 @@
+from "./interface.zok" import ClientData;
+
+def main       <N_name, N_adr, N_bd, N_ssn, N>(
+    ClientData <N_name, N_adr, N_bd, N_ssn> clientData
+    ) -> u8[N]{
+        assert(N == N_name + N_adr + N_bd + N_ssn);
+        u8[N] res = [...clientData.name, ...clientData.address,
+                        ...clientData.birthdate,...clientData.ssn];
+        return res;
+}

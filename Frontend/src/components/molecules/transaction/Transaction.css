@@ -1,0 +1,26 @@
+.tx {
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: fit-content
+}
+
+.tx-verified {
+  background: linear-gradient(to right, rgba(0, 154, 43, 0.2), white);
+}
+
+.tx-failed {
+  background: linear-gradient(to right, rgba(246, 37, 37, 0.2), white);
+}
+
+.tx-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.tx-img {
+  display: flex;
+  justify-content: flex-end;
+  height: 75%;
+}
