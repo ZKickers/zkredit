@@ -4,7 +4,7 @@ from "./threshold" import main as thresCheck;
 from "./consistency.zok" import main as isConsistent;
 
 def main(private ClientData<70,100,10,9> clientData, private u8[32] nonce,
-        private Response<70,100,10,9> response,/* private field[2] publicKey, */
+        private Response<70,100,10,9,2> response,/* private field[2] publicKey, */
         public u8[2] threshold) -> (bool, u32[8]){
     assert(isConsistent(clientData,response));
     bool isMeetsThreshold = thresCheck(response.score,threshold);
