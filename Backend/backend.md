@@ -3,7 +3,8 @@
 - App Creation ✅
 - Database Setup ✅
 - Authenticity ✅
-- Client Request ❌
+- Client Request ✅
 - Get TXs ✅
-- Credit Check Response ❌
 - Delete TXs ✅
+- Creditor Threshold ❌
+- Credit Check Response ❌
