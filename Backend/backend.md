@@ -1,10 +1,9 @@
 # Backend Tasks
 
-- App Creation ❌
-- Database Setup ❌
-- Authenticity ❌
+- App Creation ✅
+- Database Setup ✅
+- Authenticity ✅
 - Client Request ❌
-- Get TXs ❌
+- Get TXs ✅
 - Credit Check Response ❌
-- Delete TXs ❌
-- Fake Bureaau API ❌
+- Delete TXs ✅

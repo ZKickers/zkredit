@@ -1,0 +1,12 @@
+import "hashes/sha256/sha256Padded" as sha256;
+
+def main<N>(u8[N] input, u8[32] nonce) -> u32[8]{
+
+    u8[N+32] inputWithNonce = [...nonce, ...input];
+    log("inputWithNonce is {}", inputWithNonce);
+
+    u32[8] h = sha256(inputWithNonce);
+
+    log("h is {}", h);
+    return h;
+}
