@@ -4,8 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getUsername = exports.loginUser = exports.registerUser = void 0;
-
-var _config = require("config");
+// import { ZKREDIT_API } from "config";
+ZKREDIT_API = "http://localhost:8081";
 
 var registerUser = function registerUser(user) {
   var url, response, message;
@@ -13,7 +13,7 @@ var registerUser = function registerUser(user) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          url = "".concat(_config.ZKREDIT_API, "/auth/signup");
+          url = "".concat(ZKREDIT_API, "/auth/signup");
           _context.next = 3;
           return regeneratorRuntime.awrap(fetch(url, {
             method: "POST",
@@ -59,7 +59,7 @@ var loginUser = function loginUser(user) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
-          url = "".concat(_config.ZKREDIT_API, "/auth/login");
+          url = "".concat(ZKREDIT_API, "/auth/login");
           _context2.next = 3;
           return regeneratorRuntime.awrap(fetch(url, {
             method: "POST",
@@ -108,7 +108,7 @@ var getUsername = function getUsername(token) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
-          url = "".concat(_config.ZKREDIT_API, "/api/user");
+          url = "".concat(ZKREDIT_API, "/api/user");
           _context3.next = 3;
           return regeneratorRuntime.awrap(fetch(url, {
             method: "GET",

@@ -1,4 +1,5 @@
-import { ZKREDIT_API } from "config";
+// import { ZKREDIT_API } from "config";
+ZKREDIT_API = "http://localhost:8081"
 
 export const registerUser = async (user) => {
   const url = `${ZKREDIT_API}/auth/signup`;

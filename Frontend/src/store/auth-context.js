@@ -1,40 +1,29 @@
 import { useState, useEffect } from "react";
 import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {getUsername} from "../api/auth.api"
+import { getUsername } from "api/auth.api";
 
 const AuthContext = React.createContext({
   token: "",
   isLoggedIn: false,
-  userInfo: { firstName: "", lastName: "", email: "" },
+  username: "",
   login: (token) => {},
   logout: () => {},
 });
 
 export const AuthContextProvider = (props) => {
   const [token, setToken] = useState("");
-  const [userInfo, setUserInfo] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-  });
+  const [username, setUsername] = useState("");
   const isLoggedIn = token.length !== 0
 
-  async function fetchUserData(token) {
-    const response = await getUsername(token)
-    const user = await response.json()
-
-    setUserInfo({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-    });
-
+  async function fetchUsername(token) {
+    const username = await getUsername(token)
+    setUsername(username);
   }
 
 
   const loginHandler = async (token) => {
-    await fetchUserData(token);
+    await fetchUsername(token);
     setToken(token);
     AsyncStorage.setItem('token',token);
   };
@@ -48,7 +37,7 @@ export const AuthContextProvider = (props) => {
       try {
         let savedToken = await AsyncStorage.getItem('token');
         if (savedToken){
-          await fetchUserData(savedToken)
+          await fetchUsername(savedToken)
           setToken(savedToken);
         }
         
@@ -64,7 +53,7 @@ export const AuthContextProvider = (props) => {
   const contextValue = {
     token,
     isLoggedIn,
-    userInfo,
+    username,
     login: loginHandler,
     logout: logoutHandler,
   };
