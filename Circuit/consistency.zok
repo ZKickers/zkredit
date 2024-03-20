@@ -7,7 +7,7 @@ def isIdentical<N>(u8[N] a, u8[N] b) -> bool {
     return true;
 }
 
-def main<N_name,N_adr,N_bd,N_ssn>(
+def main<N_name,N_adr,N_bd,N_ssn,N_score>(
         ClientData <N_name, N_adr, N_bd, N_ssn> clientData,
         Response <N_name, N_adr, N_bd, N_ssn, N_score> response
     ) -> bool {

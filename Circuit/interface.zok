@@ -15,6 +15,6 @@ struct Response <N_name, N_adr, N_bd, N_ssn, N_score> {
     u8[N_adr] address;
     u8[N_bd] birthdate;
     u8[N_ssn] ssn;
-    u8[2] score;
+    u8[N_score] score;
     Signature sig;
 }

@@ -1,20 +1,13 @@
-struct ClientData <N_name, N_adr, N_bd, N_ssn> { 
-    u8[N_name] name;
-    u8[N_adr] address;
-    u8[N_bd] birthdate;
-    u8[N_ssn] ssn;
-}
-
 struct Signature {
     field[2] R;
     field S;
 }
 
-struct Response <N_name, N_adr, N_bd, N_ssn, N_score, N_score> { 
+struct Response <N_name, N_adr, N_bd, N_ssn, N_score> { 
     u8[N_name] name;
     u8[N_adr] address;
     u8[N_bd] birthdate;
     u8[N_ssn] ssn;
     u8[N_score] score;
-    // Signature sig;
+    Signature sig;
 }
