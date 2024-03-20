@@ -1,8 +1,8 @@
-from "./interface.zok" import Signature, ClientData, Response;
-from "./commitment" import main as commit;
-from "./threshold" import main as thresCheck;
-from "./consistency.zok" import main as isConsistent;
-from "./digsig.zok" import main as isValidSignature;
+from "./subcircuits/interface.zok" import Signature, ClientData, Response;
+from "./subcircuits/commitment.zok" import main as commit;
+from "./subcircuits/threshold.zok" import main as thresCheck;
+from "./subcircuits/consistency.zok" import main as isConsistent;
+from "./subcircuits/digsig.zok" import main as isValidSignature;
 
 
 def main(private ClientData<70,100,10,9> clientData, private u8[32] nonce,
