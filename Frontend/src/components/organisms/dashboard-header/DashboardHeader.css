@@ -1,0 +1,43 @@
+.logged-in-header {
+  font-size: 28px;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dashboard-username {
+  color: #009a2b;
+  font-weight: bold;
+}
+
+.dashboard-options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.opt-profile {
+  width: 33%;
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.opt-separator {
+  height: 50%;
+  width: 0;
+  border-left: 3px solid;
+}
+
+.opt-logout {
+  width: 33%;
+  color: #ff0000;
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
