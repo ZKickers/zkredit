@@ -1,0 +1,20 @@
+from "./interface" import ClientData,Response;
+
+def isIdentical<N>(u8[N] a, u8[N] b) -> bool {
+    for u32 i in 0..N{
+        assert(a[i] == b[i]);
+    }
+    return true;
+}
+
+def main<N_name,N_adr,N_bd,N_ssn>(
+        ClientData <N_name, N_adr, N_bd, N_ssn> clientData,
+        Response <N_name, N_adr, N_bd, N_ssn> response
+    ) -> bool {
+
+        assert(isIdentical(clientData.name,response.name));
+        assert(isIdentical(clientData.address,response.address));
+        assert(isIdentical(clientData.birthdate,response.birthdate));
+        assert(isIdentical(clientData.ssn,response.ssn));
+        return true;
+}
