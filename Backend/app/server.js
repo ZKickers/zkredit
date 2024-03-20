@@ -2,9 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth');
-const gettransaction = require('./routes/getTX')
+const getTX = require('./routes/getTX')
 const app = express();
-const deletedTransaction = require('./routes/deleteTX')
+const deleteTX = require('./routes/deleteTX')
 const ClientRequest = require('./routes/ClientRequest')
 app.use(bodyParser.json());
 
@@ -15,8 +15,8 @@ mongoose.connect('mongodb://0.0.0.0:27017/zkredit')
 
 // Routes
 app.use('/auth', authRoutes);
-app.use('/gettransaction', gettransaction);
-app.use('/deletetransaction', deletedTransaction);
+app.use('/getTX', getTX);
+app.use('/deleteTX', deleteTX);
 app.use('/ClientRequest', ClientRequest);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

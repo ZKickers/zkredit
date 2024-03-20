@@ -7,6 +7,9 @@ const ProofInput = require('../models/ProofInput');
 const WebSocket = require('ws');
 const wss = new WebSocket.Server({ port: 8080 }); // WebSocket server
 const creditorConnections = {}; // Store WebSocket connections for each creditor
+const BUREAU_ENDPOINT = 'http://127.0.0.1:8061/';
+
+
 async function createTransaction(clientInfo, creditorUser, clientId) {
     try
     {
@@ -86,8 +89,7 @@ function notifyCreditor(creditorId, transactionData, clientFullName) {
 }
 
 async function sendClientInfo(clientInfo, creditorUserName, token) {
-    const url = 'http://127.0.0.1:8061/';
-    const response = await axios.post(url, clientInfo);
+    const response = await axios.post(BUREAU_ENDPOINT, clientInfo);
     console.log('Response from server:');
     console.log(response.data);
     const creditorUser = await User.findOne({ username: creditorUserName });

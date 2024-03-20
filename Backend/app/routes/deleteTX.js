@@ -4,7 +4,7 @@ const Transaction = require('../models/Transaction');
 const ProofInput = require('../models/ProofInput');
 const verifyToken = require('../Services/authMiddleware');
 
-router.delete('/transactions/:id', verifyToken, async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
     try {
         const transaction = await Transaction.findById(req.params.id);
         if (!transaction) {

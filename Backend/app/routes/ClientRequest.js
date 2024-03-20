@@ -14,7 +14,7 @@ const validateParams = (req, res, next) => {
 };
 
 
-router.post('/client', verifyToken, validateParams, async (req, res) => {
+router.post('/', verifyToken, validateParams, async (req, res) => {
     try {
         const clientInfo = req.body; 
         const token = req.header('Authorization');
