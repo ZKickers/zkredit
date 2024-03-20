@@ -74,3 +74,6 @@ def int_to_ascii(num):
         ascii_chars = chr(num % 256) + ascii_chars
         num //= 256
     return ascii_chars
+
+def str_to_intArr(input_string):
+    return [str(ord(char)) for char in input_string]
