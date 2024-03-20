@@ -1,1 +1,1 @@
-export const ZKREDIT_API = "https://localhost:8081";
+export const ZKREDIT_API = "http://localhost:8081";

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import React from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUsername } from "api/auth.api";
 
 const AuthContext = React.createContext({
@@ -18,31 +17,31 @@ export const AuthContextProvider = (props) => {
 
   async function fetchUsername(token) {
     const username = await getUsername(token)
-    setUsername(username);
+    setUsername(username)
   }
 
 
   const loginHandler = async (token) => {
     await fetchUsername(token);
     setToken(token);
-    AsyncStorage.setItem('token',token);
+    localStorage.setItem("token",token)
   };
 
   const logoutHandler = () => {
     setToken("");
-    AsyncStorage.setItem('token',"");
+    localStorage.setItem("token", token);
   };
 
   const isLogIn = async () => {
       try {
-        let savedToken = await AsyncStorage.getItem('token');
+        let savedToken = await localStorage.getItem('token');
         if (savedToken){
           await fetchUsername(savedToken)
           setToken(savedToken);
         }
         
       } catch (error) {
-        console.log('is logged error ${error}');
+        console.log('is logged error',error);
       }
   }
 

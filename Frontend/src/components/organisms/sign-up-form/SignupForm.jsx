@@ -8,6 +8,10 @@ import {
   useEmailValidation,
   usePasswordValidation,
 } from "hooks/signup-form-hooks/signup-form-hooks";
+import { registerUser } from "api/auth.api";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function SignupForm() {
   const [username, setUsername] = useState("");
@@ -22,27 +26,21 @@ export default function SignupForm() {
     validatePassword,
     handlePasswordChange,
   } = usePasswordValidation();
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password, setPassword] = useState("");
 
   const signupHandler = async (e) => {
     e.preventDefault();
     if (validData()) {
       try {
         const response = await registerUser({
-          username,
           email,
+          username,
           password,
         });
         const message = await response.text();
-        toast.show({
-          title: message, 
-          placement: "top",
-        });
+        toast(message);
       } catch (error) {
-        toast.show({
-          title: error.message,
-          placement: "top",
-        });
+        toast(error.message);
       }
     }
   };
@@ -50,7 +48,7 @@ export default function SignupForm() {
   const validData = () => {
     return validateUsername(username) &&
       validateEmail(email) &&
-      validatePassword(username, email, confirmPassword)
+      validatePassword(username, email, password)
   }
 
   const textStyle = {
@@ -64,6 +62,7 @@ export default function SignupForm() {
         <div className="form-header-text">
           <h1>sign up to ZKredit</h1>
           <h2>quick and easy</h2>
+          <ToastContainer />
         </div>
       </div>
       <form
@@ -144,7 +143,7 @@ export default function SignupForm() {
               variant="outlined"
               type="password"
               fullWidth
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               error={!passwordsMatch}
               helperText={!passwordsMatch && "Passwords do not match"}
               InputLabelProps={{ style: textStyle }}

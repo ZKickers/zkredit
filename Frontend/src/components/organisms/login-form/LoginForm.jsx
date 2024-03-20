@@ -1,24 +1,30 @@
 import { TextField } from "@mui/material";
 import "./LoginForm.css";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { signinIcon } from "assets";
 import { loginUser } from "api/auth.api";
+import AuthContext from "../../../store/auth-context";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const auth = useContext(AuthContext);
 
-  const loginHandler = async () => {
+  const loginHandler = async (e) => {
+    e.preventDefault();
     try {
       const response = await loginUser({ username, password });
-      const token = await response.text();
-      auth.login(token);
+      var token = await response.text();
+      token = JSON.parse(token)['token']
+      if (token.length != 0) {
+        console.log("You have logged in successfully")
+        auth.login(token)
+      }
     } catch (error) {
-      toast.show({
-        title: error.message,
-        placement: "top",
-      });
+      toast(error.message)
     }
   };
 
@@ -29,6 +35,7 @@ export default function LoginForm() {
 
   return (
     <div className="login-form d-flex align-items-center justify-content-center">
+      <ToastContainer />
       <form
         onSubmit={loginHandler}
         className="d-flex flex-column"
@@ -84,7 +91,7 @@ export default function LoginForm() {
         <div className="mt-1 mb-4" style={{ width: "90%" }}>
           <SubmitButton>
             <img src={signinIcon} alt="sign-in-icon" />
-            <span>Sign In</span>
+            <span>Log In</span>
           </SubmitButton>
         </div>
       </form>

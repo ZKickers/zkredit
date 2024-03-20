@@ -3,9 +3,14 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth');
 const getTX = require('./routes/getTX')
+const cors = require('cors')
 const app = express();
 const deleteTX = require('./routes/deleteTX')
 const ClientRequest = require('./routes/ClientRequest')
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+}));
 app.use(bodyParser.json());
 
 mongoose.connect('mongodb://0.0.0.0:27017/zkredit')
