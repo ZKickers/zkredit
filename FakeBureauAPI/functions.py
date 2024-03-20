@@ -55,4 +55,18 @@ def sha256Padded(msg):
     padded_hash = hash + '0' * 64
     return padded_hash
 
+def conc_json(msg):
+    res = ""
+    for value in msg.values():
+        if isinstance(value, int):
+            res += int_to_ascii(value)
+        elif isinstance(value, str):
+            res += value
+    return res
 
+def int_to_ascii(num):
+    ascii_chars = ''
+    while num > 0:
+        ascii_chars = chr(num % 256) + ascii_chars
+        num //= 256
+    return ascii_chars
