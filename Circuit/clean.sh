@@ -1,1 +1,0 @@
-rm out out.r1cs out.wtns proof.json witness

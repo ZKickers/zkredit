@@ -56,6 +56,71 @@
         "size": 32,
         "type": "u8"
       }
+    },
+    {
+      "name": "response",
+      "public": false,
+      "type": "struct",
+      "components": {
+        "name": "Response",
+        "generics": [
+          70,
+          100,
+          10,
+          9
+        ],
+        "members": [
+          {
+            "name": "name",
+            "type": "array",
+            "components": {
+              "size": 70,
+              "type": "u8"
+            }
+          },
+          {
+            "name": "address",
+            "type": "array",
+            "components": {
+              "size": 100,
+              "type": "u8"
+            }
+          },
+          {
+            "name": "birthdate",
+            "type": "array",
+            "components": {
+              "size": 10,
+              "type": "u8"
+            }
+          },
+          {
+            "name": "ssn",
+            "type": "array",
+            "components": {
+              "size": 9,
+              "type": "u8"
+            }
+          },
+          {
+            "name": "score",
+            "type": "array",
+            "components": {
+              "size": 2,
+              "type": "u8"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "threshold",
+      "public": true,
+      "type": "array",
+      "components": {
+        "size": 2,
+        "type": "u8"
+      }
     }
   ],
   "output": {

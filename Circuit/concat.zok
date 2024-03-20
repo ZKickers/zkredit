@@ -12,7 +12,6 @@ def clientConcat <N_name, N_adr, N_bd, N_ssn, N>(
 def respConcat <N_name, N_adr, N_bd, N_ssn, N>(
       Response <N_name, N_adr, N_bd, N_ssn> response
     ) -> u8[N]{
-        assert(N == N_name + N_adr + N_bd + N_ssn + 2);
         u8[N] res = [...response.name, ...response.address,
                         ...response.birthdate,...response.ssn,
                         ...response.score];

@@ -1,5 +1,4 @@
 from "./interface.zok" import Signature, ClientData, Response;
-from "./concat.zok" import clientConcat/*, respConcat*/;
 from "./commitment" import main as commit;
 from "./threshold" import main as thresCheck;
 
@@ -7,7 +6,6 @@ def main(private ClientData<70,100,10,9> clientData, private u8[32] nonce,
         private Response<70,100,10,9> response,/* private field[2] publicKey, */
         public u8[2] threshold) -> (bool, u32[8]){
     bool isMeetsThreshold = thresCheck(response.score,threshold);
-    u8[189] clientDataConc = clientConcat(clientData);
-    u32[8] id = commit(clientDataConc,nonce);
+    u32[8] id = commit(clientData,nonce);
     return (isMeetsThreshold, id);
 }
