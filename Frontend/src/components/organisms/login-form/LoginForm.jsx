@@ -3,14 +3,23 @@ import "./LoginForm.css";
 import { useState } from "react";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { signinIcon } from "assets";
+import { loginUser } from "api/auth.api";
 
 export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(username, password);
+  const loginHandler = async () => {
+    try {
+      const response = await loginUser({ username, password });
+      const token = await response.text();
+      auth.login(token);
+    } catch (error) {
+      toast.show({
+        title: error.message,
+        placement: "top",
+      });
+    }
   };
 
   const textStyle = {
@@ -21,7 +30,7 @@ export default function LoginForm() {
   return (
     <div className="login-form d-flex align-items-center justify-content-center">
       <form
-        onSubmit={handleSubmit}
+        onSubmit={loginHandler}
         className="d-flex flex-column"
         style={{ width: "85%" }}
       >

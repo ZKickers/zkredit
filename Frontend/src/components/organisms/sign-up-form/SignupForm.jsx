@@ -24,17 +24,34 @@ export default function SignupForm() {
   } = usePasswordValidation();
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const signupHandler = async (e) => {
     e.preventDefault();
-    if (
-      validateUsername(username) &&
-      validateEmail(email) &&
-      validatePassword(username, email, confirmPassword)
-    ) {
-      console.log("Passed all tests!")
-      
+    if (validData()) {
+      try {
+        const response = await registerUser({
+          username,
+          email,
+          password,
+        });
+        const message = await response.text();
+        toast.show({
+          title: message, 
+          placement: "top",
+        });
+      } catch (error) {
+        toast.show({
+          title: error.message,
+          placement: "top",
+        });
+      }
     }
   };
+
+  const validData = () => {
+    return validateUsername(username) &&
+      validateEmail(email) &&
+      validatePassword(username, email, confirmPassword)
+  }
 
   const textStyle = {
     fontWeight: "bold",
@@ -50,7 +67,7 @@ export default function SignupForm() {
         </div>
       </div>
       <form
-        onSubmit={handleSubmit}
+        onSubmit={signupHandler}
         autoComplete="off"
         className="d-flex flex-column"
         style={{ width: "85%" }}
