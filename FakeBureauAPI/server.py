@@ -19,7 +19,7 @@ def credit_report():
     if compare_data(user_data, dummy_user):
         private_key = read_key(PATH + 'privateKeyBJJ.pem')
         dummy_report = read_json(PATH + 'dummyReport.json')
-        signature = sign_bjj(json_to_str(dummy_report), private_key)
+        signature = sign_bjj(dummy_report, private_key)
         dummy_report['signature'] = signature
         save_json(dummy_report,'response.json')
         return jsonify(dummy_report)
