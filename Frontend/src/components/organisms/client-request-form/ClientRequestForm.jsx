@@ -19,7 +19,7 @@ import { ClientRequestValidationSchema } from "utils/validators/ClientRequestVal
 //   "ssn": "210734803"
 // }
 
-export default function ClientRequestForm() {
+export default function ClientRequestForm({handleClose}) {
   const {
     register,
     handleSubmit,
@@ -29,7 +29,28 @@ export default function ClientRequestForm() {
     clearErrors,
   } = useForm({ resolver: yupResolver(ClientRequestValidationSchema) });
 
-  const onRequestSubmit = (data) => {};
+  const onRequestSubmit = (data) => {
+    //create json object from form data
+    const jsonData = {
+      fullname: data.fullname,
+      creditorUserName: data.creditorUserName,
+      address: data.address,
+      birthdate: data.birthdate,
+      ssn: data.ssn,
+    };
+
+    //TODO: send jsonData to backend
+
+    //clear form
+    setValue("fullname", "");
+    setValue("creditorUserName", "");
+    setValue("address", "");
+    setValue("birthdate", "");
+    setValue("ssn", "");
+    setValue("confirmSSN", "");
+
+    handleClose();
+  };
 
   const textStyle = {
     fontWeight: "bold",
@@ -75,7 +96,7 @@ export default function ClientRequestForm() {
         </div>
         <div className="row mt-2 mx-auto w-100">
           <TextField
-            label="Creditor User Name"
+            label="Creditor Username"
             variant="outlined"
             fullWidth
             {...register("creditorUserName")}
@@ -179,9 +200,9 @@ export default function ClientRequestForm() {
               label="Confirm SSN"
               variant="outlined"
               fullWidth
-              {...register("confirmSsn")}
-              error={!!errors.confirmSsn}
-              helperText={errors.confirmSsn?.message || ""}
+              {...register("confirmSSN")}
+              error={!!errors.confirmSSN}
+              helperText={errors.confirmSSN?.message || ""}
               InputLabelProps={{ style: textStyle }}
               InputProps={{
                 style: { borderRadius: "14px", ...textStyle },

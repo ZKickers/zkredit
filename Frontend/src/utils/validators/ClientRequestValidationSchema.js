@@ -1,18 +1,37 @@
-import * as yup from 'yup';
-
-//  Sample JSON data for the form{
-//   "fullname": "John Q. Doe",
-//   "creditorUserName": "joe",
-//   "address": "123 Oak Saint Anytown, WI. 1111",
-//   "birthdate": "02-07-2001",
-//   "ssn": "210734803"
-// }
+import * as yup from "yup";
 
 export const ClientRequestValidationSchema = yup.object().shape({
-    fullname: yup.string().required(),
-    creditorUserName: yup.string().required(),
-    address: yup.string().required(),
-    birthdate: yup.string().required(),
-    ssn: yup.string().required(),
-    confirmSSN: yup.string().required().oneOf([yup.ref('ssn'), null], 'SSN does not match'),
+  fullname: yup
+    .string()
+    .matches(
+      /^[a-zA-Z .]+$/,
+      "Full name can only contain alphabets, spaces, or dots"
+    )
+    .required("Full name is required"),
+
+  creditorUserName: yup
+    .string()
+    .matches(/^\S*$/, "Creditor user name cannot contain spaces")
+    .required("Creditor user name is required"),
+
+  address: yup.string().required("Address is required"),
+
+  birthdate: yup
+    .string()
+    .matches(/^\d{2}-\d{2}-\d{4}$/, "Invalid date format")
+    .test("birthdate", "Birthdate must be in the past", (value) => {
+      if (!value) return true;
+      const birthdate = new Date(value);
+      const currentDate = new Date();
+      return birthdate < currentDate;
+    })
+    .required("Birthdate is required"),
+  ssn: yup
+    .string()
+    .matches(/^\d{9}$/, "SSN must be 9 digits")
+    .required("SSN is required"),
+  confirmSSN: yup
+    .string()
+    .oneOf([yup.ref("ssn"), null], "SSN confirmation must match SSN")
+    .required("SSN confirmation is required"),
 });
