@@ -1,4 +1,9 @@
-* {
-  margin: 0;
-  padding: 0;
+body {
+  font-family: 'montserrat', sans-serif;
+}
+
+.zkredit-title {
+  font-weight: bold;
+  font-size: 4rem;
+  text-transform: uppercase;
 }

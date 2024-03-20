@@ -1,0 +1,38 @@
+.modal-page {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999999;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.my-modal {
+  background-color: #e9e9e9;
+  display: flex;
+  border: 1px solid;
+  border-radius: 10px;
+  width: 40%;
+  height: 60vh;
+}
+
+@media screen and (max-width: 1440px) {
+  .my-modal {
+      width: 50%;
+      height: 65vh;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .my-modal {
+      width: 80%;
+      height: 70vh;
+  }
+}
