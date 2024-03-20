@@ -15,9 +15,11 @@ const transactionSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Insufficient', 'Pending', 'Success', 'Fail'],
+        enum: ['Insufficient', 'Pending_Threshold', 'Pending_Verification', 'Success', 'Fail'],
         default: 'Insufficient'
     }
+}, {
+    timestamps: true // Enable timestamps feature
 });
 
 

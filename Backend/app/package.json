@@ -11,9 +11,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@zk-kit/baby-jubjub": "^0.3.0",
+    "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
     "express": "^4.18.3",
     "jsonwebtoken": "^9.0.2",
-    "mongodb": "^6.5.0"
+    "mongodb": "^6.5.0",
+    "mongoose": "^8.2.2",
+    "ws": "^8.16.0"
   }
 }
