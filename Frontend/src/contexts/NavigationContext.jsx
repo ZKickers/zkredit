@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 
 const NavigationContext = createContext();
 
-export default function NavigationProvider({ children }) {
+function NavigationProvider({ children }) {
   const [path, setPath] = useState(window.location.pathname);
 
   useEffect(() => {
@@ -28,3 +28,4 @@ export default function NavigationProvider({ children }) {
 }
 
 export { NavigationProvider };
+export default NavigationContext;
