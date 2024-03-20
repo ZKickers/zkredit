@@ -18,7 +18,8 @@ app.use('/auth', authRoutes);
 app.use('/getTX', getTX);
 app.use('/deleteTX', deleteTX);
 app.use('/ClientRequest', ClientRequest);
-const PORT = process.env.PORT || 3000;
+
+const PORT = 8081;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

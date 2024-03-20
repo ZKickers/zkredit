@@ -32,6 +32,7 @@ export default function SignupForm() {
       validatePassword(username, email, confirmPassword)
     ) {
       console.log("Passed all tests!")
+      
     }
   };
 
