@@ -7,6 +7,13 @@ button {
   border: none;
 }
 
+.page-template {
+  margin: 20px;
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
 .zkredit-title {
   font-weight: bold;
   font-size: 4rem;
