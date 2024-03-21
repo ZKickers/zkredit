@@ -23,7 +23,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var useClientRequest = function useClientRequest() {
   var auth = (0, _react.useContext)(_authContext["default"]);
-  var url = "".concat(_config.ZKREDIT_API, "/ClientRequest");
+  var url = "".concat(_config.BACKEND_URL, "/ClientRequest");
 
   var clientRequest = function clientRequest(data) {
     var response;

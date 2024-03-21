@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useContext } from "react";
 import AuthContext from "store/auth-context";
-import { ZKREDIT_API } from "config";
+import { BACKEND_URL } from "config";
 
 const useClientRequest = () => {
   const auth = useContext(AuthContext);
-  const url = `${ZKREDIT_API}/ClientRequest`;
+  const url = `${BACKEND_URL}/ClientRequest`;
 
   const clientRequest = async (data) => {
     data = { ...data, username: auth.username };

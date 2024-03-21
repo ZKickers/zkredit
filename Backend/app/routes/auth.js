@@ -6,6 +6,7 @@ const User = require('../models/User');
 const router = express.Router();
 
 router.post('/signup', async (req, res) => {
+    console.log("Calling signup")  
     try {
       if (!req.body.username || !req.body.email || !req.body.password) {
         return res.status(400).send('Username, email, and password are required');
@@ -54,6 +55,7 @@ router.post('/signup', async (req, res) => {
   
 
 router.post('/login', async (req, res) => {
+  console.log("Calling login")  
     try {
       const user = await User.findOne({ username: req.body.username });
   
@@ -82,6 +84,7 @@ function generateAccountId() {
 }
 
 router.get('/', async (req, res) => {
+  console.log("Calling getUsername")
   const token = req.header('Authorization');
 
   if (!token) {
@@ -89,9 +92,7 @@ router.get('/', async (req, res) => {
   }
 
   try {
-      console.log("verifying token...")
       const user = jwt.verify(token, 'secret');
-      console.log("verifyied token")
       res.json(user);
   } catch (error) {
       console.error('Error verifying token:', error);

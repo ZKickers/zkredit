@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getUsername = exports.loginUser = exports.registerUser = void 0;
+exports.getUser = exports.loginUser = exports.registerUser = void 0;
 
 var _config = require("config");
 
@@ -13,7 +13,7 @@ var registerUser = function registerUser(user) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          url = "".concat(_config.ZKREDIT_API, "/auth/signup");
+          url = "".concat(_config.BACKEND_URL, "/auth/signup");
           _context.next = 3;
           return regeneratorRuntime.awrap(fetch(url, {
             method: "POST",
@@ -59,7 +59,7 @@ var loginUser = function loginUser(user) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
-          url = "".concat(_config.ZKREDIT_API, "/auth/login");
+          url = "".concat(_config.BACKEND_URL, "/auth/login");
           _context2.next = 3;
           return regeneratorRuntime.awrap(fetch(url, {
             method: "POST",
@@ -102,13 +102,13 @@ var loginUser = function loginUser(user) {
 
 exports.loginUser = loginUser;
 
-var getUsername = function getUsername(token) {
-  var url, response, username;
-  return regeneratorRuntime.async(function getUsername$(_context3) {
+var getUser = function getUser(token) {
+  var url, response, user;
+  return regeneratorRuntime.async(function getUser$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
-          url = "".concat(_config.ZKREDIT_API, "/auth");
+          url = "".concat(_config.BACKEND_URL, "/auth");
           _context3.next = 3;
           return regeneratorRuntime.awrap(fetch(url, {
             method: "GET",
@@ -129,11 +129,11 @@ var getUsername = function getUsername(token) {
 
         case 6:
           _context3.next = 8;
-          return regeneratorRuntime.awrap(response.text());
+          return regeneratorRuntime.awrap(response.json());
 
         case 8:
-          username = _context3.sent;
-          return _context3.abrupt("return", username);
+          user = _context3.sent;
+          return _context3.abrupt("return", user);
 
         case 10:
         case "end":
@@ -143,4 +143,4 @@ var getUsername = function getUsername(token) {
   });
 };
 
-exports.getUsername = getUsername;
+exports.getUser = getUser;

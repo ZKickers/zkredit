@@ -11,7 +11,7 @@ var signup = function signup(e) {
           e.preventDefault();
           _context.prev = 1;
           _context.next = 4;
-          return regeneratorRuntime.awrap(fetch("".concat(_config.ZKREDIT_API, "/auth/signup"), {
+          return regeneratorRuntime.awrap(fetch("".concat(_config.BACKEND_URL, "/auth/signup"), {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

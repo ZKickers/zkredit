@@ -1,7 +1,7 @@
-import { ZKREDIT_API } from "config";
+import { BACKEND_URL } from "config";
 
 export const registerUser = async (user) => {
-  const url = `${ZKREDIT_API}/auth/signup`;
+  const url = `${BACKEND_URL}/auth/signup`;
   const response = await fetch(url, {
     method: "POST",
     headers: { "Content-type": "application/json" },
@@ -20,7 +20,7 @@ export const registerUser = async (user) => {
 };
 
 export const loginUser = async (user) => {
-  const url = `${ZKREDIT_API}/auth/login`;
+  const url = `${BACKEND_URL}/auth/login`;
 
   const response = await fetch(url, {
     method: "POST",
@@ -39,7 +39,7 @@ export const loginUser = async (user) => {
 };
 
 export const getUser = async (token) => {
-  const url = `${ZKREDIT_API}/auth`;
+  const url = `${BACKEND_URL}/auth`;
 
   const response = await fetch(url, {
     method: "GET",

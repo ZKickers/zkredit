@@ -1,7 +1,7 @@
-import React, { useEffect, useContext } from "react";
-import io from "socket.io-client";
-import { AuthContext } from "store/auth-context";
+import { io } from "socket.io-client";
+import AuthContext from "store/auth-context";
 import { SOCKET_URL } from "config";
+import { useContext, useEffect } from "react";
 
 const WebSocket = (onReceive) => {
   const auth = useContext(AuthContext);
