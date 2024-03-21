@@ -1,7 +1,12 @@
 .landing-page {
-    width: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@media screen and (min-width: 768px) {
+  .landing-page {
     height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  }
 }
