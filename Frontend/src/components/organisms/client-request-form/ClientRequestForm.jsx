@@ -29,6 +29,7 @@ export default function ClientRequestForm({ handleClose }) {
     handleSubmit,
     formState: { errors },
     setValue,
+    getValues,
     control,
     clearErrors,
   } = useForm({ resolver: yupResolver(ClientRequestValidationSchema) });
@@ -49,10 +50,14 @@ export default function ClientRequestForm({ handleClose }) {
     try {
       const response = await clientRequest(jsonData);
       console.log(response);
-      toast("Request initiated successfully!");
+      toast.success("Request initiated successfully!", {
+        autoClose: 3000,
+      });
     } catch (error) {
       console.log(error);
-      toast(error.message);
+      toast.error(error.message, {
+        autoClose: 5000,
+      });
     }
 
     //clear form
@@ -152,12 +157,17 @@ export default function ClientRequestForm({ handleClose }) {
         <div className="row mt-3 mx-auto w-100">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Controller
-              name="Birthdate"
+              name="birthdate"
               control={control}
               shouldValidate={true}
               defaultValue={null}
               render={() => (
                 <DatePicker
+                  value={
+                    getValues("birthdate")
+                      ? dayjs(getValues("birthdate")).toDate()
+                      : null
+                  } // Get the value of birthdate from getValues
                   className="date-picker"
                   onChange={(date) => {
                     if (date) {

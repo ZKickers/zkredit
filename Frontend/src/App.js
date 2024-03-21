@@ -18,7 +18,7 @@ export default function App() {
         {(auth.isLoggedIn && <DashboardPage />) || <LandingPage />}
       </Route>
       <Route routePath={"/dashboard"}>
-        {auth.isLoggedIn && <DashboardPage />}
+        {(auth.isLoggedIn && <DashboardPage />) || <LandingPage />}
       </Route>
       <Route routePath={"/proofs"}>
         <ProofsPage />
