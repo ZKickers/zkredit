@@ -5,6 +5,8 @@ import HeaderLeft from "components/molecules/header-left/HeaderLeft";
 import { useState } from "react";
 import ModalPage from "pages/modal-page/ModalPage";
 import Profile from "../dashboard-profile/Profile";
+import AuthContext from "store/auth-context";
+import { useContext } from "react";
 
 export default function PageHeader({ children }) {
   const rightPartClasses = classNames(
@@ -21,6 +23,9 @@ export default function PageHeader({ children }) {
 
   const handleShowProfile = () => setShowProfile(true);
   const handleCloseProfile = () => setShowProfile(false);
+
+  const auth = useContext(AuthContext);
+  const handleLogout = () => {auth.logout();}
 
   return (
     <div className="row container-fluid mx-auto mt-4">
@@ -39,7 +44,8 @@ export default function PageHeader({ children }) {
             <span>Profile</span>
           </button>
           <div className="opt-separator"></div>
-          <button className="opt-logout m-0">
+          <button className="opt-logout m-0"
+          onClick={handleLogout}>
             <LogoutIcon sx={{ fontSize: "32px", transform: "scaleX(-1)" }} />
             <span>Logout</span>
           </button>
