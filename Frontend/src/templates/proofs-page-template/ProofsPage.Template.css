@@ -1,0 +1,16 @@
+.proofs-title {
+  font-size: 64px;
+  font-weight: bold;
+}
+
+.proofs-button-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #0000CD;
+}
+
+.proofs-button-heading h2 {
+  font-size: 36px;
+  font-weight: bold;
+}
