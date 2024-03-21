@@ -8,7 +8,6 @@ const app = express();
 const deleteTX = require('./routes/deleteTX')
 const ClientRequest = require('./routes/ClientRequest');
 const { BACKEND_PORT, FRONTEND_URL, MONGODB_URI } = require('../config');
-const ClientRequest = require('./routes/ClientRequest')
 const thresholdRoute = require('./routes/thresholdRoute')
 
 app.use(cors({

@@ -11,7 +11,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ClientRequestValidationSchema } from "utils/validators/ClientRequestValidationSchema";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 import useClientRequest from "api/use-client-request";
 
@@ -35,11 +35,11 @@ export default function ClientRequestForm({ handleClose }) {
 
   const clientRequest = useClientRequest();
 
-  const onRequestSubmit = (data) => {
+  const onRequestSubmit = async (data) => {
     //create json object from form data
     const jsonData = {
       fullname: data.fullname,
-      creditorUserName: data.creditorUserName,
+      creditorUsername: data.creditorUserName,
       address: data.address,
       birthdate: data.birthdate,
       ssn: data.ssn,
@@ -47,7 +47,7 @@ export default function ClientRequestForm({ handleClose }) {
 
     //TODO: send jsonData to backend
     try {
-      const response = clientRequest(jsonData);
+      const response = await clientRequest(jsonData);
       console.log(response);
       toast("Request initiated successfully!");
     } catch (error) {
@@ -76,6 +76,7 @@ export default function ClientRequestForm({ handleClose }) {
       <div className="form-header">
         <div className="form-header-text">
           <h1 className="my-5">New Client Request</h1>
+          <ToastContainer />
         </div>
       </div>
       <form
