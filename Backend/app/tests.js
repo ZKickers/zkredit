@@ -1,21 +1,21 @@
-const { exec } = require('child_process');
+// const { exec } = require('child_process');
 
-// Command to run
-let command = 'cat ./proofs/65fba9d2e330f4dff548c5b7/input.json | zokrates compute-witness --abi --stdin  > ./proofs/65fba9d2e330f4dff548c5b7/o.txt';
-// Backend/app/proofs/65fabcbff542b1ddab6b0b05
+// // Command to run
+// let command = 'cat ./proofs/65fba9d2e330f4dff548c5b7/input.json | zokrates compute-witness --abi --stdin  > ./proofs/65fba9d2e330f4dff548c5b7/o.txt';
+// // Backend/app/proofs/65fabcbff542b1ddab6b0b05
 
-// Execute the command
-exec(command, (error, stdout, stderr) => {
-  if (error) {
-    console.error(`Error: ${error.message}`);
-    return;
-  }
-  if (stderr) {
-    console.error(`stderr: ${stderr}`);
-    return;
-  }
-  console.log(`stdout:\n${stdout}`);
-});
+// // Execute the command
+// exec(command, (error, stdout, stderr) => {
+//   if (error) {
+//     console.error(`Error: ${error.message}`);
+//     return;
+//   }
+//   if (stderr) {
+//     console.error(`stderr: ${stderr}`);
+//     return;
+//   }
+//   console.log(`stdout:\n${stdout}`);
+// });
 
 // function convertToByteArray(number) {
 //     // Check if the number is within the threshold
@@ -57,3 +57,6 @@ exec(command, (error, stdout, stderr) => {
 //         console.log('JSON file has been saved successfully.');
 //     }
 // });
+
+const currentDirectory = __dirname;
+console.log("Current working directory:", currentDirectory);

@@ -1,8 +1,11 @@
+const fs_extra = require('fs-extra');
 const express = require('express');
 const router = express.Router();
 const verifyToken = require('../Services/authMiddleware');
 const Transaction = require('../models/Transaction');
 const { handleThresholdEvent } = require('../Services/thresholdHandler');
+const index = __dirname.indexOf("/routes");
+const PROOFS_PATH = __dirname.substring(0, index) + "/proofs/"
 
 const validateParams = (req, res, next) => {
     const requiredParams = ["txId", "threshold"];
@@ -24,16 +27,16 @@ router.post('/trigger-threshold', verifyToken, validateParams, async (req, res) 
         if (!transaction) {
             return res.status(404).send('Transaction not found');
         }
-        await handleThresholdEvent(req.user.accountId, transaction, threshold);
-        res.status(200).json({ error: 'done' });
-
-        // Assuming 'file_path' is the path to the file you want to send
-        // const file_path = 'path/to/your/file.ext';
-        // res.status(200).download(file_path); // Send the file as an attachment
-
-        // Alternatively, if you want to send the file as the response body:
-        // res.status(200).sendFile(file_path);
-
+        await handleThresholdEvent(req.user.accountId, transaction, threshold)
+        const filePath = PROOFS_PATH + transaction._id.toString() + "/proof.json"
+        await res.status(200).download(filePath);
+        await fs_extra.remove(PROOFS_PATH + transaction._id.toString(), (err) => {
+                if (err) {
+                    console.error('Error removing directory:', err);
+                } else {
+                    console.log('Directory removed successfully');
+                }
+            });
     } catch (error) {
         console.error('Error triggering threshold event:', error);
         res.status(500).json({ error: 'Internal server error' });
