@@ -1,17 +1,12 @@
 import classNames from "classnames";
-import "./DashboardHeader.css";
+import "./PageHeader.css";
 import { LogoutIcon, AccountCircleIcon } from "assets";
+import HeaderLeft from "components/molecules/header-left/HeaderLeft";
+import { useState } from "react";
+import ModalPage from "pages/modal-page/ModalPage";
+import Profile from "../dashboard-profile/Profile";
 
-export default function DashboardHeader({ showProfile }) {
-  const leftPartClasses = classNames(
-    "col-md-7",
-    "col-sm-12",
-    "d-flex",
-    "flex-column",
-    "align-items-md-start",
-    "justify-content-sm-center",
-    "align-items-sm-center"
-  );
+export default function PageHeader({ children }) {
   const rightPartClasses = classNames(
     "col-md-5",
     "col-sm-12",
@@ -22,22 +17,24 @@ export default function DashboardHeader({ showProfile }) {
     "align-items-sm-center"
   );
 
+  const [showProfile, setShowProfile] = useState(false);
+
+  const handleShowProfile = () => setShowProfile(true);
+  const handleCloseProfile = () => setShowProfile(false);
+
   return (
     <div className="row container-fluid mx-auto mt-4">
-      <div className={leftPartClasses}>
-        <h1 className="zkredit-title">ZKredit</h1>
-        <h2 className="zkp-heading">built on zero knowledge proofs</h2>
-      </div>
+      <HeaderLeft>{children}</HeaderLeft>
       <div className={rightPartClasses}>
         <h3 className="logged-in-header w-75">
           logged in as
           {/**
            * TODO: HANDLE DYNAMIC USERNAME FETCHING
            */}
-          <span className="dashboard-username">&nbsp; zeyadzidan</span>
+          <span className="username">&nbsp; zeyadzidan</span>
         </h3>
-        <div className="dashboard-options w-75">
-          <button onClick={showProfile} className="opt-profile m-0">
+        <div className="options w-75">
+          <button onClick={handleShowProfile} className="opt-profile m-0">
             <AccountCircleIcon sx={{ fontSize: "32px" }} />
             <span>Profile</span>
           </button>
@@ -48,6 +45,9 @@ export default function DashboardHeader({ showProfile }) {
           </button>
         </div>
       </div>
+      <ModalPage show={showProfile} handleClose={handleCloseProfile}>
+        <Profile />
+      </ModalPage>
     </div>
   );
 }

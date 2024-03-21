@@ -1,46 +1,58 @@
-import "./DashboardPage.Template.css";
-import DashboardHeader from "components/organisms/dashboard-header/DashboardHeader";
-import ModalPage from "pages/modal-page/ModalPage";
 import { useState } from "react";
-import Profile from "components/organisms/dashboard-profile/Profile";
-import {
-  dashboardClasses,
-  transactionsBox,
-  transactionsClasses,
-  sessions,
-} from "./use-classnames";
+import "./DashboardPage.Template.css";
 import { LockIcon, LockOpenIcon } from "assets";
+import ModalPage from "pages/modal-page/ModalPage";
 import Link from "components/atoms/navigation/Link";
+import PageHeader from "components/organisms/page-header/PageHeader";
 import Transaction from "components/molecules/transaction/Transaction";
+import {
+  pageClasses,
+  leftClasses,
+  txBox,
+  rightClasses,
+} from "hooks/use-classnames";
+import ClientRequestForm from "components/organisms/client-request-form/ClientRequestForm";
 
 export default function DashboardPageTemplate() {
-  const [showProfile, setShowProfile] = useState(false);
-
-  const handleShowProfile = () => setShowProfile(true);
-  const handleCloseProfile = () => setShowProfile(false);
-
   const [showSession, setShowSession] = useState(false);
 
   const handleShowSession = () => setShowSession(true);
   const handleCloseSession = () => setShowSession(false);
 
   return (
-    <div className="dashboard-page-template">
-      <DashboardHeader showProfile={handleShowProfile} />
-      <div className={dashboardClasses}>
-        <div className={transactionsClasses}>
-          <h3>Recent Transactions</h3>
-          <div className={transactionsBox}>
-            <Transaction date="MM/DD/YYYY" CRID="85962662313" CLID="85962662313" verified={true} />
-            <Transaction date="MM/DD/YYYY" CRID="85962662313" CLID="85962662313" />
-            <Transaction date="MM/DD/YYYY" CRID="85962662313" CLID="85962662313" verified={true} />
+    <div className="page-template">
+      <PageHeader>
+        <h1 className="zkredit-title">ZKredit</h1>
+        <h2 className="zkp-heading">built on zero knowledge proofs</h2>
+      </PageHeader>
+      <div className={pageClasses}>
+        <div className={leftClasses}>
+          <h3>Recently Received Proofs</h3>
+          <div className={txBox}>
+            <Transaction
+              date="MM/DD/YYYY"
+              CRID="85962662313"
+              CLID="85962662313"
+              verified
+            />
+            <Transaction
+              date="MM/DD/YYYY"
+              CRID="85962662313"
+              CLID="85962662313"
+              declined
+            />
+            <Transaction
+              date="MM/DD/YYYY"
+              CRID="85962662313"
+              CLID="85962662313"
+              pendingThreshold
+            />
           </div>
         </div>
-        <div className={sessions}>
+        <div className={rightClasses}>
           <div className="client-session-container">
             <button
               className="w-75"
-              style={{ whiteSpace: "nowrap" }}
               onClick={handleShowSession}
             >
               <h2
@@ -52,10 +64,10 @@ export default function DashboardPageTemplate() {
             </button>
           </div>
           <div className="creditor-proofs-container">
-            <Link to="/landing" className="w-100">
+            <Link to="/proofs" className="w-75">
               <h2
-                className="d-flex justify-content-evenly align-items-center w-100"
-                style={{ fontWeight: "bold", color: "#FFB800" }}
+                className="d-flex justify-content-between align-items-center w-100"
+                style={{ fontWeight: "bold", color: "#0000CD" }}
               >
                 <LockOpenIcon sx={{ fontSize: "56px" }} /> Browse Received
                 Proofs
@@ -64,13 +76,8 @@ export default function DashboardPageTemplate() {
           </div>
         </div>
       </div>
-      <ModalPage show={showProfile} handleClose={handleCloseProfile}>
-        <Profile />
-      </ModalPage>
       <ModalPage show={showSession} handleClose={handleCloseSession}>
-        {/**
-         * TODO: Use the client session modal content here
-         */}
+         <ClientRequestForm handleClose={handleCloseSession} />
       </ModalPage>
     </div>
   );

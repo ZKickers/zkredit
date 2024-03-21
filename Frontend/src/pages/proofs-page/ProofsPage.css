@@ -1,12 +1,11 @@
-.landing-page {
+.proofs-page {
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 @media screen and (min-width: 768px) {
-  .landing-page {
+  .proofs-page {
     height: 100vh;
   }
 }

@@ -1,7 +1,7 @@
 import classNames from "classnames";
-import "./DashboardPage.Template.css";
+import "./fill-height.css";
 
-const dashboardClasses = classNames(
+const pageClasses = classNames(
   "row",
   "fill-height",
   "container-fluid",
@@ -16,7 +16,7 @@ const dashboardClasses = classNames(
   "p-4"
 );
 
-const transactionsClasses = classNames(
+const leftClasses = classNames(
   "col-md-7",
   "col-sm-12",
   "d-flex",
@@ -26,7 +26,7 @@ const transactionsClasses = classNames(
   "h-100"
 );
 
-const transactionsBox = classNames(
+const txBox = classNames(
   "d-flex",
   "flex-column",
   "align-items-center",
@@ -38,7 +38,7 @@ const transactionsBox = classNames(
   "overflow-auto"
 );
 
-const sessions = classNames(
+const rightClasses = classNames(
   "col-md-5",
   "col-sm-12",
   "d-flex",
@@ -46,7 +46,7 @@ const sessions = classNames(
   "justify-content-center",
   "align-items-center",
   "h-100",
-  "p-4"
+  "p-5",
 );
 
-export { dashboardClasses, transactionsClasses, transactionsBox, sessions };
+export { pageClasses, leftClasses, txBox, rightClasses };

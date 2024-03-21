@@ -4,7 +4,6 @@ import "./LandingPage.Template.css";
 import "../../index.css";
 import { checkMark, computer } from "assets";
 import LoginForm from "components/organisms/login-form/LoginForm";
-import Footer from "components/organisms/footer/Footer";
 import ModalPage from "pages/modal-page/ModalPage";
 import SignupForm from "components/organisms/sign-up-form/SignupForm";
 
@@ -44,12 +43,12 @@ export default function LPTemplate() {
         </div>
         <div className="col-md-1 col-sm-12 separator"></div>
         <div className="col-md-4 col-sm-12 sign-in">
-          <div className="computer-img mb-5">
+          <div className="computer-img mb-4">
             <img src={computer} alt="computer" />
           </div>
           <LoginForm />
           <button
-            className="my-3"
+            className="my-2"
             style={{
               fontSize: "1.5rem",
               fontWeight: "400",
@@ -62,9 +61,6 @@ export default function LPTemplate() {
             <span style={{ fontWeight: "bold" }}> Sign up here </span>
           </button>
         </div>
-      </div>
-      <div className="container-fluid p-0">
-        <Footer />
       </div>
       <ModalPage show={show} handleClose={handleClose}>
         <SignupForm />

@@ -7,11 +7,15 @@
 }
 
 .tx-verified {
-  background: linear-gradient(to right, rgba(0, 154, 43, 0.2), white);
+  background: linear-gradient(to right, rgba(0, 154, 43, 0.2), transparent);
 }
 
 .tx-failed {
-  background: linear-gradient(to right, rgba(246, 37, 37, 0.2), white);
+  background: linear-gradient(to right, rgba(246, 37, 37, 0.2), transparent);
+}
+
+.tx-pending {
+  background: linear-gradient(to right, rgba(255, 184, 0, 0.2), transparent);
 }
 
 .tx-content {
@@ -19,8 +23,16 @@
   flex-direction: column;
 }
 
-.tx-img {
-  display: flex;
-  justify-content: flex-end;
-  height: 75%;
+@media screen and (max-width: 768px) {
+  .tx-verified {
+    background: linear-gradient(to bottom, rgba(0, 154, 43, 0.2), transparent);
+  }
+  
+  .tx-failed {
+    background: linear-gradient(to bottom, rgba(246, 37, 37, 0.2), transparent);
+  }
+  
+  .tx-pending {
+    background: linear-gradient(to bottom, rgba(255, 184, 0, 0.2), transparent);
+  }
 }
