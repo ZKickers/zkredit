@@ -6,15 +6,16 @@ const jwt = require('jsonwebtoken');
 const ProofInput = require('../models/ProofInput');
 const http = require('http');
 const socketIo = require('socket.io');
+const { SOCKET_PORT } = require('../../config');
 
 const server = http.createServer();
 const io = socketIo(server);
-const PORT = process.env.PORT || 8080;
-server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+
+server.listen(SOCKET_PORT, () => {
+    console.log(`Socket Server running on port ${PORT}`);
 });
 
-io.on('connection', (socket) => {
+io.on('connect', (socket) => {
     console.log('Client connected');
 
     socket.on('joinRoom', (creditorId) => {

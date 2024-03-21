@@ -1,11 +1,11 @@
 import React, { useEffect, useContext } from "react";
 import io from "socket.io-client";
 import { AuthContext } from "store/auth-context";
-import { ZKREDIT_API } from "config";
+import { SOCKET_URL } from "config";
 
 const WebSocket = (onReceive) => {
   const auth = useContext(AuthContext);
-  const socket = io(ZKREDIT_API);
+  const socket = io(SOCKET_URL);
 
   const sendData = (data) => {
     socket.emit("requestData", data);

@@ -6,10 +6,11 @@ const getTX = require('./routes/getTX')
 const cors = require('cors')
 const app = express();
 const deleteTX = require('./routes/deleteTX')
-const ClientRequest = require('./routes/ClientRequest')
+const ClientRequest = require('./routes/ClientRequest');
+const { BACKEND_PORT, FRONTEND_URL } = require('../config');
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: FRONTEND_URL,
 }));
 app.use(bodyParser.json());
 
@@ -24,7 +25,6 @@ app.use('/getTX', getTX);
 app.use('/deleteTX', deleteTX);
 app.use('/ClientRequest', ClientRequest);
 
-const PORT = 8081;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(BACKEND_PORT, () => {
+  console.log(`BBackend Server is running on port ${BACKEND_PORT}`);
 });

@@ -5,7 +5,7 @@ import { ZKREDIT_API } from "config";
 
 const useClientRequest = () => {
   const auth = useContext(AuthContext);
-  const url = `${ZKREDIT_API}/clientRequest`;
+  const url = `${ZKREDIT_API}/ClientRequest`;
 
   const clientRequest = async (data) => {
     data = { ...data, username: auth.username };
