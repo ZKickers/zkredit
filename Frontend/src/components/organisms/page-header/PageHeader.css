@@ -6,12 +6,12 @@
   align-items: center;
 }
 
-.dashboard-username {
+.username {
   color: #009a2b;
   font-weight: bold;
 }
 
-.dashboard-options {
+.options {
   display: flex;
   justify-content: center;
   align-items: center;
