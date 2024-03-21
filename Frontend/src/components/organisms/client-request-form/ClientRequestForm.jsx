@@ -10,6 +10,7 @@ import { maskIcon, signatureIcon, idCardIcon } from "assets";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ClientRequestValidationSchema } from "utils/validators/ClientRequestValidationSchema";
+import SubmitButton from "components/atoms/submit-button/SubmitButton";
 
 //  Sample JSON data for the form{
 //   "fullname": "John Q. Doe",
@@ -19,7 +20,7 @@ import { ClientRequestValidationSchema } from "utils/validators/ClientRequestVal
 //   "ssn": "210734803"
 // }
 
-export default function ClientRequestForm({handleClose}) {
+export default function ClientRequestForm({ handleClose }) {
   const {
     register,
     handleSubmit,
@@ -61,11 +62,7 @@ export default function ClientRequestForm({handleClose}) {
     <div className="client-request-form d-flex flex-column align-items-center">
       <div className="form-header">
         <div className="form-header-text">
-          <h1>New Client Request</h1>
-          <h4>
-            Fill in the necessary data. Please be advised your data will be
-            reviewed by a credit bureau.
-          </h4>
+          <h1 className="my-5">New Client Request</h1>
         </div>
       </div>
       <form
@@ -74,6 +71,12 @@ export default function ClientRequestForm({handleClose}) {
         style={{ width: "85%" }}
       >
         <div className="row mt-5 mx-auto w-100">
+          <h4>
+            Fill in the necessary data. Please be advised your data will be
+            reviewed by a credit bureau.
+          </h4>
+        </div>
+        <div className="row mt-3 mx-auto w-100">
           <TextField
             label="Full Name"
             variant="outlined"
@@ -94,7 +97,7 @@ export default function ClientRequestForm({handleClose}) {
             }}
           />
         </div>
-        <div className="row mt-2 mx-auto w-100">
+        <div className="row mt-3 mx-auto w-100">
           <TextField
             label="Creditor Username"
             variant="outlined"
@@ -115,7 +118,7 @@ export default function ClientRequestForm({handleClose}) {
             }}
           />
         </div>
-        <div className="row mt-2 mx-auto w-100">
+        <div className="row mt-3 mx-auto w-100">
           <TextField
             label="Address"
             variant="outlined"
@@ -127,7 +130,7 @@ export default function ClientRequestForm({handleClose}) {
             InputProps={{
               style: { borderRadius: "14px", ...textStyle },
               startAdornment: (
-                <Home style={{ marginRight: "10px", ...textStyle }} />
+                <Home style={{ marginRight: "10px", fontSize: "28px" }} />
               ),
             }}
           />
@@ -160,7 +163,7 @@ export default function ClientRequestForm({handleClose}) {
                         style: { borderRadius: "14px", ...textStyle },
                         startAdornment: (
                           <CalendarMonth
-                            style={{ marginRight: "10px", ...textStyle }}
+                            style={{ marginRight: "10px", fontSize: "28px" }}
                           />
                         ),
                       },
@@ -218,15 +221,13 @@ export default function ClientRequestForm({handleClose}) {
           </div>
         </div>
         <div className="my-5 mx-auto" style={{ width: "fit-content" }}>
-          <Button
+          <SubmitButton
             className="submissionButton"
             type="submit"
-            variant="contained"
-            size="large"
-            style={{ fontSize: "20px" }}
+            style={{ width: "200px", fontSize: "20px" }}
           >
             Initiate Request
-          </Button>
+          </SubmitButton>
         </div>
       </form>
     </div>
