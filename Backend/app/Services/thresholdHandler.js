@@ -6,7 +6,6 @@ const ProofInput = require('../models/ProofInput');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const fs = require('fs');
-const fs_extra = require('fs-extra');
 
 const index = __dirname.indexOf("/Services");
 const PK_X_PATH = __dirname.substring(0, index) + "/static/publicKeyBJJ_X.pem"
@@ -91,6 +90,7 @@ async function handleThresholdEvent(creditorAccountId, transaction, threshold)
                 { status: 'Pending_Verification' },
                 { new: true } 
             );
+            await ProofInput.deleteMany({ transactionId: transaction._id });
             // await fs.unlink("./proofs/" + transaction._id.toString() + "/input.json", (err) => {
             //     if (err) {
             //         console.error('Error removing file:', err);
