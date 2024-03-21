@@ -1,27 +1,38 @@
+import React, { useEffect, useContext } from "react";
 import io from "socket.io-client";
-import { useContext } from "react";
 import { AuthContext } from "store/auth-context";
 import { ZKREDIT_API } from "config";
 
-const WebSocket = (oneResponse) => {
+const WebSocket = (onReceive) => {
   const auth = useContext(AuthContext);
   const socket = io(ZKREDIT_API);
 
-  socket.on("connect", () => {
-    console.log("Connected to WebSocket server");
-    socket.emit("joinRoom", auth.accountId);
-  });
+  const sendData = (data) => {
+    socket.emit("requestData", data);
+  };
 
-  socket.on("response", (data) => {
-    console.log("Response from server:", data);
-    oneResponse(data);
-  });
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected to WebSocket server");
+      socket.emit("joinRoom", auth.accountId);
+    });
 
-  socket.on("disconnect", () => {
-    console.log("Disconnected from WebSocket server");
-  });
+    // Listen for responses from the server
+    socket.on("response", (data) => {
+      console.log("Response from server:", data);
+      onReceive(data);
+    });
 
-  return socket;
+    // Cleanup function
+    return () => {
+      socket.disconnect(); // Disconnect the socket when the component unmounts
+    };
+  }, [auth.accountId, onReceive]);
+
+  return {
+    socket,
+    sendData,
+  };
 };
 
 export default WebSocket;
