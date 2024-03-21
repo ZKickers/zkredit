@@ -7,14 +7,14 @@ const cors = require('cors')
 const app = express();
 const deleteTX = require('./routes/deleteTX')
 const ClientRequest = require('./routes/ClientRequest');
-const { BACKEND_PORT, FRONTEND_URL } = require('../config');
+const { BACKEND_PORT, FRONTEND_URL, MONGODB_URI } = require('../config');
 
 app.use(cors({
   origin: FRONTEND_URL
 }));
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://0.0.0.0:27017/zkredit')
+mongoose.connect(MONGODB_URI)
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.error('MongoDB connection error:', err));
 

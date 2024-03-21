@@ -6,10 +6,15 @@ const jwt = require('jsonwebtoken');
 const ProofInput = require('../models/ProofInput');
 const http = require('http');
 const socketIo = require('socket.io');
-const { SOCKET_PORT, CREDIT_BUREAU_API } = require('../../config');
+const { SOCKET_PORT, CREDIT_BUREAU_API, FRONTEND_URL } = require('../../config');
 
 const socketServer = http.createServer();
-const io = socketIo(socketServer);
+const io = socketIo(socketServer, {
+    cors: {
+      origin: FRONTEND_URL,
+      credentials: true
+    }
+  });
 
 socketServer.listen(SOCKET_PORT, () => {
     console.log(`Socket Server running on port ${SOCKET_PORT}`);
