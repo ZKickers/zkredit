@@ -1,0 +1,7 @@
+from "./interface" import ClientData,Response;
+from "./consistency" import main as isConsistent;
+
+def main(private ClientData<70,100,10,9> clientData,
+            private Response<70,100,10,9,2> response){
+    assert(isConsistent(clientData, response));
+}

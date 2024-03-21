@@ -5,6 +5,9 @@ import keyIcon from "assets/key.png";
 import checkKeyIcon from "assets/check-key.png";
 import profileIcon from "assets/profile.png";
 import emailIcon from "assets/email.png";
+import maskIcon from "assets/mask.png";
+import signatureIcon from "assets/signature.png";
+import idCardIcon from "assets/id-card.png";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LockIcon from "@mui/icons-material/Lock";
@@ -21,6 +24,9 @@ export {
   checkKeyIcon,
   profileIcon,
   emailIcon,
+  maskIcon,
+  signatureIcon,
+  idCardIcon,
   LogoutIcon,
   AccountCircleIcon,
   LockIcon,

@@ -1,0 +1,16 @@
+from "./subcircuits/interface.zok" import Signature, ClientData, Response;
+from "./subcircuits/commitment.zok" import main as commit;
+from "./subcircuits/threshold.zok" import main as thresCheck;
+from "./subcircuits/consistency.zok" import main as isConsistent;
+from "./subcircuits/digsig.zok" import main as isValidSignature;
+
+
+def main(private ClientData<70,100,10,9> clientData, private u8[32] nonce,
+        private Response<70,100,10,9,2> response, private field[2] publicKey, 
+        public u8[2] threshold) -> (bool, u32[8]){
+    assert(isValidSignature(response,publicKey));
+    assert(isConsistent(clientData,response));
+    bool isMeetsThreshold = thresCheck(response.score,threshold);
+    u32[8] id = commit(clientData,nonce);
+    return (isMeetsThreshold, id);
+}

@@ -1,0 +1,11 @@
+def main<N>(u8[N] l, u8[N] r) -> bool{
+    u32 mut lBiggerIdx = N+1;
+    u32 mut rBiggerIdx = N+1;
+    for u32 i in 0..N {
+        lBiggerIdx = l[i] > r[i] && i < lBiggerIdx ? i : lBiggerIdx;
+        rBiggerIdx = l[i] < r[i] && i < rBiggerIdx ? i : rBiggerIdx;
+        log("L[i]:{}-r[i]:{}",l[i],r[i]);
+        log("lBiggerIdx:{}-rBiggerIdx:{}",lBiggerIdx,rBiggerIdx);
+    }
+    return lBiggerIdx <= rBiggerIdx;
+}

@@ -1,0 +1,6 @@
+from "./commitment.zok" import main as commit;
+
+def main(private u8[26] clientData, private u8[32] nonce) -> u32[8]{
+    u32[8] id = commit(clientData, nonce);
+    return id;
+}

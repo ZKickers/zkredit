@@ -11,6 +11,7 @@ import {
   txBox,
   rightClasses,
 } from "hooks/use-classnames";
+import ClientRequestForm from "components/organisms/client-request-form/ClientRequestForm";
 
 export default function DashboardPageTemplate() {
   const [showSession, setShowSession] = useState(false);
@@ -76,9 +77,7 @@ export default function DashboardPageTemplate() {
         </div>
       </div>
       <ModalPage show={showSession} handleClose={handleCloseSession}>
-        {/**
-         * TODO: Use the client session modal content here
-         */}
+         <ClientRequestForm handleClose={handleCloseSession} />
       </ModalPage>
     </div>
   );

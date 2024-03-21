@@ -1,0 +1,25 @@
+{
+  "inputs": [
+    {
+      "name": "score",
+      "public": false,
+      "type": "array",
+      "components": {
+        "size": 2,
+        "type": "u8"
+      }
+    },
+    {
+      "name": "threshold",
+      "public": true,
+      "type": "array",
+      "components": {
+        "size": 2,
+        "type": "u8"
+      }
+    }
+  ],
+  "output": {
+    "type": "bool"
+  }
+}

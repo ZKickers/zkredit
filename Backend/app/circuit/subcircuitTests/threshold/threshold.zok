@@ -1,0 +1,9 @@
+from "./compare.zok" import main as islMeetsR;
+
+const u8[2] MAX_VALUE = [3,82];
+
+def main(private u8[2] score, u8[2] threshold) -> bool{
+    assert(islMeetsR(MAX_VALUE,score));
+    assert(islMeetsR(MAX_VALUE,threshold));
+    return islMeetsR(score,threshold);
+}

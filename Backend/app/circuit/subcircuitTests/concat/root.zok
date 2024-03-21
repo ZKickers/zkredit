@@ -1,0 +1,7 @@
+from "./interface.zok" import ClientData;
+from "./concat.zok" import main as clientConcat;
+
+def main(private ClientData<70,100,10,9> clientData) -> u8[189]{
+    u8[189] res = clientConcat(clientData);
+    return res;
+}
