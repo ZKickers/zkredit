@@ -36,7 +36,8 @@ export default function PPTemplate() {
               date={"MM/DD/YYYY"}
               CRID={"xy2-z5h-32n-11m"}
               CLID={"xy2-z5h-32n-11m"}
-              pendingVerification
+              txId={"31532"}
+              pendingThreshold
             />
           </div>
         </div>

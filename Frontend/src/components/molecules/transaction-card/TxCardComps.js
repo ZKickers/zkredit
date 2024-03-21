@@ -1,3 +1,4 @@
+import { sendThreshold } from "api/proofs.api";
 import classNames from "classnames";
 
 const { TextField } = require("@mui/material");
@@ -7,7 +8,7 @@ const {
 } = require("components/atoms/submit-button/SubmitButton");
 
 const renderThresholdField = (props) => {
-  const { threshold, setThreshold, color } = props;
+  const { token, threshold, txId, setThreshold, color } = props;
 
   return (
     <div className="mt-4">
@@ -39,7 +40,7 @@ const renderThresholdField = (props) => {
           ),
           endAdornment: (
             <SubmitButton
-              onClick={() => handleThresholdSubmit(threshold)}
+              onClick={() => handleThresholdSubmit({ token, threshold, txId })}
               style={{
                 backgroundColor: color,
                 margin: "10px 0 10px 10px",
@@ -55,15 +56,15 @@ const renderThresholdField = (props) => {
   );
 };
 
-const handleThresholdSubmit = (threshold) => {
-  // TODO: SEND THE THRESHOLD TO THE BACKEND
-  console.log(threshold);
+const handleThresholdSubmit = (token, threshold, txId) => {
+  console.log(sendThreshold({ token, threshold, txId }));
+  console.log("Submitted", threshold, " for transaction", txId);
 };
 
 const renderValidationButton = (color) => {
   return (
     <SubmitButton
-    className="mt-4"
+      className="mt-4"
       onClick={() => handleValidationClicked()}
       style={{
         backgroundColor: color,

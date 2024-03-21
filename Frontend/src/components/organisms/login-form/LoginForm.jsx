@@ -19,7 +19,7 @@ export default function LoginForm() {
       const response = await loginUser({ username, password });
       var token = await response.text();
       token = JSON.parse(token)['token']
-      if (token.length != 0) {
+      if (token.length !== 0) {
         console.log("You have logged in successfully")
         auth.login(token)
       }

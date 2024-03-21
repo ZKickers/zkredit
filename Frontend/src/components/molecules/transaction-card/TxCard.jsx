@@ -1,13 +1,14 @@
 import classNames from "classnames";
 import "./TxCard.css";
 import { CloseIcon, LockIcon, LockOpenIcon } from "assets";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   renderThresholdField,
   renderValidationButton,
   contentContainer,
   iconClasses,
 } from "./TxCardComps";
+import AuthContext from "store/auth-context";
 
 export default function TxCard(props) {
   const {
@@ -18,7 +19,12 @@ export default function TxCard(props) {
     declined,
     pendingThreshold,
     pendingVerification,
+    txId
   } = props;
+
+  const auth = useContext(AuthContext);
+
+  const token = auth.token;
 
   const pending = pendingThreshold || pendingVerification;
 
@@ -68,7 +74,7 @@ export default function TxCard(props) {
             Status: <span style={{ color: color }}>{statusText}</span>
           </h3>
           {pendingThreshold &&
-            renderThresholdField({ threshold, setThreshold, color })}
+            renderThresholdField({ token, threshold, txId, setThreshold, color })}
           {pendingVerification && renderValidationButton(color)}
         </div>
       </div>
