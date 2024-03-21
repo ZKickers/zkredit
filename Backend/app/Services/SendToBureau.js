@@ -6,13 +6,13 @@ const jwt = require('jsonwebtoken');
 const ProofInput = require('../models/ProofInput');
 const http = require('http');
 const socketIo = require('socket.io');
-const { SOCKET_PORT } = require('../../config');
+const { SOCKET_PORT, CREDIT_BUREAU_API } = require('../../config');
 
 const server = http.createServer();
 const io = socketIo(server);
 
 server.listen(SOCKET_PORT, () => {
-    console.log(`Socket Server running on port ${PORT}`);
+    console.log(`Socket Server running on port ${SOCKET_PORT}`);
 });
 
 io.on('connect', (socket) => {
@@ -103,8 +103,7 @@ function notifyCreditor(creditorId, transactionData, clientFullName) {
 }
 
 async function sendClientInfo(clientInfo, creditorUserName, token) {
-    const url = 'http://127.0.0.1:8061/';
-    const response = await axios.post(url, clientInfo);
+    const response = await axios.post(CREDIT_BUREAU_API, clientInfo);
     console.log('Response from server:');
     console.log(response.data);
     const creditorUser = await User.findOne({ username: creditorUserName });
