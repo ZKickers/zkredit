@@ -5,28 +5,7 @@ const Transaction = require('../models/Transaction');
 const jwt = require('jsonwebtoken');
 const ProofInput = require('../models/ProofInput');
 const http = require('http');
-const socketIo = require('socket.io');
-const { SOCKET_PORT, CREDIT_BUREAU_API, FRONTEND_URL } = require('../../config');
-
-const socketServer = http.createServer();
-const io = socketIo(socketServer, {
-    cors: {
-      origin: FRONTEND_URL,
-      credentials: true
-    }
-  });
-
-socketServer.listen(SOCKET_PORT, () => {
-    console.log(`Socket Server running on port ${SOCKET_PORT}`);
-});
-
-io.on('connect', (socket) => {
-    console.log('Creditor connected');
-    socket.on('joinRoom', (creditorId) => {
-        socket.join(creditorId);
-        console.log(`Creditor with ID ${creditorId} joined room`);
-    });
-});
+const { CREDIT_BUREAU_API } = require('../../config');
 
 async function createTransaction(clientInfo, creditorUser, clientId) {
     try
@@ -93,19 +72,6 @@ async function serializeAndSaveData(clientInfo, responseData, transaction) {
  
 }
 
-function notifyCreditor(creditorId, transactionData, clientFullName) {
-    const ws = creditorConnections[creditorId];
-    if (ws) {
-        ws.send(JSON.stringify({ 
-            type: 'transaction_notification',
-            transactionData: transactionData,
-            clientFullName: clientFullName
-        }));
-    } else {
-        console.log(`Creditor ${creditorId} is not connected`);
-    }
-}
-
 async function sendClientInfo(clientInfo, creditorUserName, token) {
     const response = await axios.post(CREDIT_BUREAU_API, clientInfo);
     console.log('Response from server:');
@@ -120,11 +86,7 @@ async function sendClientInfo(clientInfo, creditorUserName, token) {
     const creditorId = creditorUser.accountId;
     console.log(creditorId);
     const transaction = await createTransaction(clientInfo, creditorUser, clientId);
-    await serializeAndSaveData(clientInfo, response.data, transaction);
-  
-    // notifyCreditor(creditorId, transaction, clientInfo['fullname']);
-    io.to(creditorId).emit('response', transaction);
-   
+    await serializeAndSaveData(clientInfo, response.data, transaction);   
     return transaction;
 }
 
