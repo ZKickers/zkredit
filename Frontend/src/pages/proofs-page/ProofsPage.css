@@ -1,0 +1,11 @@
+.proofs-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (min-width: 768px) {
+  .proofs-page {
+    height: 100vh;
+  }
+}
