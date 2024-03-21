@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import React from "react";
-import { getUsername } from "api/auth.api";
+import { getUser } from "api/auth.api";
 
 const AuthContext = React.createContext({
   token: "",
   isLoggedIn: false,
   username: "",
+  accountId: "",
   login: (token) => {},
   logout: () => {},
 });
@@ -13,18 +14,19 @@ const AuthContext = React.createContext({
 export const AuthContextProvider = (props) => {
   const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
-  const isLoggedIn = token.length !== 0
+  const [accountId, setAccountId] = useState("");
+  const isLoggedIn = token.length !== 0;
 
-  async function fetchUsername(token) {
-    const username = await getUsername(token)
-    setUsername(username)
+  async function fetchUser(token) {
+    const user = await getUser(token);
+    setUsername(user.username);
+    setAccountId(user.accountId);
   }
 
-
   const loginHandler = async (token) => {
-    await fetchUsername(token);
+    await fetchUser(token);
     setToken(token);
-    localStorage.setItem("token",token)
+    localStorage.setItem("token", token);
   };
 
   const logoutHandler = () => {
@@ -33,26 +35,26 @@ export const AuthContextProvider = (props) => {
   };
 
   const isLogIn = async () => {
-      try {
-        let savedToken = await localStorage.getItem('token');
-        if (savedToken){
-          await fetchUsername(savedToken)
-          setToken(savedToken);
-        }
-        
-      } catch (error) {
-        console.log('is logged error',error);
+    try {
+      let savedToken = await localStorage.getItem("token");
+      if (savedToken) {
+        await fetchUser(savedToken);
+        setToken(savedToken);
       }
-  }
+    } catch (error) {
+      console.log("is logged error", error);
+    }
+  };
 
   useEffect(() => {
     isLogIn();
-  },[])
+  }, []);
 
   const contextValue = {
     token,
     isLoggedIn,
     username,
+    accountId,
     login: loginHandler,
     logout: logoutHandler,
   };
@@ -65,5 +67,3 @@ export const AuthContextProvider = (props) => {
 };
 
 export default AuthContext;
-
-

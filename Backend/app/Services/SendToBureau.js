@@ -4,11 +4,8 @@ const User = require('../models/User');
 const Transaction = require('../models/Transaction');
 const jwt = require('jsonwebtoken');
 const ProofInput = require('../models/ProofInput');
-const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 8080 }); // WebSocket server
-const creditorConnections = {}; // Store WebSocket connections for each creditor
-const BUREAU_ENDPOINT = 'http://127.0.0.1:8061/';
-
+const http = require('http');
+const { CREDIT_BUREAU_API } = require('../../config');
 
 async function createTransaction(clientInfo, creditorUser, clientId) {
     try
@@ -75,21 +72,8 @@ async function serializeAndSaveData(clientInfo, responseData, transaction) {
  
 }
 
-function notifyCreditor(creditorId, transactionData, clientFullName) {
-    const ws = creditorConnections[creditorId];
-    if (ws) {
-        ws.send(JSON.stringify({ 
-            type: 'transaction_notification',
-            transactionData: transactionData,
-            clientFullName: clientFullName
-        }));
-    } else {
-        console.log(`Creditor ${creditorId} is not connected`);
-    }
-}
-
 async function sendClientInfo(clientInfo, creditorUserName, token) {
-    const response = await axios.post(BUREAU_ENDPOINT, clientInfo);
+    const response = await axios.post(CREDIT_BUREAU_API, clientInfo);
     console.log('Response from server:');
     console.log(response.data);
     const creditorUser = await User.findOne({ username: creditorUserName });
@@ -100,22 +84,9 @@ async function sendClientInfo(clientInfo, creditorUserName, token) {
     const decodedToken = jwt.verify(token, 'secret');
     const clientId = decodedToken.accountId;
     const creditorId = creditorUser.accountId;
+    console.log(creditorId);
     const transaction = await createTransaction(clientInfo, creditorUser, clientId);
-    await serializeAndSaveData(clientInfo, response.data, transaction);
-    wss.on('connection', (ws) => {
-        console.log('WebSocket client connected');
-    
-        // Handle messages from WebSocket clients
-        ws.on('transaction', (transaction) => {
-            console.log(`Received message from client: ${transaction}`);
-        });
-    
-        // Store creditor's WebSocket connection
-        ws.on('creditorId', (creditorId) => {
-            creditorConnections[creditorId] = ws;
-        });
-    });
-    notifyCreditor(creditorId, transaction, clientInfo['fullname']);
+    await serializeAndSaveData(clientInfo, response.data, transaction);   
     return transaction;
 }
 

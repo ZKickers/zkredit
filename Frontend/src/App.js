@@ -3,19 +3,26 @@ import { NavigationProvider } from "contexts/NavigationContext";
 import LandingPage from "pages/landing-page/LandingPage";
 import DashboardPage from "pages/dashboard-page/DashboardPage";
 import ProofsPage from "pages/proofs-page/ProofsPage";
+import AuthContext from "store/auth-context";
+import { useContext, useEffect } from "react";
 
 export default function App() {
+  const auth = useContext(AuthContext);
+
   return (
     <NavigationProvider>
       <Route routePath={"/landing"}>
         <LandingPage />
       </Route>
+      <Route routePath={"/"}>
+        <LandingPage />
+      </Route>
       <Route routePath={"/dashboard"}>
-        <DashboardPage />
+        {auth.isLoggedIn && <DashboardPage />}
       </Route>
       <Route routePath={"/proofs"}>
         <ProofsPage />
       </Route>
-    </NavigationProvider> 
+    </NavigationProvider>
   );
 }
