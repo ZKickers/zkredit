@@ -8,6 +8,8 @@ const app = express();
 const deleteTX = require('./routes/deleteTX')
 const ClientRequest = require('./routes/ClientRequest');
 const { BACKEND_PORT, FRONTEND_URL, MONGODB_URI } = require('../config');
+const ClientRequest = require('./routes/ClientRequest')
+const thresholdRoute = require('./routes/thresholdRoute')
 
 app.use(cors({
   origin: FRONTEND_URL
@@ -24,6 +26,7 @@ app.use('/auth', authRoutes);
 app.use('/getTX', getTX);
 app.use('/deleteTX', deleteTX);
 app.use('/ClientRequest', ClientRequest);
+app.use('/Creditor', thresholdRoute);
 
 app.listen(BACKEND_PORT, () => {
   console.log(`Backend Server is running on port ${BACKEND_PORT}`);
