@@ -12,6 +12,7 @@ import {
 import { LockIcon, LockOpenIcon } from "assets";
 import Link from "components/atoms/navigation/Link";
 import Transaction from "components/molecules/transaction/Transaction";
+import ClientRequestForm from "components/organisms/client-request-form/ClientRequestForm";
 
 export default function DashboardPageTemplate() {
   const [showProfile, setShowProfile] = useState(false);
@@ -68,9 +69,7 @@ export default function DashboardPageTemplate() {
         <Profile />
       </ModalPage>
       <ModalPage show={showSession} handleClose={handleCloseSession}>
-        {/**
-         * TODO: Use the client session modal content here
-         */}
+         <ClientRequestForm handleClose={handleCloseSession} />
       </ModalPage>
     </div>
   );
