@@ -8,22 +8,21 @@ const http = require('http');
 const socketIo = require('socket.io');
 const { SOCKET_PORT, CREDIT_BUREAU_API } = require('../../config');
 
-const server = http.createServer();
-const io = socketIo(server);
+const socketServer = http.createServer();
+const io = socketIo(socketServer);
 
-server.listen(SOCKET_PORT, () => {
+socketServer.listen(SOCKET_PORT, () => {
     console.log(`Socket Server running on port ${SOCKET_PORT}`);
 });
 
 io.on('connect', (socket) => {
-    console.log('Client connected');
-
+    console.log('Creditor connected');
     socket.on('joinRoom', (creditorId) => {
-        // Join a room based on the creditor ID
         socket.join(creditorId);
-        console.log(`Client with creditor ID ${creditorId} joined room`);
+        console.log(`Creditor with ID ${creditorId} joined room`);
     });
 });
+
 async function createTransaction(clientInfo, creditorUser, clientId) {
     try
     {

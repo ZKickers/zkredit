@@ -10,7 +10,7 @@ const ClientRequest = require('./routes/ClientRequest');
 const { BACKEND_PORT, FRONTEND_URL } = require('../config');
 
 app.use(cors({
-  origin: FRONTEND_URL,
+  origin: FRONTEND_URL
 }));
 app.use(bodyParser.json());
 
@@ -26,5 +26,5 @@ app.use('/deleteTX', deleteTX);
 app.use('/ClientRequest', ClientRequest);
 
 app.listen(BACKEND_PORT, () => {
-  console.log(`BBackend Server is running on port ${BACKEND_PORT}`);
+  console.log(`Backend Server is running on port ${BACKEND_PORT}`);
 });

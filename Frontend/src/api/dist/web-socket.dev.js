@@ -33,15 +33,13 @@ var WebSocket = function WebSocket(onReceive) {
     socket.on("connect", function () {
       console.log("Connected to WebSocket server");
       socket.emit("joinRoom", auth.accountId);
-    }); // Listen for responses from the server
-
+    });
     socket.on("response", function (data) {
       console.log("Response from server:", data);
       onReceive(data);
-    }); // Cleanup function
-
+    });
     return function () {
-      socket.disconnect(); // Disconnect the socket when the component unmounts
+      socket.disconnect();
     };
   }, [auth.accountId, onReceive]);
   return {

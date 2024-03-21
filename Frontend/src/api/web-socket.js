@@ -17,15 +17,13 @@ const WebSocket = (onReceive) => {
       socket.emit("joinRoom", auth.accountId);
     });
 
-    // Listen for responses from the server
     socket.on("response", (data) => {
       console.log("Response from server:", data);
       onReceive(data);
     });
 
-    // Cleanup function
     return () => {
-      socket.disconnect(); // Disconnect the socket when the component unmounts
+      socket.disconnect(); 
     };
   }, [auth.accountId, onReceive]);
 
