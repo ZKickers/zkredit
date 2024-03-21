@@ -8,7 +8,8 @@ const app = express();
 const deleteTX = require('./routes/deleteTX')
 const ClientRequest = require('./routes/ClientRequest')
 const thresholdRoute = require('./routes/thresholdRoute')
-const verificationRoutes = require('./routes/verificationRoutes') 
+const verificationRoutes = require('./routes/verificationRoutes')
+const verificationKeyRoute = require('./routes/verificationKeyRoute')
 
 app.use(cors({
   origin: 'http://localhost:3000',
@@ -27,6 +28,7 @@ app.use('/deleteTX', deleteTX);
 app.use('/ClientRequest', ClientRequest);
 app.use('/Creditor', thresholdRoute);
 app.use('/verifyTx', verificationRoutes)
+app.use('/verification-key', verificationKeyRoute)
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
