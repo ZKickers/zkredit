@@ -10,7 +10,9 @@ import WebSocket from "api/web-socket";
 export default function App() {
   const auth = useContext(AuthContext);
 
-  useEffect(() => WebSocket(console.log), []);
+  const { socket, sendData } = WebSocket(console.log);
+
+  console.log(socket, sendData);
 
   return (
     <NavigationProvider>
@@ -18,14 +20,14 @@ export default function App() {
         <LandingPage />
       </Route>
       <Route routePath={"/"}>
-        {auth.isLoggedIn && <DashboardPage /> || <LandingPage />}
+        <LandingPage />
       </Route>
       <Route routePath={"/dashboard"}>
-        <DashboardPage />
+        {auth.isLoggedIn && <DashboardPage />}
       </Route>
       <Route routePath={"/proofs"}>
         <ProofsPage />
       </Route>
-    </NavigationProvider> 
+    </NavigationProvider>
   );
 }

@@ -11,7 +11,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ClientRequestValidationSchema } from "utils/validators/ClientRequestValidationSchema";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from "react-toastify";
 
 import useClientRequest from "api/use-client-request";
 
@@ -46,15 +46,13 @@ export default function ClientRequestForm({ handleClose }) {
     };
 
     //TODO: send jsonData to backend
-    try{
+    try {
       const response = clientRequest(jsonData);
       console.log(response);
-      toast("Request initiated successfully!")
-
-    }catch(error){
+      toast("Request initiated successfully!");
+    } catch (error) {
       console.log(error);
-      toast(error.message)
-
+      toast(error.message);
     }
 
     //clear form
