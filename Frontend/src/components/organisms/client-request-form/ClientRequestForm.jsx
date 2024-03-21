@@ -1,6 +1,6 @@
 import "./ClientRequestForm.css";
 //import { useState } from "react";
-import { TextField, Button } from "@mui/material";
+import { TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -11,6 +11,9 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ClientRequestValidationSchema } from "utils/validators/ClientRequestValidationSchema";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
+import { toast, ToastContainer } from "react-toastify";
+
+import useClientRequest from "api/use-client-request";
 
 //  Sample JSON data for the form{
 //   "fullname": "John Q. Doe",
@@ -26,21 +29,36 @@ export default function ClientRequestForm({ handleClose }) {
     handleSubmit,
     formState: { errors },
     setValue,
+    getValues,
     control,
     clearErrors,
   } = useForm({ resolver: yupResolver(ClientRequestValidationSchema) });
 
-  const onRequestSubmit = (data) => {
+  const clientRequest = useClientRequest();
+
+  const onRequestSubmit = async (data) => {
     //create json object from form data
     const jsonData = {
       fullname: data.fullname,
-      creditorUserName: data.creditorUserName,
+      creditorUsername: data.creditorUserName,
       address: data.address,
       birthdate: data.birthdate,
       ssn: data.ssn,
     };
 
     //TODO: send jsonData to backend
+    try {
+      const response = await clientRequest(jsonData);
+      console.log(response);
+      toast.success("Request initiated successfully!", {
+        autoClose: 3000,
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message, {
+        autoClose: 5000,
+      });
+    }
 
     //clear form
     setValue("fullname", "");
@@ -63,6 +81,7 @@ export default function ClientRequestForm({ handleClose }) {
       <div className="form-header">
         <div className="form-header-text">
           <h1 className="my-5">New Client Request</h1>
+          <ToastContainer />
         </div>
       </div>
       <form
@@ -138,12 +157,17 @@ export default function ClientRequestForm({ handleClose }) {
         <div className="row mt-3 mx-auto w-100">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Controller
-              name="Birthdate"
+              name="birthdate"
               control={control}
               shouldValidate={true}
               defaultValue={null}
               render={() => (
                 <DatePicker
+                  value={
+                    getValues("birthdate")
+                      ? dayjs(getValues("birthdate")).toDate()
+                      : null
+                  } // Get the value of birthdate from getValues
                   className="date-picker"
                   onChange={(date) => {
                     if (date) {
