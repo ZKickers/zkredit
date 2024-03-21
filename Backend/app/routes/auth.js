@@ -92,7 +92,7 @@ router.get('/', async (req, res) => {
       console.log("verifying token...")
       const user = jwt.verify(token, 'secret');
       console.log("verifyied token")
-      res.json(user.username);
+      res.json(user);
   } catch (error) {
       console.error('Error verifying token:', error);
       res.status(403).json({ message: 'Invalid token.' });

@@ -1,12 +1,15 @@
 import io from "socket.io-client";
+import { useContext } from "react";
+import { AuthContext } from "store/auth-context";
 import { ZKREDIT_API } from "config";
 
 const WebSocket = (oneResponse) => {
+  const auth = useContext(AuthContext);
   const socket = io(ZKREDIT_API);
 
   socket.on("connect", () => {
     console.log("Connected to WebSocket server");
-    socket.emit("joinRoom", "acc_8k2iltctv");
+    socket.emit("joinRoom", auth.accountId);
   });
 
   socket.on("response", (data) => {

@@ -6,7 +6,6 @@ export const registerUser = async (user) => {
     method: "POST",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify(user),
-    
   }).catch((error) => {
     throw new Error("Problem connecting with the server!");
   });
@@ -16,7 +15,7 @@ export const registerUser = async (user) => {
     throw new Error(message);
     // console.log(response)
   }
-  
+
   return response;
 };
 
@@ -33,14 +32,13 @@ export const loginUser = async (user) => {
 
   if (response.status === 401) {
     throw new Error("Invalid credentials");
-  }
-  else if (response.status !== 200) {
+  } else if (response.status !== 200) {
     throw new Error(response.status);
-  } 
+  }
   return response;
 };
 
-export const getUsername = async (token) => {
+export const getUser = async (token) => {
   const url = `${ZKREDIT_API}/auth`;
 
   const response = await fetch(url, {
@@ -51,6 +49,6 @@ export const getUsername = async (token) => {
   if (response.status !== 200) {
     throw new Error(response.status);
   }
-  const username = await response.text()
-  return username;
+  const user = await response.json();
+  return user;
 };
