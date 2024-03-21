@@ -1,13 +1,49 @@
 import classNames from "classnames";
 import "./Transaction.css";
-import { falseCheck, trueCheck } from "assets";
+import { LockIcon, LockOpenIcon, CloseIcon } from "assets";
 
-export default function Transaction({ date, CRID, CLID, verified }) {
-  const base = "tx row container w-100 p-3";
+export default function Transaction(props) {
+  const {
+    date,
+    CRID,
+    CLID,
+    verified,
+    declined,
+    pendingThreshold,
+    pendingVerification,
+  } = props;
+
+  const base = "tx row container w-100 p-md-2 p-sm-3 my-md-1 my-sm-3";
   const classes = classNames(base, {
     "tx-verified": verified,
-    "tx-failed": !verified,
+    "tx-failed": declined,
+    "tx-pending": pendingThreshold || pendingVerification,
   });
+
+  const status = classNames({
+    Verified: verified,
+    Declined: declined,
+    Pending: pendingThreshold || pendingVerification,
+  });
+
+  const color = classNames({
+    "#009A2B": verified,
+    "#F62525": declined,
+    "#FFB800": pendingThreshold || pendingVerification,
+  });
+
+  const iconStyle = {
+    fontSize: "72px",
+    color: "white",
+    backgroundColor: color,
+  };
+
+  const renderIcon = () => {
+    if (verified)
+      return <LockIcon className="rounded-circle p-2" sx={iconStyle} />;
+    if (declined) return <CloseIcon className="rounded-circle p-2" sx={iconStyle} />;
+    if (pendingThreshold || pendingVerification) return <LockOpenIcon className="rounded-circle p-2" sx={iconStyle} />;
+  };
 
   const contentClasses = classNames(
     "col-md-8",
@@ -16,10 +52,16 @@ export default function Transaction({ date, CRID, CLID, verified }) {
     "flex-column",
     "justify-content-center",
     "align-items-md-start",
-    "align-items-sm-center",
+    "align-items-sm-center"
   );
 
-  const imgClasses = classNames("col-md-4", "col-sm-12", "tx-img");
+  const imgClasses = classNames(
+    "col-md-4",
+    "col-sm-12",
+    "d-flex",
+    "justify-content-md-end",
+    "justify-content-sm-center"
+  );
 
   return (
     <div className={classes}>
@@ -31,19 +73,13 @@ export default function Transaction({ date, CRID, CLID, verified }) {
           style={{
             fontSize: "16px",
             fontWeight: "bold",
-            color: verified ? "#009A2B" : "#F62525",
+            color: color,
           }}
         >
-          {verified ? "Verified" : "Declined"}
+          {status}
         </h3>
       </div>
-      <div className={imgClasses}>
-        {verified ? (
-          <img src={trueCheck} alt={"true-check"} />
-        ) : (
-          <img src={falseCheck} alt={"false-check"} />
-        )}
-      </div>
+      <div className={imgClasses}>{renderIcon()}</div>
     </div>
   );
 }
