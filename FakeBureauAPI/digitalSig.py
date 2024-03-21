@@ -24,4 +24,7 @@ def sign_bjj(msg,sk):
     (r_int, s_int) = sk.sign(bytes.fromhex(msg))
     S = hex(s_int)[2:]
     R = [hex(r.n)[2:] for r in r_int]
+    print("a7eeh")
+    print(R)
+    print(S)
     return {"R" : R , "S" : S}

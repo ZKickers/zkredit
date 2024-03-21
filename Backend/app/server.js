@@ -6,6 +6,7 @@ const getTX = require('./routes/getTX')
 const app = express();
 const deleteTX = require('./routes/deleteTX')
 const ClientRequest = require('./routes/ClientRequest')
+const thresholdRoute = require('./routes/thresholdRoute')
 app.use(bodyParser.json());
 
 mongoose.connect('mongodb://0.0.0.0:27017/zkredit')
@@ -18,6 +19,7 @@ app.use('/auth', authRoutes);
 app.use('/getTX', getTX);
 app.use('/deleteTX', deleteTX);
 app.use('/ClientRequest', ClientRequest);
+app.use('/Creditor', thresholdRoute);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
