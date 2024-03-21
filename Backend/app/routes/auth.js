@@ -65,7 +65,10 @@ router.post('/login', async (req, res) => {
         return res.status(401).send('Invalid password');
       }
   
-      const token = jwt.sign({ accountId: user.accountId }, 'secret');
+      const token = jwt.sign({ 
+        accountId: user.accountId,
+        username: user.username
+       }, 'secret');
   
       res.status(200).json({ token });
     } catch (error) {
@@ -77,5 +80,24 @@ router.post('/login', async (req, res) => {
 function generateAccountId() {
   return 'acc_' + Math.random().toString(36).substr(2, 9);
 }
+
+router.get('/', async (req, res) => {
+  const token = req.header('Authorization');
+
+  if (!token) {
+      return res.status(401).json({ message: 'Access denied. Token is required.' });
+  }
+
+  try {
+      console.log("verifying token...")
+      const user = jwt.verify(token, 'secret');
+      console.log("verifyied token")
+      res.json(user.username);
+  } catch (error) {
+      console.error('Error verifying token:', error);
+      res.status(403).json({ message: 'Invalid token.' });
+  }
+});
+
 
 module.exports = router;
