@@ -22,6 +22,8 @@ const WebSocket = (onReceive) => {
       onReceive(data);
     });
 
+    console.log(auth.accountId)
+
     return () => {
       socket.disconnect(); 
     };

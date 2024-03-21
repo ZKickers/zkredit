@@ -32,10 +32,11 @@ var WebSocket = function WebSocket(onReceive) {
       console.log("Response from server:", data);
       onReceive(data);
     });
+    console.log(auth.accountId);
     return function () {
       socket.disconnect();
     };
-  }, [auth.accountId, onReceive]);
+  }, [auth.accountId, onReceive, socket]);
   return {
     socket: socket,
     sendData: sendData
