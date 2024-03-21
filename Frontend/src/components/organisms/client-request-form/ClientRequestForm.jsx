@@ -1,6 +1,6 @@
 import "./ClientRequestForm.css";
 //import { useState } from "react";
-import { TextField, Button } from "@mui/material";
+import { TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -11,6 +11,9 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ClientRequestValidationSchema } from "utils/validators/ClientRequestValidationSchema";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
+import { toast, ToastContainer } from 'react-toastify';
+
+import useClientRequest from "api/use-client-request";
 
 //  Sample JSON data for the form{
 //   "fullname": "John Q. Doe",
@@ -30,6 +33,8 @@ export default function ClientRequestForm({ handleClose }) {
     clearErrors,
   } = useForm({ resolver: yupResolver(ClientRequestValidationSchema) });
 
+  const clientRequest = useClientRequest();
+
   const onRequestSubmit = (data) => {
     //create json object from form data
     const jsonData = {
@@ -41,6 +46,16 @@ export default function ClientRequestForm({ handleClose }) {
     };
 
     //TODO: send jsonData to backend
+    try{
+      const response = clientRequest(jsonData);
+      console.log(response);
+      toast("Request initiated successfully!")
+
+    }catch(error){
+      console.log(error);
+      toast(error.message)
+
+    }
 
     //clear form
     setValue("fullname", "");
