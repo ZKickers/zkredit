@@ -7,8 +7,8 @@ import { useContext } from 'react'
 export default function DashboardPage() {
     const auth = useContext(AuthContext);
 
-    testThres(auth)
-    creditResponseTest(auth)
+    // testThres(auth)
+    // creditResponseTest(auth)
     return <div className='dashboard-page'>
         <DashboardPageTemplate />
         <Footer />
@@ -22,6 +22,6 @@ const testThres = async (auth) => {
 }
 
 const creditResponseTest = async (auth) => {
-    const respone = await sendProofStatus("65f9fa5f090eea43c6ceef34",true,auth.token);
+    const respone = await sendProofStatus("65f9fa5f090eea43c6ceef34", true, auth.token);
     console.log(respone);
 }

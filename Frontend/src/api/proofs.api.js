@@ -2,7 +2,7 @@ import { BACKEND_URL } from "config";
 
 export const sendThreshold = async (props) => {
   const { token, threshold, txId } = props;
-  const url = `${ZKREDIT_API}/Creditor/trigger-threshold`;
+  const url = `${BACKEND_URL}/Creditor/trigger-threshold`;
   const response = await fetch(url, {
     method: "POST",
     headers: { "Content-type": "application/json",
