@@ -30,6 +30,6 @@ app.use('/Creditor', thresholdRoute);
 app.use('/verifyTx', verificationRoutes)
 app.use('/verification-key', verificationKeyRoute)
 
-app.listen(BACKEND_PORT, () => {
+app.listen(3000, () => {
   console.log(`Backend Server is running on port ${BACKEND_PORT}`);
 });
