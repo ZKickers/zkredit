@@ -13,7 +13,9 @@ import { ClientRequestValidationSchema } from "utils/validators/ClientRequestVal
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { toast, ToastContainer } from "react-toastify";
 
-import useClientRequest from "api/use-client-request";
+import { useContext } from "react";
+import AuthContext from "store/auth-context";
+import { useAddTransactionMutation } from "store";
 
 //  Sample JSON data for the form{
 //   "fullname": "John Q. Doe",
@@ -34,27 +36,30 @@ export default function ClientRequestForm({ handleClose }) {
     clearErrors,
   } = useForm({ resolver: yupResolver(ClientRequestValidationSchema) });
 
-  const clientRequest = useClientRequest();
+  const auth = useContext(AuthContext);
+
+  const [addTransaction, results] = useAddTransactionMutation();
 
   const onRequestSubmit = async (data) => {
     //create json object from form data
     const jsonData = {
-      fullname: data.fullname,
       creditorUsername: data.creditorUserName,
-      address: data.address,
-      birthdate: data.birthdate,
-      ssn: data.ssn,
+      username: auth.username,
+      ...data,
     };
 
-    //TODO: send jsonData to backend
+    const response = await addTransaction({
+      token: auth.token,
+      data: jsonData,
+    });
+    console.log(response);
+
     try {
-      const response = await clientRequest(jsonData);
-      console.log(response);
       toast.success("Request initiated successfully!", {
         autoClose: 3000,
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error(error.message, {
         autoClose: 5000,
       });

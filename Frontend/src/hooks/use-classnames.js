@@ -13,7 +13,7 @@ const pageClasses = classNames(
   "justify-content-sm-start",
   "align-items-md-start",
   "align-items-sm-center",
-  "p-4"
+  "p-4",
 );
 
 const leftClasses = classNames(
@@ -30,10 +30,8 @@ const txBox = classNames(
   "d-flex",
   "flex-column",
   "align-items-center",
-  "justify-content-around",
   "p-4",
   "w-100",
-  "h-100",
   "rounded border border-black border-2",
   "overflow-auto"
 );
@@ -43,7 +41,6 @@ const rightClasses = classNames(
   "col-sm-12",
   "d-flex",
   "flex-column",
-  "justify-content-center",
   "align-items-center",
   "h-100",
   "p-5",
