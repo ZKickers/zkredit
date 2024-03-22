@@ -7,13 +7,54 @@ import {
   txBox,
 } from "hooks/use-classnames";
 import { KeyboardBackspaceIcon } from "assets";
-import TransactionCard from "components/molecules/transaction-card/TxCard";
 import Transaction from "components/molecules/transaction/Transaction";
+import { useFetchTransactionsQuery } from "store/apis/txApi";
+import Skeleton from "components/molecules/skeleton/Skeleton";
+import { useContext, useState } from "react";
+import AuthContext from "store/auth-context";
+import classNames from "classnames";
+import TxCard from "components/molecules/transaction-card/TxCard";
 
 export default function PPTemplate() {
+  const [txCard, setTxCard] = useState();
+
   const handleGoBack = () => {
     window.history.back();
   };
+
+  const auth = useContext(AuthContext);
+
+  const renderCard = (props) => setTxCard(<TxCard {...props} />);
+
+  const { data, error, isFetching } = useFetchTransactionsQuery({
+    accountId: auth.accountId,
+    token: auth.token,
+    type: "creditor",
+  });
+
+  let content;
+
+  if (isFetching) {
+    return <Skeleton />;
+  } else if (error) {
+    content = <div>Error loading transactions...</div>;
+  } else {
+    content = data.map((tx) => {
+      return (
+        <Transaction
+          key={tx._id}
+          txId={tx._id}
+          token={auth.token}
+          clientFullName={tx.fullNameOfClient}
+          creditorId={tx.creditorAccountId}
+          updateDate={tx.updatedAt}
+          status={tx.status}
+          isButton
+          renderCard={renderCard}
+        />
+      );
+    });
+  }
 
   return (
     <div className="page-template">
@@ -28,40 +69,10 @@ export default function PPTemplate() {
       </PageHeader>
       <div className={pageClasses}>
         <div className={leftClasses}>
-          <div className={txBox}>
-            {/**
-             * TODO: Handle Dynamic Transaction Fetching
-             */}
-            <TransactionCard
-              date={"MM/DD/YYYY"}
-              CRID={"xy2-z5h-32n-11m"}
-              CLID={"xy2-z5h-32n-11m"}
-              txId={"31532"}
-              pendingThreshold
-            />
-          </div>
+          <div className={classNames(txBox, "h-100")}>{txCard}</div>
         </div>
         <div className={rightClasses}>
-          <div className={txBox}>
-            <Transaction
-              date="MM/DD/YYYY"
-              CRID="85962662313"
-              CLID="85962662313"
-              verified
-            />
-            <Transaction
-              date="MM/DD/YYYY"
-              CRID="85962662313"
-              CLID="85962662313"
-              declined
-            />
-            <Transaction
-              date="MM/DD/YYYY"
-              CRID="85962662313"
-              CLID="85962662313"
-              pendingThreshold
-            />
-          </div>
+          <div className={classNames(txBox, "proofs-container")}>{content}</div>
         </div>
       </div>
     </div>

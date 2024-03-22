@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./DashboardPage.Template.css";
 import { LockIcon, LockOpenIcon } from "assets";
 import ModalPage from "pages/modal-page/ModalPage";
@@ -12,12 +12,48 @@ import {
   rightClasses,
 } from "hooks/use-classnames";
 import ClientRequestForm from "components/organisms/client-request-form/ClientRequestForm";
+import Verifier from "utils/Verifier";
+import { useFetchTransactionsQuery } from "store";
+import AuthContext from "store/auth-context";
+import Skeleton from "components/molecules/skeleton/Skeleton";
+import classNames from "classnames";
 
 export default function DashboardPageTemplate() {
   const [showSession, setShowSession] = useState(false);
 
   const handleShowSession = () => setShowSession(true);
   const handleCloseSession = () => setShowSession(false);
+
+  Verifier();
+  const auth = useContext(AuthContext);
+
+  const { data, error, isFetching } = useFetchTransactionsQuery({
+    accountId: auth.accountId,
+    token: auth.token,
+    type: "creditor",
+  });
+
+  let content;
+
+  if (isFetching) {
+    return <Skeleton />;
+  } else if (error) {
+    content = <div>Error loading transactions...</div>;
+  } else {
+    content = data.map((tx) => {
+      return (
+        <Transaction
+          key={tx._id}
+          txId={tx._id}
+          token={auth.token}
+          clientFullName={tx.fullNameOfClient}
+          creditorId={tx.creditorAccountId}
+          updateDate={tx.updatedAt}
+          status={tx.status}
+        />
+      );
+    });
+  }
 
   return (
     <div className="page-template">
@@ -28,33 +64,11 @@ export default function DashboardPageTemplate() {
       <div className={pageClasses}>
         <div className={leftClasses}>
           <h3>Recently Received Proofs</h3>
-          <div className={txBox}>
-            <Transaction
-              date="MM/DD/YYYY"
-              CRID="85962662313"
-              CLID="85962662313"
-              verified
-            />
-            <Transaction
-              date="MM/DD/YYYY"
-              CRID="85962662313"
-              CLID="85962662313"
-              declined
-            />
-            <Transaction
-              date="MM/DD/YYYY"
-              CRID="85962662313"
-              CLID="85962662313"
-              pendingThreshold
-            />
-          </div>
+          <div className={classNames(txBox, "height-60")}>{content}</div>
         </div>
-        <div className={rightClasses}>
+        <div className={classNames(rightClasses, "justify-content-center")}>
           <div className="client-session-container">
-            <button
-              className="w-75"
-              onClick={handleShowSession}
-            >
+            <button className="w-75" onClick={handleShowSession}>
               <h2
                 className="d-flex justify-content-between align-items-center w-100"
                 style={{ fontWeight: "bold", color: "#009A2B" }}
@@ -77,7 +91,7 @@ export default function DashboardPageTemplate() {
         </div>
       </div>
       <ModalPage show={showSession} handleClose={handleCloseSession}>
-         <ClientRequestForm handleClose={handleCloseSession} />
+        <ClientRequestForm handleClose={handleCloseSession} />
       </ModalPage>
     </div>
   );
