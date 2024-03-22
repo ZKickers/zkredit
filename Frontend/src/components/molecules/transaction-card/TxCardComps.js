@@ -8,7 +8,7 @@ const {
 } = require("components/atoms/submit-button/SubmitButton");
 
 const renderThresholdField = (props) => {
-  const { token, threshold, txId, setThreshold, setProofCallback, color } = props;
+  const { token, threshold, txId, setThreshold, color } = props;
 
   return (
     <div className="mt-4">
@@ -40,7 +40,7 @@ const renderThresholdField = (props) => {
           ),
           endAdornment: (
             <SubmitButton
-              onClick={() => handleThresholdSubmit({ token, threshold, txId, setProofCallback })}
+              onClick={() => handleThresholdSubmit({ token, threshold, txId})}
               style={{
                 backgroundColor: color,
                 margin: "10px 0 10px 10px",
@@ -56,7 +56,7 @@ const renderThresholdField = (props) => {
   );
 };
 
-const handleThresholdSubmit = async (token, threshold, txId, setProofCallback) => {
+const handleThresholdSubmit = async (token, threshold, txId) => {
   const response = await sendThreshold({ token, threshold, txId });
   console.log(response.body);
   console.log("Submitted", threshold, " for transaction", txId);
