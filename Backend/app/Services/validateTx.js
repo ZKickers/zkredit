@@ -3,6 +3,7 @@ const Transaction = require('../models/Transaction');
 
 async function validateTx(txId, accepted)
 {
+    console.log(accepted);
     try {
         let status;
         if (accepted) {
@@ -15,6 +16,7 @@ async function validateTx(txId, accepted)
             { status: status },
             { new: true }
         );
+        console.log(updatedTransaction);
     } catch (error) {
         throw error;
     }

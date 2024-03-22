@@ -4,10 +4,10 @@ const verifyToken = require('../Services/authMiddleware');
 const { validateTx } = require('../Services/validateTx');
 const Transaction = require('../models/Transaction');
 
-router.get('/', verifyToken, async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
     try {
         const accepted = req.body.accepted; 
-        console.log(accepted);
+        console.log(req.body);
         const txId = req.body.txId;
         if (typeof accepted !== 'boolean' || !txId) {
             return res.status(400).json({ error: 'Invalid parameters' });
