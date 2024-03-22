@@ -26,7 +26,8 @@
     "react-toastify": "^10.0.5",
     "toast": "^0.5.4",
     "web-vitals": "^2.1.4",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "zokrates-js": "^1.1.9"
   },
   "scripts": {
     "start": "react-scripts start",

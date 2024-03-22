@@ -12,12 +12,15 @@ import {
   rightClasses,
 } from "hooks/use-classnames";
 import ClientRequestForm from "components/organisms/client-request-form/ClientRequestForm";
+import Verifier from "utils/Verifier";
 
 export default function DashboardPageTemplate() {
   const [showSession, setShowSession] = useState(false);
 
   const handleShowSession = () => setShowSession(true);
   const handleCloseSession = () => setShowSession(false);
+
+  Verifier();
 
   return (
     <div className="page-template">
