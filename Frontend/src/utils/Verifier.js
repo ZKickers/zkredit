@@ -17,10 +17,11 @@ const Verifier = () => {
     }
   }, [vk]);
 
-  // initialize().then((zokratesProvider) => {
-  //   // or verify off-chain
-  //   const isVerified = zokratesProvider.verify(keypair.vk, proof);
-  // });
+  
+  initialize().then((zokratesProvider) => {
+    const isVerified = zokratesProvider.verify(vk, proof);
+    return isVerified
+  });
 };
 
 export default Verifier;
