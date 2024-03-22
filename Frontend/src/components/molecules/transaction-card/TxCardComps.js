@@ -58,7 +58,7 @@ const renderThresholdField = (props) => {
 
 const handleThresholdSubmit = async (token, threshold, txId, setProofCallback) => {
   const response = await sendThreshold({ token, threshold, txId });
-  setProofCallback(response.body);
+  console.log(response.body);
   console.log("Submitted", threshold, " for transaction", txId);
 };
 

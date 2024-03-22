@@ -14,6 +14,7 @@ const useGetVK = (setVk) => {
         },
       });
       setVk(response.data);
+      console.log(response.data)
     };
   
     return vkReq;
