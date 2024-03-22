@@ -4,7 +4,6 @@ const User = require('../models/User');
 const Transaction = require('../models/Transaction');
 const jwt = require('jsonwebtoken');
 const ProofInput = require('../models/ProofInput');
-const http = require('http');
 const { CREDIT_BUREAU_API } = require('../../config');
 
 async function createTransaction(clientInfo, creditorUser, clientId) {
@@ -86,7 +85,7 @@ async function sendClientInfo(clientInfo, creditorUserName, token) {
     const creditorId = creditorUser.accountId;
     console.log(creditorId);
     const transaction = await createTransaction(clientInfo, creditorUser, clientId);
-    await serializeAndSaveData(clientInfo, response.data, transaction);   
+    await serializeAndSaveData(clientInfo, response.data, transaction);
     return transaction;
 }
 

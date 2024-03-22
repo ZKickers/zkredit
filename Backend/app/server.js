@@ -7,8 +7,10 @@ const cors = require('cors')
 const app = express();
 const deleteTX = require('./routes/deleteTX')
 const ClientRequest = require('./routes/ClientRequest');
-const { BACKEND_PORT, FRONTEND_URL, MONGODB_URI } = require('../config');
 const thresholdRoute = require('./routes/thresholdRoute')
+const verificationRoutes = require('./routes/verificationRoutes')
+const verificationKeyRoute = require('./routes/verificationKeyRoute')
+const { BACKEND_PORT, FRONTEND_URL, MONGODB_URI } = require('../config');
 
 app.use(cors({
   origin: FRONTEND_URL
@@ -19,13 +21,14 @@ mongoose.connect(MONGODB_URI)
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.error('MongoDB connection error:', err));
 
-
 // Routes
 app.use('/auth', authRoutes);
 app.use('/getTX', getTX);
 app.use('/deleteTX', deleteTX);
 app.use('/ClientRequest', ClientRequest);
 app.use('/Creditor', thresholdRoute);
+app.use('/verifyTx', verificationRoutes)
+app.use('/verification-key', verificationKeyRoute)
 
 app.listen(BACKEND_PORT, () => {
   console.log(`Backend Server is running on port ${BACKEND_PORT}`);
