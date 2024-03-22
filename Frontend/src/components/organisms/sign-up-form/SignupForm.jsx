@@ -1,6 +1,6 @@
 import "./SignupForm.css";
 import { TextField } from "@mui/material";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { checkKeyIcon, emailIcon, keyIcon, profileIcon } from "assets";
 import {
@@ -8,12 +8,13 @@ import {
   useEmailValidation,
   usePasswordValidation,
 } from "hooks/signup-form-hooks/signup-form-hooks";
-import { registerUser } from "api/auth.api";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { registerUser, loginUser } from "api/auth.api";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+import AuthContext from "../../../store/auth-context";
 
-export default function SignupForm() {
+export default function SignupForm({ handleClose }) {
   const [username, setUsername] = useState("");
   const { usernameError, validateUsername } = useUsernameValidation();
 
@@ -28,6 +29,24 @@ export default function SignupForm() {
   } = usePasswordValidation();
   const [password, setPassword] = useState("");
 
+  const auth = useContext(AuthContext);
+
+  const loginHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await loginUser({ username, password });
+      var token = await response.text();
+      token = JSON.parse(token)["token"];
+      if (token.length !== 0) {
+        console.log("You have logged in successfully");
+        auth.login(token);
+      }
+    } catch (error) {
+      console.log(error);
+      toast(error.message);
+    }
+  };
+
   const signupHandler = async (e) => {
     e.preventDefault();
     if (validData()) {
@@ -37,19 +56,24 @@ export default function SignupForm() {
           username,
           password,
         });
-        const message = await response.text();
-        toast(message);
+        const message = await response.text().then((text) => text);
+        //toast(message);
+        loginHandler(e);
+        handleClose();
       } catch (error) {
+        console.log(error);
         toast(error.message);
       }
     }
   };
 
   const validData = () => {
-    return validateUsername(username) &&
+    return (
+      validateUsername(username) &&
       validateEmail(email) &&
       validatePassword(username, email, password)
-  }
+    );
+  };
 
   const textStyle = {
     fontWeight: "bold",
