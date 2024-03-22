@@ -7,7 +7,7 @@ import {
   contentContainer,
   iconClasses,
 } from "./TxCardComps";
-import AuthContext from "store/auth-context";
+import Verifier from "utils/Verifier";
 
 export default function TxCard(props) {
   const {
@@ -45,6 +45,8 @@ export default function TxCard(props) {
 
   const [threshold, setThreshold] = useState(0);
 
+  const { proof, setProof } = Verifier();
+
   return (
     <div className="row container-fluid h-100 p-4">
       <div className={contentContainer}>
@@ -69,7 +71,7 @@ export default function TxCard(props) {
             Status: <span style={{ color: color }}>{statusText}</span>
           </h3>
           {pendingThreshold &&
-            renderThresholdField({ threshold, setThreshold, color })}
+            renderThresholdField({ threshold, setThreshold, color, setProofCallback: setProof })}
         </div>
       </div>
       <div className={iconClasses}>
