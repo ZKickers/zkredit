@@ -73,7 +73,7 @@ export default function TxCard(props) {
             Status: <span style={{ color: color }}>{statusText}</span>
           </h3>
           {pendingThreshold &&
-            renderThresholdField({ threshold, token, txId, setThreshold, color, setProofCallback: setProof })}
+            renderThresholdField({ threshold, token, txId, setThreshold, color })}
         </div>
       </div>
       <div className={iconClasses}>
