@@ -7,7 +7,6 @@ import {
   contentContainer,
   iconClasses,
 } from "./TxCardComps";
-import Verifier from "utils/Verifier";
 
 export default function TxCard(props) {
   const {
@@ -46,8 +45,6 @@ export default function TxCard(props) {
   };
 
   const [threshold, setThreshold] = useState(0);
-
-  // Verifier();
 
   return (
     <div className="row container-fluid h-100 p-4">

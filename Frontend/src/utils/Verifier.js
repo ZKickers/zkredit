@@ -2,8 +2,7 @@ import { initialize } from "zokrates-js";
 import useGetVK from "api/use-get-vk";
 import { useEffect, useState } from "react";
 
-const Verifier = () => {
-  const [proof, setProof] = useState(null);
+const Verifier = (proof) => {
   const [vk, setVk] = useState(null);
   const getVk = useGetVK(setVk);
 
@@ -17,7 +16,6 @@ const Verifier = () => {
     }
   }, [vk]);
 
-  
   initialize().then((zokratesProvider) => {
     const isVerified = zokratesProvider.verify(vk, proof);
     return isVerified

@@ -1,6 +1,6 @@
 import { sendThreshold } from "api/proofs.api";
 import classNames from "classnames";
-
+import Verifier from "utils/Verifier";
 const { TextField } = require("@mui/material");
 const { DataThresholdingIcon } = require("assets");
 const {
@@ -40,7 +40,7 @@ const renderThresholdField = (props) => {
           ),
           endAdornment: (
             <SubmitButton
-              onClick={() => handleThresholdSubmit({ token, threshold, txId})}
+              onClick={() => handleThresholdSubmit({ token, threshold, txId })}
               style={{
                 backgroundColor: color,
                 margin: "10px 0 10px 10px",
@@ -57,9 +57,11 @@ const renderThresholdField = (props) => {
 };
 
 const handleThresholdSubmit = async (token, threshold, txId) => {
-  const response = await sendThreshold(token, threshold, txId );
+  const response = await sendThreshold(token, threshold, txId);
   console.log(response.body);
-  console.log("Submitted", threshold, " for transaction", txId);
+  const proof = response.body;
+  const isVerified = Verifier(proof);
+  console.log("PROOF STATUS OF VERIFICATION:", isVerified);
 };
 
 const renderValidationButton = (color) => {

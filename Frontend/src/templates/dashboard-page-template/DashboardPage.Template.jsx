@@ -24,7 +24,6 @@ export default function DashboardPageTemplate() {
   const handleShowSession = () => setShowSession(true);
   const handleCloseSession = () => setShowSession(false);
 
-  Verifier();
   const auth = useContext(AuthContext);
 
   const { data, error, isFetching } = useFetchTransactionsQuery({
