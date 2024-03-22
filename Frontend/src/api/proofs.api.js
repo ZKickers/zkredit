@@ -1,4 +1,5 @@
 import { BACKEND_URL } from "config";
+
 export const sendProofStatus = async (transactionId, isAccepted ,token) => {
     const url = `${BACKEND_URL}/verifyTx`;
     const data = {
