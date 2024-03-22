@@ -7,6 +7,7 @@ const AuthContext = React.createContext({
   isLoggedIn: false,
   username: "",
   accountId: "",
+  createdAt: "",
   login: (token) => {},
   logout: () => {},
 });
@@ -15,12 +16,14 @@ export const AuthContextProvider = (props) => {
   const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
   const [accountId, setAccountId] = useState("");
+  const [createdAt, setCreatedAt] = useState("");
   const isLoggedIn = token.length !== 0;
 
   async function fetchUser(token) {
     const user = await getUser(token);
     setUsername(user.username);
     setAccountId(user.accountId);
+    setCreatedAt(user.createdAt);
   }
 
   const loginHandler = async (token) => {
@@ -33,12 +36,13 @@ export const AuthContextProvider = (props) => {
     setToken("");
     setUsername("");
     setAccountId("");
+    setCreatedAt("");
     localStorage.setItem("token", "");
   };
 
   const isLogIn = async () => {
     try {
-      let savedToken = await localStorage.getItem("token");
+      let savedToken = localStorage.getItem("token");
       if (savedToken) {
         await fetchUser(savedToken);
         setToken(savedToken);
@@ -57,6 +61,7 @@ export const AuthContextProvider = (props) => {
     isLoggedIn,
     username,
     accountId,
+    createdAt,
     login: loginHandler,
     logout: logoutHandler,
   };
