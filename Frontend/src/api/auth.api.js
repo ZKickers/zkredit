@@ -10,7 +10,7 @@ export const registerUser = async (user) => {
     throw new Error("Problem connecting with the server!");
   });
 
-  if (response.status !== 200) {
+  if (response.status !== 201) {
     const message = await response.text();
     throw new Error(message);
     // console.log(response)

@@ -63,7 +63,7 @@ export default function LPTemplate() {
         </div>
       </div>
       <ModalPage show={show} handleClose={handleClose}>
-        <SignupForm />
+        <SignupForm handleClose={handleClose} />
       </ModalPage>
     </div>
   );
