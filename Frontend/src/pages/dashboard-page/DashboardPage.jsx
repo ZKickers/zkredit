@@ -8,7 +8,6 @@ import { useContext } from 'react'
 export default function DashboardPage() {
     const auth = useContext(AuthContext);
 
-    testThres(auth);
     return <div className='dashboard-page'>
         <DashboardPageTemplate />
         <Footer />
@@ -18,5 +17,5 @@ export default function DashboardPage() {
 const testThres = async (auth) => {
     const response = await sendThreshold({ token: auth.token, threshold: 800, txId: "65fd010f4e120358e07d0a4a" });
     const proof = response.body
-    
+    console.log(proof)
 }
