@@ -1,13 +1,16 @@
-export const verifyTransaction = async (transactionId, accepted ,token) => {
+import { BACKEND_URL } from "config";
+export const sendProofStatus = async (transactionId, isAccepted ,token) => {
     const url = `${BACKEND_URL}/verifyTx`;
     const data = {
       txId: transactionId,
-      accepted: accepted
+      accepted: isAccepted
     };
   
     const response = await fetch(url, {
-      method: "GET", 
-      headers: { Authorization: `${token}` },
+      method: "POST", 
+      headers: { 
+        "Content-type": "application/json",
+        Authorization: `${token}` },
       body: JSON.stringify(data)
     }).catch((error) => {
       console.log(error);
