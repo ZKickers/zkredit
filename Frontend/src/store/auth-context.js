@@ -31,7 +31,9 @@ export const AuthContextProvider = (props) => {
 
   const logoutHandler = () => {
     setToken("");
-    localStorage.setItem("token", token);
+    setUsername("");
+    setAccountId("");
+    localStorage.setItem("token", "");
   };
 
   const isLogIn = async () => {

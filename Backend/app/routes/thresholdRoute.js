@@ -27,6 +27,14 @@ router.post('/trigger-threshold', verifyToken, validateParams, async (req, res) 
         if (!transaction) {
             return res.status(404).send('Transaction not found');
         }
+        if(req.user.accountId !== transaction.creditorAccountId)
+        {
+            return res.status(403).send('Forbidden: You are not authorized to verify transaction');
+        }
+        if(transaction.status != "Pending_Threshold")
+        {
+            return res.status(403).send('Transaction is not Pending_Threshold');
+        }
         await handleThresholdEvent(req.user.accountId, transaction, threshold)
         const filePath = PROOFS_PATH + transaction._id.toString() + "/proof.json"
         await res.status(200).download(filePath);
