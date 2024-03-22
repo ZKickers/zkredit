@@ -47,7 +47,7 @@ export default function TxCard(props) {
 
   const [threshold, setThreshold] = useState(0);
 
-  Verifier();
+  // Verifier();
 
   return (
     <div className="row container-fluid h-100 p-4">
@@ -73,7 +73,7 @@ export default function TxCard(props) {
             Status: <span style={{ color: color }}>{statusText}</span>
           </h3>
           {pendingThreshold &&
-            renderThresholdField({ threshold, token, txId, setThreshold, color, setProofCallback: setProof })}
+            renderThresholdField({ threshold, token, txId, setThreshold, color })}
         </div>
       </div>
       <div className={iconClasses}>
