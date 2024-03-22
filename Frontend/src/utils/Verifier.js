@@ -1,24 +1,20 @@
 import { initialize } from "zokrates-js";
-import useGetVK from "api/use-get-vk";
-import { useEffect, useState } from "react";
+import getVK from "api/use-get-vk";
 
-const Verifier = (proof) => {
-  const [vk, setVk] = useState(null);
-  const getVk = useGetVK(setVk);
-
-  useEffect(() => {
-    getVk();
-  }, []);
-
-  useEffect(() => {
-    if (vk) {
-      console.log(vk);
-    }
-  }, [vk]);
-
-  initialize().then((zokratesProvider) => {
-    const isVerified = zokratesProvider.verify(vk, proof);
-    return isVerified
+const Verifier = async (proof) => {
+  const vk = await getVK();
+  console.log(vk)
+  return new Promise((resolve, reject) => {
+    initialize().then((zokratesProvider) => {
+      try {
+        const isVerified = zokratesProvider.verify(vk, proof);
+        console.log(isVerified)
+        console.log(proof['inputs'][2])
+        resolve(isVerified && proof['inputs'][2]);
+      } catch (error) {
+        reject(error);
+      }
+    });
   });
 };
 

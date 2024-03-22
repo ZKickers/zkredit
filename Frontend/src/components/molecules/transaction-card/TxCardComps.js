@@ -58,9 +58,9 @@ const renderThresholdField = (props) => {
 
 const handleThresholdSubmit = async (token, threshold, txId) => {
   const response = await sendThreshold(token, threshold, txId);
-  console.log(response.body);
-  const proof = response.body;
-  const isVerified = Verifier(proof);
+  console.log(response);
+  const proof = response;
+  const isVerified = await Verifier(proof);
   console.log("PROOF STATUS OF VERIFICATION:", isVerified);
 };
 

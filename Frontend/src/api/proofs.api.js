@@ -10,9 +10,9 @@ export const sendThreshold = async (props) => {
   }).catch((err) => {
     throw new Error("Error connecting to the server!");
   });
-
+  const proof = await response.json()
   if (response.status === 200) {
-    return response;
+    return proof;
   }
   
   throw new Error(response.statusText);
