@@ -33,10 +33,7 @@ export default function PageHeader({ children }) {
       <div className={rightPartClasses}>
         <h3 className="logged-in-header w-75">
           logged in as
-          {/**
-           * TODO: HANDLE DYNAMIC USERNAME FETCHING
-           */}
-          <span className="username">&nbsp; zeyadzidan</span>
+          <span className="username">&nbsp; {auth.username}</span>
         </h3>
         <div className="options w-75">
           <button onClick={handleShowProfile} className="opt-profile m-0">
