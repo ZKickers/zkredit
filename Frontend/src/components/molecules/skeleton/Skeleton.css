@@ -1,0 +1,33 @@
+.loading-skeleton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 200px; /* Adjust height as needed */
+  }
+  
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3; /* Light grey */
+    border-top: 5px solid #3498db; /* Blue */
+    border-radius: 50%;
+    animation: spin 1s linear infinite; /* Apply spinning animation */
+  }
+  
+  .text {
+    margin-top: 20px; /* Adjust margin as needed */
+    width: 100px; /* Adjust width as needed */
+    height: 20px; /* Adjust height as needed */
+    background-color: #f3f3f3; /* Light grey */
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  

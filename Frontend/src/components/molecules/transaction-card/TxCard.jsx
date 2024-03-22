@@ -4,7 +4,6 @@ import { CloseIcon, LockIcon, LockOpenIcon } from "assets";
 import { useState } from "react";
 import {
   renderThresholdField,
-  renderValidationButton,
   contentContainer,
   iconClasses,
 } from "./TxCardComps";
@@ -12,21 +11,21 @@ import {
 export default function TxCard(props) {
   const {
     date,
-    CRID,
-    CLID,
+    creditorUsername,
+    clientFullName,
     verified,
     declined,
     pendingThreshold,
-    pendingVerification,
+    pendingValidation,
   } = props;
 
-  const pending = pendingThreshold || pendingVerification;
+  const pending = pendingThreshold || pendingValidation;
 
   const statusText = classNames({
     Verified: verified,
     Declined: declined,
     "Pending Threshold": pendingThreshold,
-    "Pending Verification": pendingVerification,
+    "Pending Validation": pendingValidation,
   });
 
   const color = classNames({
@@ -50,13 +49,14 @@ export default function TxCard(props) {
       <div className={contentContainer}>
         <div className="w-100" style={{ height: "fit-content" }}>
           <h1 style={{ color: color, fontSize: "36px", fontWeight: "bold" }}>
-            Session ID: {CRID}
+            {date}
           </h1>
           <h2 style={{ fontSize: "24px", fontWeight: "400" }}>
-            Date: <span className="fw-bold">{date}</span>
+            Creditor Username: &nbsp;
+            <span className="fw-bold">{creditorUsername}</span>
           </h2>
-          <h2 style={{ fontSize: "20px", fontWeight: "400" }}>
-            Client ID: <span className="fw-bold">{CLID}</span>
+          <h2 style={{ fontSize: "24px", fontWeight: "400" }}>
+            Client Full Name: <span className="fw-bold">{clientFullName}</span>
           </h2>
           <h3
             style={{
@@ -69,7 +69,6 @@ export default function TxCard(props) {
           </h3>
           {pendingThreshold &&
             renderThresholdField({ threshold, setThreshold, color })}
-          {pendingVerification && renderValidationButton(color)}
         </div>
       </div>
       <div className={iconClasses}>
