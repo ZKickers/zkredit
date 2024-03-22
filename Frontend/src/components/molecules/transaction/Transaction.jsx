@@ -47,6 +47,8 @@ export default function Transaction({
 
   const handleShowCard = () =>
     renderCard({
+      txId,
+      token,
       date: `${formattedDate} ${formattedTime}`,
       creditorUsername,
       clientFullName,

@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import "./TxCard.css";
 import { CloseIcon, LockIcon, LockOpenIcon } from "assets";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import {
   renderThresholdField,
   contentContainer,
@@ -11,6 +11,8 @@ import Verifier from "utils/Verifier";
 
 export default function TxCard(props) {
   const {
+    txId,
+    token,
     date,
     creditorUsername,
     clientFullName,
@@ -71,7 +73,7 @@ export default function TxCard(props) {
             Status: <span style={{ color: color }}>{statusText}</span>
           </h3>
           {pendingThreshold &&
-            renderThresholdField({ threshold, setThreshold, color})}
+            renderThresholdField({ threshold, token, txId, setThreshold, color, setProofCallback: setProof })}
         </div>
       </div>
       <div className={iconClasses}>
