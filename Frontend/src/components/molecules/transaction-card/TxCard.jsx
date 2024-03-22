@@ -47,7 +47,7 @@ export default function TxCard(props) {
 
   const [threshold, setThreshold] = useState(0);
 
-  Verifier();
+  // Verifier();
 
   return (
     <div className="row container-fluid h-100 p-4">

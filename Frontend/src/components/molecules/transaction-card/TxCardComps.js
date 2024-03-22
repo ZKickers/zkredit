@@ -57,7 +57,7 @@ const renderThresholdField = (props) => {
 };
 
 const handleThresholdSubmit = async (token, threshold, txId) => {
-  const response = await sendThreshold({ token, threshold, txId });
+  const response = await sendThreshold(token, threshold, txId );
   console.log(response.body);
   console.log("Submitted", threshold, " for transaction", txId);
 };

@@ -3,6 +3,7 @@ import { BACKEND_URL } from "config";
 export const sendThreshold = async (props) => {
   console.log(props)
   const { token, threshold, txId } = props;
+  console.log(props)
   const url = `${BACKEND_URL}/Creditor/trigger-threshold`;
   const response = await fetch(url, {
     method: "POST",
