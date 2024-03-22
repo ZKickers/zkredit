@@ -1,12 +1,13 @@
 import classNames from "classnames";
 import "./TxCard.css";
 import { CloseIcon, LockIcon, LockOpenIcon } from "assets";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   renderThresholdField,
   contentContainer,
   iconClasses,
 } from "./TxCardComps";
+import AuthContext from "store/auth-context";
 
 export default function TxCard(props) {
   const {
