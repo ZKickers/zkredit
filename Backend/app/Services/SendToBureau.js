@@ -4,8 +4,7 @@ const User = require('../models/User');
 const Transaction = require('../models/Transaction');
 const jwt = require('jsonwebtoken');
 const ProofInput = require('../models/ProofInput');
-const BUREAU_ENDPOINT = 'http://192.168.0.100:8061';
-
+const { CREDIT_BUREAU_API } = require('../../config');
 
 async function createTransaction(clientInfo, creditorUser, clientId) {
     try
@@ -73,7 +72,7 @@ async function serializeAndSaveData(clientInfo, responseData, transaction) {
 }
 
 async function sendClientInfo(clientInfo, creditorUserName, token) {
-    const response = await axios.post(BUREAU_ENDPOINT, clientInfo);
+    const response = await axios.post(CREDIT_BUREAU_API, clientInfo);
     console.log('Response from server:');
     console.log(response.data);
     const creditorUser = await User.findOne({ username: creditorUserName });
@@ -84,6 +83,7 @@ async function sendClientInfo(clientInfo, creditorUserName, token) {
     const decodedToken = jwt.verify(token, 'secret');
     const clientId = decodedToken.accountId;
     const creditorId = creditorUser.accountId;
+    console.log(creditorId);
     const transaction = await createTransaction(clientInfo, creditorUser, clientId);
     await serializeAndSaveData(clientInfo, response.data, transaction);
     return transaction;

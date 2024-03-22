@@ -6,5 +6,5 @@
 - Client Request ✅
 - Get TXs ✅
 - Delete TXs ✅
-- Creditor Threshold ❌
+- Creditor Threshold ✅
 - Credit Check Response ❌

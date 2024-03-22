@@ -2,10 +2,12 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const verifyToken = require('../Services/authMiddleware');
 
 const router = express.Router();
 
 router.post('/signup', async (req, res) => {
+    console.log("Calling signup")  
     try {
       if (!req.body.username || !req.body.email || !req.body.password) {
         return res.status(400).send('Username, email, and password are required');
@@ -54,6 +56,7 @@ router.post('/signup', async (req, res) => {
   
 
 router.post('/login', async (req, res) => {
+  console.log("Calling login")  
     try {
       const user = await User.findOne({ username: req.body.username });
   
@@ -81,21 +84,19 @@ function generateAccountId() {
   return 'acc_' + Math.random().toString(36).substr(2, 9);
 }
 
-router.get('/', async (req, res) => {
-  const token = req.header('Authorization');
-
-  if (!token) {
-      return res.status(401).json({ message: 'Access denied. Token is required.' });
-  }
-
+router.get('/', verifyToken, async (req, res) => {
+  console.log("Calling getUsername");
   try {
-      console.log("verifying token...")
-      const user = jwt.verify(token, 'secret');
-      console.log("verifyied token")
-      res.json(user.username);
+    const user = await User.findOne({ accountId: req.user.accountId });
+    console.log("User: ", user);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const { username, createdAt, accountId } = user;
+    res.json({ username, createdAt, accountId });
   } catch (error) {
-      console.error('Error verifying token:', error);
-      res.status(403).json({ message: 'Invalid token.' });
+    console.error('Error verifying token:', error);
+    res.status(403).json({ message: 'Invalid token.' });
   }
 });
 

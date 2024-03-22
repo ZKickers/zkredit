@@ -1,12 +1,2 @@
 .vscode
-Backend/app/proofs
-Backend/app/out.r1cs
-Backend/app/out
-Backend/app/witness
-Backend/app/proofs/65fbb4fc1e8ed9e3280ef6be/witness
-Backend/app/proofs/65fba9d2e330f4dff548c5b7/witness
-Backend/app/out.wtns
-Backend/app/proving.key
-Backend/app/verification.key
-Backend/app/out
-
+.DS_Store

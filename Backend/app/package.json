@@ -19,7 +19,6 @@
     "fs-extra": "^11.2.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.5.0",
-    "mongoose": "^8.2.2",
-    "ws": "^8.16.0"
+    "mongoose": "^8.2.2"
   }
 }

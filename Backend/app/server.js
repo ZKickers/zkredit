@@ -6,18 +6,20 @@ const getTX = require('./routes/getTX')
 const cors = require('cors')
 const app = express();
 const deleteTX = require('./routes/deleteTX')
-const ClientRequest = require('./routes/ClientRequest')
+const ClientRequest = require('./routes/ClientRequest');
 const thresholdRoute = require('./routes/thresholdRoute')
+const verificationRoutes = require('./routes/verificationRoutes')
+const verificationKeyRoute = require('./routes/verificationKeyRoute')
+const { BACKEND_PORT, FRONTEND_URL, MONGODB_URI } = require('../config');
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: FRONTEND_URL
 }));
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://0.0.0.0:27017/zkredit')
+mongoose.connect(MONGODB_URI)
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.error('MongoDB connection error:', err));
-
 
 // Routes
 app.use('/auth', authRoutes);
@@ -25,7 +27,9 @@ app.use('/getTX', getTX);
 app.use('/deleteTX', deleteTX);
 app.use('/ClientRequest', ClientRequest);
 app.use('/Creditor', thresholdRoute);
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.use('/verifyTx', verificationRoutes)
+app.use('/verification-key', verificationKeyRoute)
+
+app.listen(BACKEND_PORT, () => {
+  console.log(`Backend Server is running on port ${BACKEND_PORT}`);
 });

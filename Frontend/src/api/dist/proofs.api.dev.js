@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.sendThreshold = void 0;
+exports.sendProofStatus = exports.sendThreshold = void 0;
 
 var _config = require("config");
 
@@ -14,7 +14,7 @@ var sendThreshold = function sendThreshold(props) {
       switch (_context.prev = _context.next) {
         case 0:
           token = props.token, threshold = props.threshold, txId = props.txId;
-          url = "".concat(_config.ZKREDIT_API, "/Creditor/trigger-threshold");
+          url = "".concat(ZKREDIT_API, "/Creditor/trigger-threshold");
           _context.next = 4;
           return regeneratorRuntime.awrap(fetch(url, {
             method: "POST",
@@ -52,3 +52,55 @@ var sendThreshold = function sendThreshold(props) {
 };
 
 exports.sendThreshold = sendThreshold;
+
+var sendProofStatus = function sendProofStatus(transactionId, isAccepted, token) {
+  var url, data, response, message;
+  return regeneratorRuntime.async(function sendProofStatus$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          url = "".concat(_config.BACKEND_URL, "/verifyTx");
+          data = {
+            txId: transactionId,
+            accepted: isAccepted
+          };
+          _context2.next = 4;
+          return regeneratorRuntime.awrap(fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+              Authorization: "".concat(token)
+            },
+            body: JSON.stringify(data)
+          })["catch"](function (error) {
+            console.log(error);
+            throw new Error("Problem connecting with the server!");
+          }));
+
+        case 4:
+          response = _context2.sent;
+
+          if (!(response.status !== 200)) {
+            _context2.next = 10;
+            break;
+          }
+
+          _context2.next = 8;
+          return regeneratorRuntime.awrap(response.text());
+
+        case 8:
+          message = _context2.sent;
+          throw new Error(message);
+
+        case 10:
+          return _context2.abrupt("return", response.json());
+
+        case 11:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  });
+};
+
+exports.sendProofStatus = sendProofStatus;
