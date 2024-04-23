@@ -68,7 +68,7 @@ export default function TxCard(props) {
     console.log(proof);
     if (proof) {
       console.log("proof is valid");
-      Verifier(proof,setVerification);
+      Verifier(proof,setVerification, token);
       // console.log("PROOF STATUS OF VERIFICATION:", isVerified);
     }
   }, [proof]);

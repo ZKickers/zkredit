@@ -1,12 +1,8 @@
 import axios from "axios";
 import { BACKEND_URL } from "config";
-import AuthContext from "store/auth-context";
-import { useContext } from "react";
 
-const useGetVK = () => {
-  const auth = useContext(AuthContext)
+const useGetVK = (token) => {
   const url = `${BACKEND_URL}/verification-key`;
-
   const getVK = async () => {
     try {
       const response = await axios.get(url, {

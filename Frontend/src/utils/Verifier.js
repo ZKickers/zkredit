@@ -1,9 +1,9 @@
 import { initialize } from "zokrates-js";
 import useGetVK from "api/use-get-vk";
 
-const Verifier = async (proof,setVerification) => {
+const Verifier = async (proof,setVerification, token) => {
   console.log("Entered Verification func");
-  const getVK = useGetVK();
+  const getVK = useGetVK(token);
   const vk = await getVK();
   console.log(vk)
   setVerification( new Promise((resolve, reject) => {
