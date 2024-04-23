@@ -1,10 +1,11 @@
 import { initialize } from "zokrates-js";
 import getVK from "api/use-get-vk";
 
-const Verifier = async (proof) => {
+const Verifier = async (proof,setVerification) => {
+  console.log("Entered Verification func");
   const vk = await getVK();
   console.log(vk)
-  return new Promise((resolve, reject) => {
+  setVerification( new Promise((resolve, reject) => {
     initialize().then((zokratesProvider) => {
       try {
         const isVerified = zokratesProvider.verify(vk, proof);
@@ -15,7 +16,8 @@ const Verifier = async (proof) => {
         reject(error);
       }
     });
-  });
+  })
+);
 };
 
 export default Verifier;

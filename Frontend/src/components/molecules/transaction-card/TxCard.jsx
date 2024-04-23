@@ -47,6 +47,7 @@ export default function TxCard(props) {
   };
 
   const [threshold, setThreshold] = useState(0);
+  const [verification, setVerification] = useState(null);
   const { proof, error, sendThreshold } = useSendThreshold(token);
 
   useEffect(() => {
@@ -57,14 +58,18 @@ export default function TxCard(props) {
 
   useEffect(() => {
     if (error) {
+      
       alert(error);
     }
   }, [error]);
 
-  useEffect(async () => {
+  useEffect( () => {
+    console.log("lolita");
+    console.log(proof);
     if (proof) {
-      const isVerified = await Verifier(proof);
-      console.log("PROOF STATUS OF VERIFICATION:", isVerified);
+      console.log("proof is valid");
+      Verifier(proof,setVerification);
+      // console.log("PROOF STATUS OF VERIFICATION:", isVerified);
     }
   }, [proof]);
 

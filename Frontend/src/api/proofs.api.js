@@ -21,7 +21,8 @@ export const useSendThreshold = (token) => {
         }
       );
       if (response.status === 200) {
-        setProof(response.json());
+        console.log(response)
+        setProof(response.data);
       }else{
         setError("Problem connecting with the server!");
       }
@@ -32,7 +33,7 @@ export const useSendThreshold = (token) => {
   return { proof, error, sendThreshold };
 }
 
-
+  
 
 export const sendProofStatus = async (transactionId, isAccepted, token) => {
   const url = `${BACKEND_URL}/verifyTx`;
