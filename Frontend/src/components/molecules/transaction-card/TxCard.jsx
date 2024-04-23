@@ -1,12 +1,14 @@
 import classNames from "classnames";
 import "./TxCard.css";
 import { CloseIcon, LockIcon, LockOpenIcon } from "assets";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   renderThresholdField,
   contentContainer,
   iconClasses,
 } from "./TxCardComps";
+import { useSendThreshold } from "api/proofs.api";
+import Verifier from "utils/Verifier";
 
 export default function TxCard(props) {
   const {
@@ -45,6 +47,26 @@ export default function TxCard(props) {
   };
 
   const [threshold, setThreshold] = useState(0);
+  const { proof, error, sendThreshold } = useSendThreshold(token);
+
+  useEffect(() => {
+    if(threshold != 0){
+      sendThreshold(threshold, txId);
+    }
+  }, [threshold]);
+
+  useEffect(() => {
+    if (error) {
+      alert(error);
+    }
+  }, [error]);
+
+  useEffect(async () => {
+    if (proof) {
+      const isVerified = await Verifier(proof);
+      console.log("PROOF STATUS OF VERIFICATION:", isVerified);
+    }
+  }, [proof]);
 
   return (
     <div className="row container-fluid h-100 p-4">
@@ -70,7 +92,7 @@ export default function TxCard(props) {
             Status: <span style={{ color: color }}>{statusText}</span>
           </h3>
           {pendingThreshold &&
-            renderThresholdField({ threshold, token, txId, setThreshold, color })}
+            renderThresholdField({ setThreshold, color })}
         </div>
       </div>
       <div className={iconClasses}>

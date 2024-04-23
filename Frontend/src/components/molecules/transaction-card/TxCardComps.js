@@ -1,14 +1,15 @@
-import { sendThreshold } from "api/proofs.api";
 import classNames from "classnames";
-import Verifier from "utils/Verifier";
-const { TextField } = require("@mui/material");
-const { DataThresholdingIcon } = require("assets");
-const {
-  default: SubmitButton,
-} = require("components/atoms/submit-button/SubmitButton");
+import { useState } from "react";
+import { TextField } from "@mui/material";
+import SubmitButton from "components/atoms/submit-button/SubmitButton";
+import { DataThresholdingIcon } from "assets";
 
-const renderThresholdField = (props) => {
-  const { token, threshold, txId, setThreshold, color } = props;
+const renderThresholdField = ({ setThreshold, color }) => {
+
+  const [t, setT] = useState(0);
+  const handleThresholdSubmit = (t) => {
+    setThreshold(t);
+  };
 
   return (
     <div className="mt-4">
@@ -16,7 +17,7 @@ const renderThresholdField = (props) => {
         type="number"
         fullWidth
         label="Threshold"
-        onChange={(e) => setThreshold(e.target.value)}
+        onChange={(e) => setT(e.target.value)}
         InputLabelProps={{
           style: {
             color: color,
@@ -40,7 +41,7 @@ const renderThresholdField = (props) => {
           ),
           endAdornment: (
             <SubmitButton
-              onClick={() => handleThresholdSubmit({ token, threshold, txId })}
+              onClick={() => handleThresholdSubmit(t)}
               style={{
                 backgroundColor: color,
                 margin: "10px 0 10px 10px",
@@ -56,13 +57,7 @@ const renderThresholdField = (props) => {
   );
 };
 
-const handleThresholdSubmit = async (token, threshold, txId) => {
-  const response = await sendThreshold(token, threshold, txId);
-  console.log(response);
-  const proof = response;
-  const isVerified = await Verifier(proof);
-  console.log("PROOF STATUS OF VERIFICATION:", isVerified);
-};
+
 
 const renderValidationButton = (color) => {
   return (

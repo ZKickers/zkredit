@@ -12,7 +12,6 @@ import {
   rightClasses,
 } from "hooks/use-classnames";
 import ClientRequestForm from "components/organisms/client-request-form/ClientRequestForm";
-import Verifier from "utils/Verifier";
 import { useFetchTransactionsQuery } from "store";
 import AuthContext from "store/auth-context";
 import Skeleton from "components/molecules/skeleton/Skeleton";

@@ -1,22 +1,38 @@
 import { BACKEND_URL } from "config";
+import axios from "axios";
+import { useState } from "react";
 
-export const sendThreshold = async (props) => {
-  const { token, threshold, txId } = props;
+
+export const useSendThreshold = (token) => {
   const url = `${BACKEND_URL}/Creditor/trigger-threshold`;
-  const response = await fetch(url, {
-    method: "POST",
-    headers: { "Content-type": "application/json", Authorization: token },
-    body: JSON.stringify({ threshold: threshold, txId: txId }),
-  }).catch((err) => {
-    throw new Error("Error connecting to the server!");
-  });
-  const proof = await response.json()
-  if (response.status === 200) {
-    return proof;
-  }
+  const [proof, setProof] = useState(null);
+  const [error, setError] = useState(null);
+
+  const sendThreshold = async (threshold, txId) => {
   
-  throw new Error(response.statusText);
-};
+    try {
+      const response = await axios.post(
+        url,
+        { threshold: threshold, txId: txId },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        setProof(response.json());
+      }else{
+        setError("Problem connecting with the server!");
+      }
+    }catch (error) {
+      setError(error.message);  
+    }
+  };
+  return { proof, error, sendThreshold };
+}
+
+
 
 export const sendProofStatus = async (transactionId, isAccepted, token) => {
   const url = `${BACKEND_URL}/verifyTx`;
