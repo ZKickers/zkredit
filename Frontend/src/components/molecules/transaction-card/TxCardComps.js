@@ -8,7 +8,11 @@ const renderThresholdField = ({ setThreshold, color }) => {
 
   const [t, setT] = useState(0);
   const handleThresholdSubmit = (t) => {
-    setThreshold(t);
+    if(t > 0 && t <= 850){
+      setThreshold(t);
+    }else{
+      alert("Threshold must be between 1 and 850");
+    }
   };
 
   return (

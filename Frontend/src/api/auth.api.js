@@ -13,7 +13,6 @@ export const registerUser = async (user) => {
   if (response.status !== 201) {
     const message = await response.text();
     throw new Error(message);
-    // console.log(response)
   }
 
   return response;

@@ -8,7 +8,7 @@ import {
   iconClasses,
 } from "./TxCardComps";
 import { useSendThreshold } from "api/proofs.api";
-import Verifier from "utils/Verifier";
+import useVerify from "utils/useVerify";
 
 export default function TxCard(props) {
   const {
@@ -47,31 +47,58 @@ export default function TxCard(props) {
   };
 
   const [threshold, setThreshold] = useState(0);
-  const [verification, setVerification] = useState(null);
-  const { proof, error, sendThreshold } = useSendThreshold(token);
+  const {
+    proof,
+    error: thresholdError,
+    sendThreshold,
+  } = useSendThreshold(token);
+  const {
+    verify,
+    isVerified,
+    verificationResult,
+    error: verificationError,
+  } = useVerify(token);
 
   useEffect(() => {
-    if(threshold != 0){
+    if (threshold != 0) {
+      // TODO:: set UI to be pending the proof
       sendThreshold(threshold, txId);
     }
   }, [threshold]);
 
   useEffect(() => {
-    if (error) {
-      
-      alert(error);
+    if (thresholdError) {
+      // TODO:: handle error in UI
+      alert(thresholdError);
     }
-  }, [error]);
+  }, [thresholdError]);
 
-  useEffect( () => {
-    console.log("lolita");
-    console.log(proof);
-    if (proof) {
+  useEffect(() => {
+    if (proof != null) {
+      // TODO:: set UI to be pending the verification
       console.log("proof is valid");
-      Verifier(proof,setVerification, token);
-      // console.log("PROOF STATUS OF VERIFICATION:", isVerified);
+      console.log(proof);
+      verify(proof);
     }
   }, [proof]);
+
+  useEffect(() => {
+    if (isVerified && verificationResult != null) {
+      alert(verificationResult ? "Threshold reached" : "Threshold not reached");
+      // TODO:: change the status of the transaction to verified and update the UI accordingly
+      // TODO:: send the proof to the backend to update the status of the transaction
+    } else if (isVerified === false) {
+      alert("Error verifying the proof, proof is invalid");
+      //TODO:: change the status of the transaction to inverified and update the UI accordingly
+      //TODO:: send the proof to the backend to update the status of the transaction
+    }
+  }, [isVerified, verificationResult]);
+
+  useEffect(() => {
+    if (verificationError) {
+      alert(verificationError);
+    }
+  }, [verificationError]);
 
   return (
     <div className="row container-fluid h-100 p-4">
@@ -96,8 +123,7 @@ export default function TxCard(props) {
           >
             Status: <span style={{ color: color }}>{statusText}</span>
           </h3>
-          {pendingThreshold &&
-            renderThresholdField({ setThreshold, color })}
+          {pendingThreshold && renderThresholdField({ setThreshold, color })}
         </div>
       </div>
       <div className={iconClasses}>

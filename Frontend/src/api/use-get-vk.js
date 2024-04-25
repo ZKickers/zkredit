@@ -7,7 +7,7 @@ const useGetVK = (token) => {
     try {
       const response = await axios.get(url, {
         headers: {
-          Authorization: `${auth.token}`, 
+          Authorization: `${token}`, 
         },
       });
       return response.data; 
