@@ -5,13 +5,7 @@ const ADDRESS_MAX = 100
 
 function serializeResponse(apiResponse) {
   // Extract relevant fields from the API response
-  // const { fullname, address, birthdate, ssn, score, signature } = apiResponse;
-  address =  "123 Oak Saint Anytown, WI. 1111";
-  birthdate =  "02-07-2001";
-  fullname = "John Q. Doe";
-  ssn = "210734803";
-  score = 850;
-  signature = {'R': ["24287f104fa8e92cc6379234ff6ae148f478af5b701c34ed573a01cc3b662f10","2076bcd6ea13565ab2d0290d8b0ced81f2289e28c02e9ae843fdab56147a72a5"], 'S':"2b07d92dada2d51d8231642762c3000e2f1e31e7f6f26de273bd4a282c90d166"}
+  const { fullname, address, birthdate, ssn, score, signature } = apiResponse;
 
   // console.log("looooooool")
   // console.log(signature.R)

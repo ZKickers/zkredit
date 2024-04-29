@@ -19,6 +19,7 @@ const useVerify = (token) => {
         console.log(isVerified);
         setIsVerified(isVerified);
         if(isVerified){
+          console.log(proof["inputs"][2]);
           let result = parseInt(proof["inputs"][2].replace(/^0x/i, ''), 16);
           setVerificationResult(result===1);
         }

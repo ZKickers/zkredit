@@ -55,9 +55,9 @@ export const sendProofStatus = async (transactionId, isAccepted, token) => {
   });
 
   if (response.status !== 200) {
-    const message = await response.text();
+    const message = response.data;
     throw new Error(message);
   }
 
-  return response.json();
+  return response.data;
 };

@@ -4,6 +4,8 @@ import { LockIcon, LockOpenIcon, CloseIcon } from "assets";
 import { useFetchCreditorUsernameQuery } from "store/apis/txApi";
 import { datePrettier } from "./datePrettier";
 import TxCard from "../transaction-card/TxCard";
+import TransactionStateEnum from "utils/TransactionStateEnum";
+import { useState, useEffect } from "react";
 
 export default function Transaction({
   token,
@@ -16,22 +18,35 @@ export default function Transaction({
   isButton,
   renderCard,
 }) {
-  let verified, declined, pendingThreshold, pendingValidation;
-
-  switch (status) {
-    case "Success":
-      verified = true;
-      break;
-    case "Fail":
-      declined = true;
-      break;
-    case "Pending_Threshold":
-      pendingThreshold = true;
-      break;
-    case "Pending_Validation":
-      pendingValidation = true;
-      break;
-  }
+  const [transactionState, setTransactionState] = useState(null);
+  const state = {
+    Verified: transactionState === TransactionStateEnum.SUCCESS,
+    Declined: transactionState === TransactionStateEnum.FAIL,
+    Pending:
+      transactionState === TransactionStateEnum.PENDING_THRESHOLD ||
+      transactionState === TransactionStateEnum.PENDING_VALIDATION ||
+      transactionState === TransactionStateEnum.PENDING_PROOF,
+  };
+  useEffect(() => {
+    switch (status) {
+      case "Success":
+        setTransactionState(TransactionStateEnum.SUCCESS);
+        // TODO:: need to check the result and set it SUCCESS or FAIL
+        break;
+      case "Fail":
+        setTransactionState(TransactionStateEnum.FAIL);
+        break;
+      case "Pending_Threshold":
+        setTransactionState(TransactionStateEnum.PENDING_THRESHOLD);
+        break;
+      case "Pending_Validation":
+        setTransactionState(TransactionStateEnum.PENDING_VALIDATION);
+        break;
+      case "Insufficient":
+        setTransactionState(TransactionStateEnum.INSUFFICIENT);
+        break;
+    }
+  }, [status]);
 
   const { formattedDate, formattedTime } = datePrettier(updateDate);
 
@@ -52,29 +67,26 @@ export default function Transaction({
       date: `${formattedDate} ${formattedTime}`,
       creditorUsername,
       clientFullName,
-      verified,
-      declined,
-      pendingThreshold,
-      pendingValidation,
+      transactionState,
+      setTransactionState,
     });
-
   const base = "tx row container w-100 p-md-2 p-sm-3 my-md-1 my-sm-3";
   const classes = classNames(base, {
-    "tx-verified": verified,
-    "tx-failed": declined,
-    "tx-pending": pendingThreshold || pendingValidation,
+    "tx-verified": state.Verified,
+    "tx-failed": state.Declined,
+    "tx-pending": state.Pending,
   });
 
   const statusText = classNames({
-    Verified: verified,
-    Declined: declined,
-    Pending: pendingThreshold || pendingValidation,
+    Verified: state.Verified,
+    Declined: state.Declined,
+    Pending: state.Pending,
   });
 
   const color = classNames({
-    "#009A2B": verified,
-    "#F62525": declined,
-    "#FFB800": pendingThreshold || pendingValidation,
+    "#009A2B": state.Verified,
+    "#F62525": state.Declined,
+    "#FFB800": state.Pending,
   });
 
   const iconStyle = {
@@ -84,11 +96,11 @@ export default function Transaction({
   };
 
   const renderIcon = () => {
-    if (verified)
+    if (state.Verified)
       return <LockIcon className="rounded-circle p-2" sx={iconStyle} />;
-    if (declined)
+    if (state.Declined)
       return <CloseIcon className="rounded-circle p-2" sx={iconStyle} />;
-    if (pendingThreshold || pendingValidation)
+    if (state.Pending)
       return <LockOpenIcon className="rounded-circle p-2" sx={iconStyle} />;
   };
 
@@ -134,7 +146,9 @@ export default function Transaction({
   );
 
   return isButton ? (
-    <button className={classes} onClick={handleShowCard}>{renderContent()}</button>
+    <button className={classes} onClick={handleShowCard}>
+      {renderContent()}
+    </button>
   ) : (
     <div className={classes}>{renderContent()}</div>
   );
