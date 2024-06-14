@@ -15,8 +15,8 @@ const transactionSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Insufficient', 'Pending_Threshold', 'Pending_Verification', 'Success', 'Fail'],
-        default: 'Insufficient'
+        enum: ['Pending_Threshold', 'Pending_Client_Data', 'Pending_Proof', 'Invalid', 'Pending_Verification', 'Passed', 'Failed'],
+        default: 'Pending_Threshold'
     }
 }, {
     timestamps: true // Enable timestamps feature
@@ -26,3 +26,12 @@ const transactionSchema = new mongoose.Schema({
 const Transaction = mongoose.model('Transaction', transactionSchema);
 
 module.exports = Transaction;
+
+// Pending_Threshold,
+//         Pending_Client_Data,
+//         Pending_Proof,
+//         Pending_Verification,
+//         Accepted,
+//         Invalid,
+//         Failed,
+//         Rejected,
