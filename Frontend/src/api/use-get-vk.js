@@ -1,23 +1,24 @@
 import axios from "axios";
-import { useContext } from "react";
-import AuthContext from "store/auth-context";
 import { BACKEND_URL } from "config";
 
-const useGetVK = (setVk) => {
-    const auth = useContext(AuthContext);
-    const url = `${BACKEND_URL}/verification-key`;
-  
-    const vkReq = async () => {
+const useGetVK = (token) => {
+  const url = `${BACKEND_URL}/verification-key`;
+  const getVK = async () => {
+    try {
       const response = await axios.get(url, {
         headers: {
-          Authorization: `${auth.token}`,
+          Authorization: `${token}`, 
         },
       });
-      setVk(response.data);
-    };
-  
-    return vkReq;
+      return response.data; 
+    } catch (error) {
+      console.error("Error fetching the verification key:", error);
+      throw error; 
+    }
   };
+  return getVK;
+}
+
   
   export default useGetVK;
   

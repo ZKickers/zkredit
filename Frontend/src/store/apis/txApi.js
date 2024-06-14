@@ -42,9 +42,29 @@ export const transactionsApi = createApi({
           };
         },
       }),
+      updateThreshold: builder.mutation({
+        query: (props) => {
+          const { txId, threshold } = props;
+          return {
+            url: "/Creditor/trigger-threshold",
+            method: "POST",
+            headers: {
+              Authorization: token,
+            },
+            body: {
+              threshold,
+              txId,
+            },
+          };
+        },
+      }),
     };
   },
 });
 
-export const { useFetchTransactionsQuery, useFetchCreditorUsernameQuery, useAddTransactionMutation } =
-  transactionsApi;
+export const {
+  useFetchTransactionsQuery,
+  useFetchCreditorUsernameQuery,
+  useAddTransactionMutation,
+  useUpdateThresholdMutation,
+} = transactionsApi;

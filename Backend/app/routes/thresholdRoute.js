@@ -1,4 +1,5 @@
 const fs_extra = require('fs-extra');
+const fs = require("fs");
 const express = require('express');
 const router = express.Router();
 const verifyToken = require('../Services/authMiddleware');
@@ -37,7 +38,9 @@ router.post('/trigger-threshold', verifyToken, validateParams, async (req, res) 
         }
         await handleThresholdEvent(req.user.accountId, transaction, threshold)
         const filePath = PROOFS_PATH + transaction._id.toString() + "/proof.json"
-        await res.status(200).download(filePath);
+        const fileContent = fs.readFileSync(filePath, 'utf8');
+        const proof = JSON.parse(fileContent);
+        res.status(200).json(proof);
         await fs_extra.remove(PROOFS_PATH + transaction._id.toString(), (err) => {
                 if (err) {
                     console.error('Error removing directory:', err);
