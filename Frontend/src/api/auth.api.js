@@ -1,53 +1,53 @@
-import { BACKEND_URL } from "config";
+import axiosInstance from "./axios";
 
 export const registerUser = async (user) => {
-  const url = `${BACKEND_URL}/auth/signup`;
-  const response = await fetch(url, {
-    method: "POST",
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify(user),
-  }).catch((error) => {
-    throw new Error("Problem connecting with the server!");
+  const url = "/auth/signup";
+
+  const response = await axiosInstance.post(
+    url, 
+    user
+  ).catch((error) => {
+    throw new Error(error.message);
   });
+  console.log(response);
 
   if (response.status !== 201) {
-    const message = await response.text();
-    throw new Error(message);
+    throw new Error(response.data);
   }
 
-  return response;
+  return response.data;
 };
 
 export const loginUser = async (user) => {
-  const url = `${BACKEND_URL}/auth/login`;
+  const url = '/auth/login';
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify(user),
-  }).catch((error) => {
-    throw new Error("Problem connecting with the server!");
+  const response = await axiosInstance.post(
+    url, 
+    user
+  ).catch((error) => {
+    if (response.status === 401) {
+      throw new Error("Invalid credentials");
+    }
+    throw new Error(error.message);
   });
+  console.log(response);
 
-  if (response.status === 401) {
-    throw new Error("Invalid credentials");
-  } else if (response.status !== 200) {
-    throw new Error(response.status);
+  if (response.status !== 200) {
+    throw new Error(response.data);
   }
-  return response;
+  return response.data;
 };
 
-export const getUser = async (token) => {
-  const url = `${BACKEND_URL}/auth`;
+export const getUser = async () => {
+  const url = "/auth";
 
-  const response = await fetch(url, {
-    method: "GET",
-    headers: { Authorization: `${token}` },
+  const response = await axiosInstance.get(url)
+  .catch((error) => {
+    throw new Error(error.message);
   });
 
   if (response.status !== 200) {
     throw new Error(response.status);
   }
-  const user = await response.json();
-  return user;
+  return response.data;
 };

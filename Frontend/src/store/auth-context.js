@@ -27,9 +27,12 @@ export const AuthContextProvider = (props) => {
   }
 
   const loginHandler = async (token) => {
-    await fetchUser(token);
-    setToken(token);
+    console.log("login handler", token);
+    sessionStorage.setItem("token", token)
     localStorage.setItem("token", token);
+    setToken(token);
+    await fetchUser(token);
+
   };
 
   const logoutHandler = () => {
@@ -37,13 +40,18 @@ export const AuthContextProvider = (props) => {
     setUsername("");
     setAccountId("");
     setCreatedAt("");
+    sessionStorage.setItem("token", "")
     localStorage.setItem("token", "");
   };
 
   const isLogIn = async () => {
     try {
       let savedToken = localStorage.getItem("token");
-      if (savedToken) {
+      console.log("is logged in", savedToken);
+      if (savedToken.length != 0) {
+        sessionStorage.setItem("token", savedToken)
+
+        console.log("is logged in", sessionStorage.getItem("token"));
         await fetchUser(savedToken);
         setToken(savedToken);
       }
