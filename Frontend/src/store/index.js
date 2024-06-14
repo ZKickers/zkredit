@@ -17,4 +17,5 @@ export {
   useFetchTransactionsQuery,
   useFetchCreditorUsernameQuery,
   useAddTransactionMutation,
+  useUpdateThresholdMutation,
 } from "store/apis/txApi";
