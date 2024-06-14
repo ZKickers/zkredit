@@ -11,7 +11,7 @@ import {
   txBox,
   rightClasses,
 } from "hooks/use-classnames";
-import ClientRequestForm from "components/organisms/client-request-form/ClientRequestForm";
+import ClientConnectRequestForm from "components/organisms/client-connect-request-form/ClientConnectRequestForm";
 import { useFetchTransactionsQuery } from "store";
 import AuthContext from "store/auth-context";
 import Skeleton from "components/molecules/skeleton/Skeleton";
@@ -89,7 +89,7 @@ export default function DashboardPageTemplate() {
         </div>
       </div>
       <ModalPage show={showSession} handleClose={handleCloseSession}>
-        <ClientRequestForm handleClose={handleCloseSession} />
+        <ClientConnectRequestForm handleClose={handleCloseSession} />
       </ModalPage>
     </div>
   );
