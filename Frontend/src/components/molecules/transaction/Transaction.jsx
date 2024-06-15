@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import "./Transaction.css";
 import { LockIcon, LockOpenIcon, CloseIcon } from "assets";
-import useFetchCreditorUsername from "api/useFetchCreditorUsername";
+import useFetchCreditorUsername from "API/useFetchCreditorUsername";
 import { datePrettier } from "./datePrettier";
 import TransactionStateEnum from "utils/TransactionStateEnum";
 import { useState, useEffect } from "react";
@@ -52,7 +52,7 @@ export default function Transaction({
   const [creditorUsername, setCreditorUsername] = useState("");
   const { fetchCreditorUsername, loading, error } = useFetchCreditorUsername();
 
-  useEffect(async() => {
+  useEffect(async () => {
     const CUN = await fetchCreditorUsername({ txId, creditorId });
     setCreditorUsername(CUN);
   }, []);

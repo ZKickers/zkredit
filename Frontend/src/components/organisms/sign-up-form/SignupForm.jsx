@@ -8,9 +8,8 @@ import {
   useEmailValidation,
   usePasswordValidation,
 } from "hooks/signup-form-hooks/signup-form-hooks";
-import useSignUp from "api/useSignup";
+import useSignUp from "API/useSignup";
 import "react-toastify/dist/ReactToastify.css";
-
 
 export default function SignupForm({ handleClose }) {
   const [username, setUsername] = useState("");

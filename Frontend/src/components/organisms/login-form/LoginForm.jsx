@@ -3,8 +3,8 @@ import "./LoginForm.css";
 import { useState } from "react";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { signinIcon } from "assets";
-import useLogin from "api/useLogin";
-import 'react-toastify/dist/ReactToastify.css';
+import useLogin from "API/useLogin";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function LoginForm() {
   const [username, setUsername] = useState("");
@@ -15,7 +15,7 @@ export default function LoginForm() {
     e.preventDefault();
     try {
       await loginUser({ username, password });
-      console.log("You have logged in successfully")
+      console.log("You have logged in successfully");
     } catch (error) {
       console.error(error.message);
     }

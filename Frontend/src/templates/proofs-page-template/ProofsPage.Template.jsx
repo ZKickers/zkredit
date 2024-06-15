@@ -8,7 +8,7 @@ import {
 } from "hooks/use-classnames";
 import { KeyboardBackspaceIcon } from "assets";
 import Transaction from "components/molecules/transaction/Transaction";
-import useFetchTransactions from "api/useFetchTransactions";
+import useFetchTransactions from "API/useFetchTransactions";
 import Skeleton from "components/molecules/skeleton/Skeleton";
 import { useEffect, useState } from "react";
 import classNames from "classnames";

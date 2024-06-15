@@ -3,10 +3,9 @@ import { NavigationProvider } from "contexts/NavigationContext";
 import LandingPage from "pages/landing-page/LandingPage";
 import DashboardPage from "pages/dashboard-page/DashboardPage";
 import ProofsPage from "pages/proofs-page/ProofsPage";
-import useGetUser from "api/useGetUser";
+import useGetUser from "API/useGetUser";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-
 
 export default function App() {
   const getUser = useGetUser();
@@ -31,7 +30,7 @@ export default function App() {
         {(user.isLoggedIn && <DashboardPage />) || <LandingPage />}
       </Route>
       <Route routePath={"/proofs"}>
-      {(user.isLoggedIn && <ProofsPage />) || <LandingPage />}
+        {(user.isLoggedIn && <ProofsPage />) || <LandingPage />}
       </Route>
     </NavigationProvider>
   );
