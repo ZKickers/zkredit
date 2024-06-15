@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ClientConnectRequestValidationSchema } from "utils/validators/ClientConnectRequestValidationSchema";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
+import useClientConnectReq from "API/useClientConnectReq";
 
 export default function ClientConnectRequestForm({ handleClose }) {
   const {
@@ -14,18 +15,20 @@ export default function ClientConnectRequestForm({ handleClose }) {
     setValue,
   } = useForm({ resolver: yupResolver(ClientConnectRequestValidationSchema) });
 
+  const ClientConnectReq = useClientConnectReq();
+
   const onRequestSubmit = async (data) => {
     const jsonData = {
       ...data,
     };
 
-    // const response = await clientRequest({
-    //   token: auth.token,
-    //   data: jsonData,
-    // });
-
-    console.log("result");
-    console.log(jsonData);
+    try{
+      const response = await ClientConnectReq(jsonData);
+      console.log("result");
+      console.log(response);
+    }catch(err){
+      console.log(err);
+    }
 
     //clear form
     setValue("clientFullName", "");

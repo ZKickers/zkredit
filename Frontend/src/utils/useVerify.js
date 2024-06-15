@@ -1,5 +1,5 @@
 import { initialize } from "zokrates-js";
-import useGetVK from "API/use-get-vk";
+import useGetVK from "API/useGetVk";
 import { useState } from "react";
 
 const useVerify = (token) => {

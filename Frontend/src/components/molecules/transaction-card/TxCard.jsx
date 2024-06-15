@@ -7,7 +7,7 @@ import {
   contentContainer,
   iconClasses,
 } from "./TxCardComps";
-import { useSendThreshold, sendProofStatus } from "API/proofs.api";
+import { useSendThreshold, sendProofStatus } from "API/proofsAPIs";
 import useVerify from "utils/useVerify";
 import TransactionStateEnum from "utils/TransactionStateEnum";
 
