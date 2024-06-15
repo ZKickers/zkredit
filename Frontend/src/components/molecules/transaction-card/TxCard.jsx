@@ -14,7 +14,6 @@ import TransactionStateEnum from "utils/TransactionStateEnum";
 export default function TxCard(props) {
   const {
     txId,
-    token,
     date,
     creditorUsername,
     clientFullName,
@@ -61,13 +60,13 @@ export default function TxCard(props) {
     proof,
     error: thresholdError,
     sendThreshold,
-  } = useSendThreshold(token);
+  } = useSendThreshold();
   const {
     verify,
     isVerified,
     verificationResult,
     error: verificationError,
-  } = useVerify(token);
+  } = useVerify();
 
   useEffect(() => {
     if (threshold != 0) {
@@ -96,7 +95,7 @@ export default function TxCard(props) {
 
   const sendProofStatusHsndler = async (verificationResult) => {
     try {
-      const response = await sendProofStatus(txId, verificationResult, token);
+      const response = await sendProofStatus(txId, verificationResult);
       alert(response);
     } catch (error) {
       alert(error);

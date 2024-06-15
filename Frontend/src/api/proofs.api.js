@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axiosInstance from "./axios";
 
-export const useSendThreshold = (token) => {
+export const useSendThreshold = () => {
   const url = "/Creditor/trigger-threshold";
   const [proof, setProof] = useState(null);
   const [error, setError] = useState(null);
@@ -25,7 +25,7 @@ export const useSendThreshold = (token) => {
   return { proof, error, sendThreshold };
 };
 
-export const sendProofStatus = async (transactionId, isAccepted, token) => {
+export const sendProofStatus = async (transactionId, isAccepted) => {
   const url = "/verifyTx";
   const data = {
     txId: transactionId,

@@ -45,7 +45,6 @@ export default function PPTemplate() {
         <Transaction
           key={tx._id}
           txId={tx._id}
-          token={sessionStorage.getItem("token")}
           clientFullName={tx.fullNameOfClient}
           creditorId={tx.creditorAccountId}
           updateDate={tx.updatedAt}

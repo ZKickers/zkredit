@@ -7,7 +7,6 @@ import TransactionStateEnum from "utils/TransactionStateEnum";
 import { useState, useEffect } from "react";
 
 export default function Transaction({
-  token,
   txId,
   clientFullName,
   isClient,
@@ -60,7 +59,6 @@ export default function Transaction({
   const handleShowCard = () =>
     renderCard({
       txId,
-      token,
       date: `${formattedDate} ${formattedTime}`,
       creditorUsername,
       clientFullName,
