@@ -6,7 +6,7 @@ import { useState } from "react";
 import ModalPage from "pages/modal-page/ModalPage";
 import Profile from "../dashboard-profile/Profile";
 import { useSelector } from "react-redux";
-
+import useLogout from "hooks/useLogout";
 
 export default function PageHeader({ children }) {
   const rightPartClasses = classNames(
@@ -25,8 +25,11 @@ export default function PageHeader({ children }) {
   const handleCloseProfile = () => setShowProfile(false);
 
   const user = useSelector((state) => state.user);
+  const logout = useLogout();
 
-  const handleLogout = () => {}//auth.logout();}
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <div className="row container-fluid mx-auto mt-4">
@@ -42,8 +45,7 @@ export default function PageHeader({ children }) {
             <span>Profile</span>
           </button>
           <div className="opt-separator"></div>
-          <button className="opt-logout m-0"
-          onClick={handleLogout}>
+          <button className="opt-logout m-0" onClick={handleLogout}>
             <LogoutIcon sx={{ fontSize: "32px", transform: "scaleX(-1)" }} />
             <span>Logout</span>
           </button>
