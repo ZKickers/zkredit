@@ -17,6 +17,10 @@ const transactionSchema = new mongoose.Schema({
         type: String,
         enum: ['Pending_Threshold', 'Pending_Client_Data', 'Pending_Proof', 'Invalid', 'Pending_Verification', 'Passed', 'Failed'],
         default: 'Pending_Threshold'
+    },
+    threshold: {
+        type: Number,
+        default: 85
     }
 }, {
     timestamps: true // Enable timestamps feature
