@@ -8,9 +8,9 @@ import {
 } from "hooks/use-classnames";
 import { KeyboardBackspaceIcon } from "assets";
 import Transaction from "components/molecules/transaction/Transaction";
-import { useFetchTransactionsQuery } from "store/apis/txApi";
+import useFetchTransactions from "api/useFetchTransactions";
 import Skeleton from "components/molecules/skeleton/Skeleton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import classNames from "classnames";
 import TxCard from "components/molecules/transaction-card/TxCard";
 import { useSelector } from "react-redux";
@@ -23,23 +23,24 @@ export default function PPTemplate() {
   };
 
   const user = useSelector((state) => state.user);
+  const transactions = useSelector((state) => state.transactions);
 
   const renderCard = (props) => setTxCard(<TxCard {...props} />);
 
-  const { data, error, isFetching } = useFetchTransactionsQuery({
-    accountId: user.accountId,
-    token: sessionStorage.getItem("token"),
-    type: "creditor",
-  });
+  const fetchTransactions = useFetchTransactions();
+
+  useEffect(() => {
+    fetchTransactions({ accountId: user.accountId, type: "creditor" });
+  }, []);
 
   let content;
 
-  if (isFetching) {
+  if (transactions.status === "loading") {
     return <Skeleton />;
-  } else if (error) {
+  } else if (transactions.error) {
     content = <div>Error loading transactions...</div>;
   } else {
-    content = data.map((tx) => {
+    content = transactions.transactions.map((tx) => {
       return (
         <Transaction
           key={tx._id}

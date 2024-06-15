@@ -1,9 +1,8 @@
 import classNames from "classnames";
 import "./Transaction.css";
 import { LockIcon, LockOpenIcon, CloseIcon } from "assets";
-import { useFetchCreditorUsernameQuery } from "store/apis/txApi";
+import useFetchCreditorUsername from "api/useFetchCreditorUsername";
 import { datePrettier } from "./datePrettier";
-import TxCard from "../transaction-card/TxCard";
 import TransactionStateEnum from "utils/TransactionStateEnum";
 import { useState, useEffect } from "react";
 
@@ -50,15 +49,13 @@ export default function Transaction({
 
   const { formattedDate, formattedTime } = datePrettier(updateDate);
 
-  let creditorUsername;
+  const [creditorUsername, setCreditorUsername] = useState("");
+  const { fetchCreditorUsername, loading, error } = useFetchCreditorUsername();
 
-  const { data, error, isFetching } = useFetchCreditorUsernameQuery({
-    token,
-    creditorId,
-    txId,
-  });
-
-  if (data !== undefined) creditorUsername = data;
+  useEffect(async() => {
+    const CUN = await fetchCreditorUsername({ txId, creditorId });
+    setCreditorUsername(CUN);
+  }, []);
 
   const handleShowCard = () =>
     renderCard({
