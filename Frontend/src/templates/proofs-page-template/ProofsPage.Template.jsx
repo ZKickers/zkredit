@@ -10,10 +10,10 @@ import { KeyboardBackspaceIcon } from "assets";
 import Transaction from "components/molecules/transaction/Transaction";
 import { useFetchTransactionsQuery } from "store/apis/txApi";
 import Skeleton from "components/molecules/skeleton/Skeleton";
-import { useContext, useState } from "react";
-import AuthContext from "store/auth-context";
+import { useState } from "react";
 import classNames from "classnames";
 import TxCard from "components/molecules/transaction-card/TxCard";
+import { useSelector } from "react-redux";
 
 export default function PPTemplate() {
   const [txCard, setTxCard] = useState();
@@ -22,13 +22,13 @@ export default function PPTemplate() {
     window.history.back();
   };
 
-  const auth = useContext(AuthContext);
+  const user = useSelector((state) => state.user);
 
   const renderCard = (props) => setTxCard(<TxCard {...props} />);
 
   const { data, error, isFetching } = useFetchTransactionsQuery({
-    accountId: auth.accountId,
-    token: auth.token,
+    accountId: user.accountId,
+    token: sessionStorage.getItem("token"),
     type: "creditor",
   });
 
@@ -44,7 +44,7 @@ export default function PPTemplate() {
         <Transaction
           key={tx._id}
           txId={tx._id}
-          token={auth.token}
+          token={sessionStorage.getItem("token")}
           clientFullName={tx.fullNameOfClient}
           creditorId={tx.creditorAccountId}
           updateDate={tx.updatedAt}

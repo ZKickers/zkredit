@@ -1,6 +1,6 @@
 import "./SignupForm.css";
 import { TextField } from "@mui/material";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { checkKeyIcon, emailIcon, keyIcon, profileIcon } from "assets";
 import {
@@ -8,11 +8,9 @@ import {
   useEmailValidation,
   usePasswordValidation,
 } from "hooks/signup-form-hooks/signup-form-hooks";
-import { registerUser, loginUser } from "api/auth.api";
-import { toast, ToastContainer } from "react-toastify";
+import useSignUp from "api/useSignup";
 import "react-toastify/dist/ReactToastify.css";
 
-import AuthContext from "../../../store/auth-context";
 
 export default function SignupForm({ handleClose }) {
   const [username, setUsername] = useState("");
@@ -29,39 +27,19 @@ export default function SignupForm({ handleClose }) {
   } = usePasswordValidation();
   const [password, setPassword] = useState("");
 
-  const auth = useContext(AuthContext);
-
-  const loginHandler = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await loginUser({ username, password });
-      var token = response["token"];
-      if (token.length !== 0) {
-        console.log("You have logged in successfully");
-        auth.login(token);
-      }
-    } catch (error) {
-      console.log(error);
-      toast(error.message);
-    }
-  };
+  const signupUser = useSignUp();
 
   const signupHandler = async (e) => {
     e.preventDefault();
     if (validData()) {
       try {
-        const response = await registerUser({
+        await signupUser({
           email,
           username,
           password,
         });
-        const message = await response.text().then((text) => text);
-        //toast(message);
-        loginHandler(e);
-        handleClose();
       } catch (error) {
-        console.log(error);
-        toast(error.message);
+        console.log(error.message);
       }
     }
   };
@@ -85,7 +63,6 @@ export default function SignupForm({ handleClose }) {
         <div className="form-header-text">
           <h1>sign up to ZKredit</h1>
           <h2>quick and easy</h2>
-          <ToastContainer />
         </div>
       </div>
       <form

@@ -1,14 +1,10 @@
 import "./ClientConnectRequestForm.css";
 import { TextField } from "@mui/material";
 import { maskIcon, signatureIcon, idCardIcon } from "assets";
-
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ClientConnectRequestValidationSchema } from "utils/validators/ClientConnectRequestValidationSchema";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
-
-import { useContext } from "react";
-import AuthContext from "store/auth-context";
 
 export default function ClientConnectRequestForm({ handleClose }) {
   const {
@@ -16,18 +12,12 @@ export default function ClientConnectRequestForm({ handleClose }) {
     handleSubmit,
     formState: { errors },
     setValue,
-    getValues,
-    control,
-    clearErrors,
   } = useForm({ resolver: yupResolver(ClientConnectRequestValidationSchema) });
-
-  const auth = useContext(AuthContext);
 
   const onRequestSubmit = async (data) => {
     const jsonData = {
       ...data,
     };
-
 
     // const response = await clientRequest({
     //   token: auth.token,
@@ -62,9 +52,7 @@ export default function ClientConnectRequestForm({ handleClose }) {
         style={{ width: "85%" }}
       >
         <div className="row mt-5 mx-auto w-100">
-          <h4>
-            Fill in the necessary data to cennect to the Creditor.
-          </h4>
+          <h4>Fill in the necessary data to cennect to the Creditor.</h4>
         </div>
         <div className="row mt-3 mx-auto w-100">
           <TextField

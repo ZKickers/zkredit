@@ -1,18 +1,15 @@
-import axios from "axios";
-import { useContext } from "react";
-import AuthContext from "store/auth-context";
-import { BACKEND_URL } from "config";
+import axiosInstance from "./axios";
 
 const useClientRequest = () => {
-  const auth = useContext(AuthContext);
-  const url = `${BACKEND_URL}/ClientRequest`;
+  const url = '/ClientRequest';
 
   const clientRequest = async (data) => {
-    data = { ...data, username: auth.username };
-    const response = await axios.post(url, data, {
-      headers: {
-        Authorization: `${auth.token}`,
-      },
+    const response = await axiosInstance.post(
+      url, 
+      data
+    ).catch((error) => {
+      throw new Error(error.message);
+      // TODO add snakebar
     });
     return response;
   };

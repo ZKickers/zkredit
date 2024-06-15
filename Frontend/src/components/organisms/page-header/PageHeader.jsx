@@ -5,8 +5,8 @@ import HeaderLeft from "components/molecules/header-left/HeaderLeft";
 import { useState } from "react";
 import ModalPage from "pages/modal-page/ModalPage";
 import Profile from "../dashboard-profile/Profile";
-import AuthContext from "store/auth-context";
-import { useContext } from "react";
+import { useSelector } from "react-redux";
+
 
 export default function PageHeader({ children }) {
   const rightPartClasses = classNames(
@@ -24,8 +24,9 @@ export default function PageHeader({ children }) {
   const handleShowProfile = () => setShowProfile(true);
   const handleCloseProfile = () => setShowProfile(false);
 
-  const auth = useContext(AuthContext);
-  const handleLogout = () => {auth.logout();}
+  const user = useSelector((state) => state.user);
+
+  const handleLogout = () => {}//auth.logout();}
 
   return (
     <div className="row container-fluid mx-auto mt-4">
@@ -33,7 +34,7 @@ export default function PageHeader({ children }) {
       <div className={rightPartClasses}>
         <h3 className="logged-in-header w-75">
           logged in as
-          <span className="username">&nbsp; {auth.username}</span>
+          <span className="username">&nbsp; {user.username}</span>
         </h3>
         <div className="options w-75">
           <button onClick={handleShowProfile} className="opt-profile m-0">

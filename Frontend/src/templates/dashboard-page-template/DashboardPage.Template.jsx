@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import "./DashboardPage.Template.css";
 import { LockIcon, LockOpenIcon } from "assets";
 import ModalPage from "pages/modal-page/ModalPage";
@@ -12,10 +12,10 @@ import {
   rightClasses,
 } from "hooks/use-classnames";
 import ClientConnectRequestForm from "components/organisms/client-connect-request-form/ClientConnectRequestForm";
-import { useFetchTransactionsQuery } from "store";
-import AuthContext from "store/auth-context";
+//import { useFetchTransactionsQuery } from "store";
 import Skeleton from "components/molecules/skeleton/Skeleton";
 import classNames from "classnames";
+import { useSelector } from "react-redux";
 
 export default function DashboardPageTemplate() {
   const [showSession, setShowSession] = useState(false);
@@ -23,35 +23,35 @@ export default function DashboardPageTemplate() {
   const handleShowSession = () => setShowSession(true);
   const handleCloseSession = () => setShowSession(false);
 
-  const auth = useContext(AuthContext);
+  const user = useSelector((state) => state.user);
 
-  const { data, error, isFetching } = useFetchTransactionsQuery({
-    accountId: auth.accountId,
-    token: auth.token,
-    type: "creditor",
-  });
+  // const { data, error, isFetching } = useFetchTransactionsQuery({
+  //   accountId: user.accountId,
+  //   token: sessionStorage.getItem("token"),
+  //   type: "creditor",
+  // });
 
   let content;
 
-  if (isFetching) {
-    return <Skeleton />;
-  } else if (error) {
-    content = <div>Error loading transactions...</div>;
-  } else {
-    content = data.map((tx) => {
-      return (
-        <Transaction
-          key={tx._id}
-          txId={tx._id}
-          token={auth.token}
-          clientFullName={tx.fullNameOfClient}
-          creditorId={tx.creditorAccountId}
-          updateDate={tx.updatedAt}
-          status={tx.status}
-        />
-      );
-    });
-  }
+  // if (isFetching) {
+  //   return <Skeleton />;
+  // } else if (error) {
+  //   content = <div>Error loading transactions...</div>;
+  // } else {
+  //   content = data.map((tx) => {
+  //     return (
+  //       <Transaction
+  //         key={tx._id}
+  //         txId={tx._id}
+  //         token={sessionStorage.getItem("token")}
+  //         clientFullName={tx.fullNameOfClient}
+  //         creditorId={tx.creditorAccountId}
+  //         updateDate={tx.updatedAt}
+  //         status={tx.status}
+  //       />
+  //     );
+  //   });
+  // }
 
   return (
     <div className="page-template">
