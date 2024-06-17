@@ -30,12 +30,12 @@ const txReducers = {
     state.status = "loading";
   },
   transactionsReceived(state, action) {
-    state.status = "succeeded";
     state.transactions = action.payload;
+    state.status = "succeeded";
   },
   transactionsFailed(state, action) {
-    state.status = "failed";
     state.error = action.payload;
+    state.status = "failed";
   },
 };
 
