@@ -29,8 +29,11 @@ export default function App() {
       <Route routePath={"/dashboard"}>
         {(user.isLoggedIn && <DashboardPage />) || <LandingPage />}
       </Route>
-      <Route routePath={"/proofs"}>
-        {(user.isLoggedIn && <ProofsPage />) || <LandingPage />}
+      <Route routePath={"/received"}>
+        {(user.isLoggedIn && <ProofsPage isCreditor={true} />) || <LandingPage />}
+      </Route>
+      <Route routePath={"/sent"}>
+        {(user.isLoggedIn && <ProofsPage isCreditor={false} />) || <LandingPage />}
       </Route>
     </NavigationProvider>
   );

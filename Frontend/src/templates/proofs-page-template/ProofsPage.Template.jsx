@@ -7,6 +7,7 @@ import {
   txBox,
 } from "hooks/use-classnames";
 import { KeyboardBackspaceIcon } from "assets";
+import CachedIcon from "@mui/icons-material/Cached";
 import Transaction from "components/molecules/transaction/Transaction";
 import useFetchTransactions from "API/useFetchTransactions";
 import Skeleton from "components/molecules/skeleton/Skeleton";
@@ -15,7 +16,7 @@ import classNames from "classnames";
 import TxCard from "components/molecules/transaction-card/TxCard";
 import { useSelector } from "react-redux";
 
-export default function PPTemplate() {
+export default function PPTemplate({ isCreditor }) {
   const [txCard, setTxCard] = useState();
 
   const handleGoBack = () => {
@@ -23,43 +24,56 @@ export default function PPTemplate() {
   };
 
   const user = useSelector((state) => state.user);
-  const transactions = useSelector((state) => state.transactions);
+  const transactions = useSelector((state) =>
+    isCreditor ? state.creditorTransactions : state.clientTransactions
+  );
 
   const renderCard = (props) => setTxCard(<TxCard {...props} />);
 
   const fetchTransactions = useFetchTransactions();
+  const loadTx = () => {
+    fetchTransactions({
+      accountId: user.accountId,
+      type: isCreditor ? "creditor" : "client",
+    });
+  };
 
   useEffect(() => {
-    fetchTransactions({ accountId: user.accountId, type: "creditor" });
+    if (transactions.status === "idle") {
+      loadTx();
+    }
   }, []);
 
-  let content;
+  const renderContent = () => {
+    if (transactions.status === "loading") {
+      return <Skeleton />;
+    }
 
-  if (transactions.status === "loading") {
-    return <Skeleton />;
-  } else if (transactions.error) {
-    content = <div>Error loading transactions...</div>;
-  } else {
-    content = transactions.transactions.map((tx) => {
-      return (
-        <Transaction
-          key={tx._id}
-          txId={tx._id}
-          clientFullName={tx.fullNameOfClient}
-          creditorId={tx.creditorAccountId}
-          updateDate={tx.updatedAt}
-          status={tx.status}
-          isButton
-          renderCard={renderCard}
-        />
-      );
-    });
-  }
+    if (transactions.error) {
+      console.error(transactions.error);
+      content = <div>Error loading transactions...</div>;
+    }
+
+    return transactions.transactions.map((tx) => (
+      <Transaction
+        key={tx._id}
+        txId={tx._id}
+        clientFullName={tx.fullNameOfClient}
+        creditorId={tx.creditorAccountId}
+        updateDate={tx.updatedAt}
+        status={tx.status}
+        isButton
+        renderCard={renderCard}
+      />
+    ));
+  };
 
   return (
     <div className="page-template">
       <PageHeader>
-        <h1 className="proofs-title">Received Proofs</h1>
+        <h1 className="proofs-title">
+          {isCreditor ? "Received" : "Sent"} Transactions
+        </h1>
         <button onClick={handleGoBack} className="proofs-button-heading">
           <KeyboardBackspaceIcon
             sx={{ fontSize: "42px", fontWeight: "bold" }}
@@ -72,7 +86,15 @@ export default function PPTemplate() {
           <div className={classNames(txBox, "h-100")}>{txCard}</div>
         </div>
         <div className={rightClasses}>
-          <div className={classNames(txBox, "proofs-container")}>{content}</div>
+          <div className="d-flex align-items-center">
+            <h3>Transactions List</h3>
+            <button className="reload-button ml-2" onClick={loadTx}>
+              <CachedIcon />
+            </button>
+          </div>
+          <div className={classNames(txBox, "proofs-container")}>
+            {renderContent()}
+          </div>
         </div>
       </div>
     </div>

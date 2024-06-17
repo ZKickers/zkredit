@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./DashboardPage.Template.css";
 import { LockIcon, LockOpenIcon } from "assets";
+import CachedIcon from "@mui/icons-material/Cached";
 import ModalPage from "pages/modal-page/ModalPage";
 import Link from "components/atoms/navigation/Link";
 import PageHeader from "components/organisms/page-header/PageHeader";
@@ -12,46 +13,68 @@ import {
   rightClasses,
 } from "hooks/use-classnames";
 import ClientConnectRequestForm from "components/organisms/client-connect-request-form/ClientConnectRequestForm";
-//import { useFetchTransactionsQuery } from "store";
 import Skeleton from "components/molecules/skeleton/Skeleton";
 import classNames from "classnames";
 import { useSelector } from "react-redux";
+import useFetchTransactions from "API/useFetchTransactions";
 
 export default function DashboardPageTemplate() {
   const [showSession, setShowSession] = useState(false);
 
+  const user = useSelector((state) => state.user);
+  const creditorTransactions = useSelector(
+    (state) => state.creditorTransactions
+  );
+  const clientTransactions = useSelector((state) => state.clientTransactions);
+  const fetchTransactions = useFetchTransactions();
+
+  useEffect(() => {
+    if (creditorTransactions.status === "idle") {
+      fetchTransactions({ accountId: user.accountId, type: "creditor" });
+    }
+    if (clientTransactions.status === "idle") {
+      fetchTransactions({ accountId: user.accountId, type: "client" });
+    }
+  }, []);
+
   const handleShowSession = () => setShowSession(true);
   const handleCloseSession = () => setShowSession(false);
+  const handleReload = () => {
+    fetchTransactions({ accountId: user.accountId, type: "creditor" });
+    fetchTransactions({ accountId: user.accountId, type: "client" });
+  };
 
-  const user = useSelector((state) => state.user);
+  const renderContent = () => {
+    if (
+      creditorTransactions.status === "loading" ||
+      clientTransactions.status === "loading"
+    ) {
+      return <Skeleton />;
+    }
 
-  // const { data, error, isFetching } = useFetchTransactionsQuery({
-  //   accountId: user.accountId,
-  //   token: sessionStorage.getItem("token"),
-  //   type: "creditor",
-  // });
+    if (creditorTransactions.error || clientTransactions.error) {
+      console.error(
+        `${creditorTransactions.error} ${clientTransactions.error}`
+      );
+      return <div>Error loading transactions...</div>;
+    }
 
-  let content;
+    const transactions = [
+      ...creditorTransactions.transactions,
+      ...clientTransactions.transactions,
+    ].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
 
-  // if (isFetching) {
-  //   return <Skeleton />;
-  // } else if (error) {
-  //   content = <div>Error loading transactions...</div>;
-  // } else {
-  //   content = data.map((tx) => {
-  //     return (
-  //       <Transaction
-  //         key={tx._id}
-  //         txId={tx._id}
-  //         token={sessionStorage.getItem("token")}
-  //         clientFullName={tx.fullNameOfClient}
-  //         creditorId={tx.creditorAccountId}
-  //         updateDate={tx.updatedAt}
-  //         status={tx.status}
-  //       />
-  //     );
-  //   });
-  // }
+    return transactions.map((tx) => (
+      <Transaction
+        key={tx._id}
+        txId={tx._id}
+        clientFullName={tx.fullNameOfClient}
+        creditorId={tx.creditorAccountId}
+        updateDate={tx.updatedAt}
+        status={tx.status}
+      />
+    ));
+  };
 
   return (
     <div className="page-template">
@@ -61,8 +84,15 @@ export default function DashboardPageTemplate() {
       </PageHeader>
       <div className={pageClasses}>
         <div className={leftClasses}>
-          <h3>Recently Received Proofs</h3>
-          <div className={classNames(txBox, "height-60")}>{content}</div>
+          <div className="d-flex align-items-center">
+            <h3>Recent Transactions</h3>
+            <button className="reload-button ml-2" onClick={handleReload}>
+              <CachedIcon />
+            </button>
+          </div>
+          <div className={classNames(txBox, "height-60")}>
+            {renderContent()}
+          </div>
         </div>
         <div className={classNames(rightClasses, "justify-content-center")}>
           <div className="client-session-container">
@@ -71,12 +101,23 @@ export default function DashboardPageTemplate() {
                 className="d-flex justify-content-between align-items-center w-100"
                 style={{ fontWeight: "bold", color: "#009A2B" }}
               >
-                <LockIcon sx={{ fontSize: "56px" }} /> New Client Session
+                <LockIcon sx={{ fontSize: "56px" }} />
+                New Client Session
               </h2>
             </button>
           </div>
           <div className="creditor-proofs-container">
-            <Link to="/proofs" className="w-75">
+            <Link to="/sent" className="w-75">
+              <h2
+                className="d-flex justify-content-between align-items-center w-100"
+                style={{ fontWeight: "bold", color: "#0000CD" }}
+              >
+                <LockOpenIcon sx={{ fontSize: "56px" }} /> Browse Sent Proofs
+              </h2>
+            </Link>
+          </div>
+          <div className="creditor-proofs-container">
+            <Link to="/received" className="w-75">
               <h2
                 className="d-flex justify-content-between align-items-center w-100"
                 style={{ fontWeight: "bold", color: "#0000CD" }}
