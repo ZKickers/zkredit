@@ -15,7 +15,7 @@ import classNames from "classnames";
 import TxCard from "components/molecules/transaction-card/TxCard";
 import { useSelector } from "react-redux";
 
-export default function PPTemplate() {
+export default function PPTemplate({ isCreditor }) {
   const [txCard, setTxCard] = useState();
 
   const handleGoBack = () => {
@@ -23,14 +23,21 @@ export default function PPTemplate() {
   };
 
   const user = useSelector((state) => state.user);
-  const transactions = useSelector((state) => state.transactions);
+  const transactions = useSelector((state) =>
+    isCreditor ? state.creditorTransactions : state.clientTransactions
+  );
 
   const renderCard = (props) => setTxCard(<TxCard {...props} />);
 
   const fetchTransactions = useFetchTransactions();
 
   useEffect(() => {
-    fetchTransactions({ accountId: user.accountId, type: "creditor" });
+    if (transactions.status === "idle") {
+      fetchTransactions({
+        accountId: user.accountId,
+        type: isCreditor ? "creditor" : "client",
+      });
+    }
   }, []);
 
   let content;
@@ -59,7 +66,9 @@ export default function PPTemplate() {
   return (
     <div className="page-template">
       <PageHeader>
-        <h1 className="proofs-title">Received Proofs</h1>
+        <h1 className="proofs-title">
+          {isCreditor ? "Received" : "Sent"} Transactions
+        </h1>
         <button onClick={handleGoBack} className="proofs-button-heading">
           <KeyboardBackspaceIcon
             sx={{ fontSize: "42px", fontWeight: "bold" }}

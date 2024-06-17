@@ -32,6 +32,7 @@ export default function DashboardPageTemplate() {
   // });
 
   let content;
+  // TODO: fetch both and sort them by date and show them in recent transactions
 
   // if (isFetching) {
   //   return <Skeleton />;
@@ -61,7 +62,7 @@ export default function DashboardPageTemplate() {
       </PageHeader>
       <div className={pageClasses}>
         <div className={leftClasses}>
-          <h3>Recently Received Proofs</h3>
+          <h3>Recently Transactions</h3>
           <div className={classNames(txBox, "height-60")}>{content}</div>
         </div>
         <div className={classNames(rightClasses, "justify-content-center")}>
@@ -76,7 +77,17 @@ export default function DashboardPageTemplate() {
             </button>
           </div>
           <div className="creditor-proofs-container">
-            <Link to="/proofs" className="w-75">
+            <Link to="/sent" className="w-75">
+              <h2
+                className="d-flex justify-content-between align-items-center w-100"
+                style={{ fontWeight: "bold", color: "#0000CD" }}
+              >
+                <LockOpenIcon sx={{ fontSize: "56px" }} /> Browse Sent Proofs
+              </h2>
+            </Link>
+          </div>
+          <div className="creditor-proofs-container">
+            <Link to="/received" className="w-75">
               <h2
                 className="d-flex justify-content-between align-items-center w-100"
                 style={{ fontWeight: "bold", color: "#0000CD" }}
