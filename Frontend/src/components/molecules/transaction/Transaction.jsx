@@ -51,10 +51,26 @@ export default function Transaction({
   const [creditorUsername, setCreditorUsername] = useState("");
   const { fetchCreditorUsername, loading, error } = useFetchCreditorUsername();
 
-  useEffect(async () => {
-    const CUN = await fetchCreditorUsername({ txId, creditorId });
-    setCreditorUsername(CUN);
-  }, []);
+  useEffect(() => {
+    let isMounted = true;
+  
+    async function fetchData() {
+      try {
+        const CUN = await fetchCreditorUsername({ txId, creditorId });
+        if (isMounted) {
+          setCreditorUsername(CUN);
+        }
+      } catch (error) {
+        console.error("Error fetching creditor username:", error);
+      }
+    }
+  
+    fetchData();
+  
+    return () => {
+      isMounted = false; // Cleanup function to prevent state updates on unmounted component
+    };
+  }, [txId, creditorId]);
 
   const handleShowCard = () =>
     renderCard({
