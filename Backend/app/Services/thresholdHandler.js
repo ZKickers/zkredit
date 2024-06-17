@@ -60,7 +60,6 @@ async function handleThresholdEvent(transaction, threshold)
               threshold: threshold
             },
             { new: true });
-        // updatedTransaction.save();
         return updatedTransaction;
         // const proofInput = await ProofInput.findOne({ transactionId: transaction._id });
         // if (!proofInput) {

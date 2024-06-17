@@ -7,9 +7,9 @@ async function validateTx(txId, accepted)
     try {
         let status;
         if (accepted) {
-            status = 'Success';
+            status = 'Passed';
         } else {
-            status = 'Fail';
+            status = 'Failed';
         }
         const updatedTransaction = await Transaction.findByIdAndUpdate(
             { _id: txId},
