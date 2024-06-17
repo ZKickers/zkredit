@@ -7,14 +7,13 @@ import {
   contentContainer,
   iconClasses,
 } from "./TxCardComps";
-import { useSendThreshold, sendProofStatus } from "api/proofs.api";
+import { useSendThreshold, sendProofStatus } from "API/proofsAPIs";
 import useVerify from "utils/useVerify";
 import TransactionStateEnum from "utils/TransactionStateEnum";
 
 export default function TxCard(props) {
   const {
     txId,
-    token,
     date,
     creditorUsername,
     clientFullName,
@@ -61,13 +60,13 @@ export default function TxCard(props) {
     proof,
     error: thresholdError,
     sendThreshold,
-  } = useSendThreshold(token);
+  } = useSendThreshold();
   const {
     verify,
     isVerified,
     verificationResult,
     error: verificationError,
-  } = useVerify(token);
+  } = useVerify();
 
   useEffect(() => {
     if (threshold != 0) {
@@ -94,21 +93,21 @@ export default function TxCard(props) {
     }
   }, [proof]);
 
-  const sendProofStatusHsndler = async (verificationResult) =>{
+  const sendProofStatusHsndler = async (verificationResult) => {
     try {
-      const response = await sendProofStatus(txId, verificationResult, token);
-      alert(response) ;
+      const response = await sendProofStatus(txId, verificationResult);
+      alert(response);
     } catch (error) {
       alert(error);
     }
-  }
+  };
 
   useEffect(() => {
     if (isVerified && verificationResult != null) {
       alert(verificationResult ? "Threshold reached" : "Threshold not reached");
-      if(verificationResult){
+      if (verificationResult) {
         setTransactionState(TransactionStateEnum.SUCCESS);
-      }else{
+      } else {
         setTransactionState(TransactionStateEnum.FAIL);
       }
       sendProofStatusHsndler(true);
@@ -153,7 +152,8 @@ export default function TxCard(props) {
           >
             Status: <span style={{ color: color }}>{statusText}</span>
           </h3>
-          {state.Pending_Threshold && renderThresholdField({ setThreshold, color })}
+          {state.Pending_Threshold &&
+            renderThresholdField({ setThreshold, color })}
         </div>
       </div>
       <div className={iconClasses}>

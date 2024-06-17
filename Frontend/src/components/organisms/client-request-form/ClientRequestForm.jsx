@@ -1,5 +1,4 @@
 import "./ClientRequestForm.css";
-//import { useState } from "react";
 import { TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -12,9 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { ClientRequestValidationSchema } from "utils/validators/ClientRequestValidationSchema";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { toast, ToastContainer } from "react-toastify";
-
-import { useContext } from "react";
-import AuthContext from "store/auth-context";
+import { useSelector } from "react-redux";
 import { useAddTransactionMutation } from "store";
 
 //  Sample JSON data for the form{
@@ -36,7 +33,7 @@ export default function ClientRequestForm({ handleClose }) {
     clearErrors,
   } = useForm({ resolver: yupResolver(ClientRequestValidationSchema) });
 
-  const auth = useContext(AuthContext);
+  const user = useSelector((state) => state.user);
 
   const [addTransaction, results] = useAddTransactionMutation();
 
@@ -44,12 +41,12 @@ export default function ClientRequestForm({ handleClose }) {
     //create json object from form data
     const jsonData = {
       creditorUsername: data.creditorUserName,
-      username: auth.username,
+      username: user.username,
       ...data,
     };
 
     const response = await addTransaction({
-      token: auth.token,
+      token: user.token,
       data: jsonData,
     });
     console.log(response);

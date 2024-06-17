@@ -1,15 +1,10 @@
-import axios from "axios";
-import { BACKEND_URL } from "config";
+import axiosInstance from "./axios";
 
 const useGetVK = (token) => {
-  const url = `${BACKEND_URL}/verification-key`;
+  const url = "/verification-key";
   const getVK = async () => {
     try {
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: `${token}`, 
-        },
-      });
+      const response = await axiosInstance.get(url);
       return response.data; 
     } catch (error) {
       console.error("Error fetching the verification key:", error);
