@@ -9,6 +9,10 @@ const transactionSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    creditorUsername: {
+        type: String,
+        required: true
+    },
     fullNameOfClient: {
         type: String,
         required: true

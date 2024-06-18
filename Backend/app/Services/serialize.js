@@ -6,10 +6,6 @@ const ADDRESS_MAX = 100
 function serializeResponse(apiResponse) {
   // Extract relevant fields from the API response
   const { fullname, address, birthdate, ssn, score, signature } = apiResponse;
-
-  // console.log("looooooool")
-  // console.log(signature.R)
-  // console.log(signature.S)
   const response = {
       name: serializePadded(fullname,NAME_MAX),
       address: serializePadded(address,ADDRESS_MAX),
@@ -21,10 +17,6 @@ function serializeResponse(apiResponse) {
         S: BigInt('0x' + signature.S).toString()
       }
     };
-    // console.log("TAHHHHAAAA")
-    // console.log(signature.R.map(big => BigInt('0x' + big).toString()))
-    // console.log(BigInt('0x' + signature.S).toString())
-    
     return response;
 }
 

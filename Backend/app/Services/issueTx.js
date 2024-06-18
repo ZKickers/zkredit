@@ -10,6 +10,7 @@ async function createTransaction(clientFullname, creditorUserName, clientId) {
                 clientAccountId: clientId,
                 creditorAccountId: creditor.accountId,
                 fullNameOfClient: clientFullname,
+                creditorUsername: creditorUserName,
                 status: 'Pending_Threshold',
     };
     const transaction = new Transaction(transactionData);
