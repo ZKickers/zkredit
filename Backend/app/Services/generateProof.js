@@ -129,29 +129,38 @@ async function sendClientInfo(transaction, address, birthdate, ssn) {
     };
 
     try {
+        // console.log("lOOOOP")
         const response = await axios.post(CREDIT_BUREAU_API, clientInfo, {
             timeout: 2000
         });
-
+        // console.log("POOOOP")
+        // console.log(response)
         if (response && response.data) {
             const { serialized_clientData, serialized_resp } = serializeData(clientInfo, response.data);
+            // console.log("dkjhfd     " + response.data);
             generateProof(serialized_clientData, serialized_resp, transaction).then(() => {
                 console.log('Proof generation completed');
             }).catch(error => {
-                console.error('Error generating proof:', error);
+                throw new Error('Error generating proof:', error);
             });
 
-            return transaction;
+            return {status: 'success', transaction: transaction};
         } else {
             throw new Error('No response received from the server');
         }
     } catch (error) {
-        if (error.code === 'ECONNABORTED') {
-            console.error('Request timed out:', error.message);
-        } else {
-            console.error('Error sending client info:', error.message);
+        // console.log("TTTT "+ error.response)
+        if (error.code === 'ECONNREFUSED') {
+            return { status: 'timeout', message: 'The request timed out' };
         }
-        throw error;
+        else if(error.response.data.error === 'Data mismatch')
+        {
+            await invalidateTransaction(transaction._id);
+            return { status: 'Mismatch', message: 'An error occurred', details: error.message };
+        }
+        else {
+            return { status: 'error', message: 'An error occurred', details: error.message };
+        }
     }
 }
 

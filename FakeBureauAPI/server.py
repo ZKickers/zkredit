@@ -24,6 +24,7 @@ def credit_report():
         save_json(dummy_report,'response.json')
         return jsonify(dummy_report)
     else:
+        print("mismatch")
         return jsonify({'error': 'Data mismatch'}), 403
 
 if __name__ == '__main__':
