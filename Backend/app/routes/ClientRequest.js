@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const verifyToken = require('../Services/authMiddleware');
-const sendClientInfo = require('../Services/SendToBureau');
+const sendClientInfo = require('../Services/generateProof');
 const createTransaction = require('../Services/issueTx')
 const Transaction = require('../models/Transaction')
 
