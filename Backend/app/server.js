@@ -10,6 +10,7 @@ const ClientRequest = require('./routes/ClientRequest');
 const thresholdRoute = require('./routes/thresholdRoute')
 const verificationRoutes = require('./routes/verificationRoutes')
 const verificationKeyRoute = require('./routes/verificationKeyRoute')
+const getProofRoute = require('./routes/getProofRoute')
 const { BACKEND_PORT, FRONTEND_URL, MONGODB_URI } = require('../config');
 
 app.use(cors({
@@ -27,8 +28,9 @@ app.use('/getTX', getTX);
 app.use('/deleteTX', deleteTX);
 app.use('/ClientRequest', ClientRequest);
 app.use('/Creditor', thresholdRoute);
-app.use('/verifyTx', verificationRoutes)
-app.use('/verification-key', verificationKeyRoute)
+app.use('/verifyTx', verificationRoutes);
+app.use('/verification-key', verificationKeyRoute);
+app.use('/getProof', getProofRoute);
 
 app.listen(BACKEND_PORT, () => {
   console.log(`Backend Server is running on port ${BACKEND_PORT}`);
