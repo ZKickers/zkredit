@@ -91,6 +91,7 @@ async function generateProof(serialized_clientData, serialized_resp, transaction
         const witnessFilePath = PROOFS_PATH + transaction._id.toString() + '/witness';
 
         await runCommand(witnessCommand);
+        await fs.promises.unlink(`./proofs/${transaction._id.toString()}/input.json`);
         if (await fileExists(witnessFilePath)) {
             await runCommand(generateProofCommand);
             await Transaction.findOneAndUpdate(
@@ -98,8 +99,6 @@ async function generateProof(serialized_clientData, serialized_resp, transaction
                 { status: 'Pending_Verification' },
                 { new: true }
             );
-
-            await fs.promises.unlink(`./proofs/${transaction._id.toString()}/input.json`);
             await fs.promises.unlink(`./proofs/${transaction._id.toString()}/witness`);
 
             console.log('File removed successfully');
@@ -129,27 +128,27 @@ async function sendClientInfo(transaction, address, birthdate, ssn) {
     };
 
     try {
-        // console.log("lOOOOP")
         const response = await axios.post(CREDIT_BUREAU_API, clientInfo, {
             timeout: 2000
         });
-        // console.log("POOOOP")
-        // console.log(response)
         if (response && response.data) {
             const { serialized_clientData, serialized_resp } = serializeData(clientInfo, response.data);
-            // console.log("dkjhfd     " + response.data);
+            const updatedTransaction = await Transaction.findOneAndUpdate(
+                { _id: transaction._id },
+                { status: 'Pending_Proof' },
+                { new: true }
+            );
             generateProof(serialized_clientData, serialized_resp, transaction).then(() => {
                 console.log('Proof generation completed');
             }).catch(error => {
                 throw new Error('Error generating proof:', error);
             });
 
-            return {status: 'success', transaction: transaction};
+            return {status: 'success', transaction: updatedTransaction};
         } else {
             throw new Error('No response received from the server');
         }
     } catch (error) {
-        // console.log("TTTT "+ error.response)
         if (error.code === 'ECONNREFUSED') {
             return { status: 'timeout', message: 'The request timed out' };
         }
