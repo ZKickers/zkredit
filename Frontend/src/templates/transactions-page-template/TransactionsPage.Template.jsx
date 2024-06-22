@@ -1,5 +1,5 @@
 import PageHeader from "components/organisms/page-header/PageHeader";
-import "./ProofsPage.Template.css";
+import "./TransactionsPage.Template.css";
 import {
   pageClasses,
   leftClasses,
@@ -16,7 +16,7 @@ import classNames from "classnames";
 import TxCard from "components/molecules/transaction-card/TxCard";
 import { useSelector } from "react-redux";
 
-export default function PPTemplate({ isCreditor }) {
+export default function TPTemplate({ isCreditor }) {
   const [txCard, setTxCard] = useState();
 
   const handleGoBack = () => {
