@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { hideSuccessSnackbar } from '../features/snackbar/successSnackbarSlice';
+import { hideSuccessSnackbar } from 'features/snackbar/successSnackbarSlice';
 import './Snackbar.css';
 
 const SuccessSnackbar = () => {
