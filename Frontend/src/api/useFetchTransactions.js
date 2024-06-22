@@ -1,5 +1,7 @@
 import { useDispatch } from "react-redux";
 import axiosInstance from "./axios";
+import { showSnackbar } from '../features/snackbar/snackbarSlice';
+import { showSuccessSnackbar } from '../features/snackbar/successSnackbarSlice';
 import {
   transactionsLoading as creditorTxLoading,
   transactionsReceived as creditorTxRecieved,
@@ -45,6 +47,7 @@ const useFetchTransactions = () => {
 
       dispatch(transactionsReceived(response.data));
     } catch (error) {
+      dispatch(showSnackbar(error.message));
       dispatch(transactionsFailed(error.message));
     }
   };

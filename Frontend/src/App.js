@@ -6,7 +6,8 @@ import ProofsPage from "pages/proofs-page/ProofsPage";
 import useGetUser from "API/useGetUser";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-
+import Snackbar from './components/Snackbar';
+import SuccessSnackbar from './components/SuccessSnackbar';
 export default function App() {
   const getUser = useGetUser();
   const user = useSelector((state) => state.user);
@@ -35,6 +36,8 @@ export default function App() {
       <Route routePath={"/sent"}>
         {(user.isLoggedIn && <ProofsPage isCreditor={false} />) || <LandingPage />}
       </Route>
+      <Snackbar />
+      <SuccessSnackbar />
     </NavigationProvider>
   );
 }

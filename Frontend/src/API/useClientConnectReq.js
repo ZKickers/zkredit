@@ -1,5 +1,6 @@
 import axiosInstance from "./axios";
-
+import { showSnackbar } from '../features/snackbar/snackbarSlice';
+import { showSuccessSnackbar } from '../features/snackbar/successSnackbarSlice';
 const useClientConnectReq = () => {
   const url = '/ClientRequest/issue-transaction';
 
@@ -8,9 +9,11 @@ const useClientConnectReq = () => {
       url, 
       data
     ).catch((error) => {
-      throw new Error(error.message);
       // TODO add snakebar
+      dispatch(showSnackbar(error.message));
+      throw new Error(error.message);
     });
+    dispatch(showSuccessSnackbar('Transaction issued successfully'));
     return response;
   };
 

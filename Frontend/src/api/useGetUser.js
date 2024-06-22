@@ -1,7 +1,8 @@
 import axiosInstance from "./axios";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/userSlice";
-
+import { showSnackbar } from '../features/snackbar/snackbarSlice';
+import { showSuccessSnackbar } from '../features/snackbar/successSnackbarSlice';
 const useGetUser = () => {
   const dispatch = useDispatch();
   const url = "/auth";
@@ -12,6 +13,7 @@ const useGetUser = () => {
     });
 
     if (response.status !== 200) {
+      dispatch(showSnackbar(error.message));
       throw new Error(response.status);
     }
     dispatch(

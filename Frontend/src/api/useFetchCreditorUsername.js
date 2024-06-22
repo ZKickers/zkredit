@@ -1,6 +1,7 @@
 import axiosInstance from "./axios";
 import { useState } from "react";
-
+import { showSnackbar } from '../features/snackbar/snackbarSlice';
+import { showSuccessSnackbar } from '../features/snackbar/successSnackbarSlice';
 const useFetchCreditorUsername = () => {
   const url = "/getTX/CreditorUsername";
   const [loading, setLoading] = useState(false);
@@ -14,6 +15,7 @@ const useFetchCreditorUsername = () => {
       });
 
       if (response.status !== 200) {
+        dispatch(showSnackbar(response.data));
         throw new Error(`Error: ${response.data}`);
       }
 
@@ -22,6 +24,7 @@ const useFetchCreditorUsername = () => {
       return response.data;
     } catch (error) {
       setLoading(false);
+      dispatch(showSnackbar(error.message));
       setError(error.message);
       console.error(error.message);
     }
