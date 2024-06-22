@@ -3,14 +3,16 @@ import { useState } from "react";
 import { TextField } from "@mui/material";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { DataThresholdingIcon } from "assets";
+import ClientRequestForm from "components/organisms/client-request-form/ClientRequestForm";
+import ModalPage from "pages/modal-page/ModalPage";
 
 const renderThresholdField = ({ setThreshold, color }) => {
-
   const [t, setT] = useState(0);
+
   const handleThresholdSubmit = (t) => {
-    if(t > 0 && t <= 850){
+    if (t > 0 && t <= 850) {
       setThreshold(t);
-    }else{
+    } else {
       alert("Threshold must be between 1 and 850");
     }
   };
@@ -61,7 +63,30 @@ const renderThresholdField = ({ setThreshold, color }) => {
   );
 };
 
+const renderClientDataButton = (color, txId) => {
+  const [showForm, setShowForm] = useState(false);
 
+  return (
+    <>
+      <SubmitButton
+        className="mt-4"
+        onClick={() => setShowForm(true)}
+        style={{
+          backgroundColor: color,
+          width: "100%",
+          height: "75px",
+          fontSize: "24px",
+          borderRadius: "10px",
+        }}
+      >
+        Send Your Data
+      </SubmitButton>
+      <ModalPage show={showForm} handleClose={() => setShowForm(false)}>
+        <ClientRequestForm handleClose={() => setShowForm(false)} txId={txId} />
+      </ModalPage>
+    </>
+  );
+};
 
 const renderValidationButton = (color) => {
   return (
@@ -109,6 +134,7 @@ const iconClasses = classNames(
 
 export {
   renderThresholdField,
+  renderClientDataButton,
   renderValidationButton,
   contentContainer,
   iconClasses,

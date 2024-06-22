@@ -2,7 +2,7 @@ import axiosInstance from "./axios";
 import { showSnackbar } from '../features/snackbar/snackbarSlice';
 import { showSuccessSnackbar } from '../features/snackbar/successSnackbarSlice';
 const useClientRequest = () => {
-  const url = '/ClientRequest';
+  const url = '/ClientRequest/generate-proof';
 
   const clientRequest = async (data) => {
     const response = await axiosInstance.post(

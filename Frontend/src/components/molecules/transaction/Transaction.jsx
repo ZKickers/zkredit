@@ -23,9 +23,11 @@ export default function Transaction({
     Pending:
       transactionState === TransactionStateEnum.PENDING_THRESHOLD ||
       transactionState === TransactionStateEnum.PENDING_VALIDATION ||
-      transactionState === TransactionStateEnum.PENDING_PROOF,
+      transactionState === TransactionStateEnum.PENDING_PROOF ||
+      transactionState === TransactionStateEnum.PENDING_CLIENT_DATA,
   };
   useEffect(() => {
+    console.log(status);
     switch (status) {
       case "Success":
         setTransactionState(TransactionStateEnum.SUCCESS);
@@ -39,6 +41,9 @@ export default function Transaction({
         break;
       case "Pending_Validation":
         setTransactionState(TransactionStateEnum.PENDING_VALIDATION);
+        break;
+      case "Pending_Client_Data":
+        setTransactionState(TransactionStateEnum.PENDING_CLIENT_DATA);
         break;
       case "Insufficient":
         setTransactionState(TransactionStateEnum.INSUFFICIENT);
