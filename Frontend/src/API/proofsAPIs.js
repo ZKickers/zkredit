@@ -1,6 +1,7 @@
-import { useState } from "react";
 import axiosInstance from "./axios";
 
+// ! An ignored part
+/*
 export const useSendThreshold = () => {
   const url = "/Creditor/trigger-threshold";
   const [proof, setProof] = useState(null);
@@ -24,9 +25,40 @@ export const useSendThreshold = () => {
   };
   return { proof, error, sendThreshold };
 };
+*/
 
-export const sendProofStatus = async (transactionId, isAccepted) => {
-  const url = "/verifyTx";
+export const sendThreshold = async ({ threshold, txId }) => {
+  const url = "/Creditor/trigger-threshold";
+  const data = { threshold, txId };
+
+  const response = await axiosInstance.post(url, data).catch((error) => {
+    console.log(error);
+    throw new Error(
+      `Encountered an error while setting the threshold associated with tx ID ${txId}`
+    );
+  });
+
+  console.log("Attempted a send threshold request. Response:\n", response);
+
+  return response.data; // * May not return any data.
+};
+
+export const generateProof = async (txId) => {
+  const url = `/get-proof`; // TODO: SUPPLY THIS WITH THE CORRECT API CALL
+  const data = { txId };
+
+  const response = await axiosInstance.post(url, data).catch((error) => {
+    console.log(error);
+    throw new Error(
+      `Encountered an error while fetching the proof associated with tx ID ${txId}`
+    );
+  });
+
+  return response.data;
+};
+
+export const validateProof = async ({ transactionId, isAccepted }) => {
+  const url = "/verify-proof"; // TODO: DOUBLE CHECK THE API CALL
   const data = {
     txId: transactionId,
     accepted: isAccepted,
