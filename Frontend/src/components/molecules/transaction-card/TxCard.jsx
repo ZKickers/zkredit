@@ -6,6 +6,7 @@ import {
   renderThresholdField,
   contentContainer,
   iconClasses,
+  renderClientDataButton,
 } from "./TxCardComps";
 import { useSendThreshold, sendProofStatus } from "API/proofsAPIs";
 import useVerify from "utils/useVerify";
@@ -29,16 +30,22 @@ export default function TxCard(props) {
     Pending_Validation:
       transactionState === TransactionStateEnum.PENDING_VALIDATION,
     Pending_Proof: transactionState === TransactionStateEnum.PENDING_PROOF,
+    Pending_Client_Data:
+      transactionState === TransactionStateEnum.PENDING_CLIENT_DATA,
   };
 
   const pending =
-    state.Pending_Threshold || state.Pending_Validation || state.Pending_Proof;
+    state.Pending_Threshold ||
+    state.Pending_Validation ||
+    state.Pending_Proof ||
+    state.Pending_Client_Data;
 
   const statusText = classNames({
     Verified: state.Verified,
     Declined: state.Declined,
     "Pending Threshold": state.Pending_Threshold,
     "Pending Validation": state.Pending_Validation,
+    "Pending Client Data": state.Pending_Client_Data,
   });
 
   const color = classNames({
@@ -56,11 +63,9 @@ export default function TxCard(props) {
   };
 
   const [threshold, setThreshold] = useState(0);
-  const {
-    proof,
-    error: thresholdError,
-    sendThreshold,
-  } = useSendThreshold();
+
+  const { proof, error: thresholdError, sendThreshold } = useSendThreshold();
+
   const {
     verify,
     isVerified,
@@ -93,7 +98,7 @@ export default function TxCard(props) {
     }
   }, [proof]);
 
-  const sendProofStatusHsndler = async (verificationResult) => {
+  const sendProofStatusHandler = async (verificationResult) => {
     try {
       const response = await sendProofStatus(txId, verificationResult);
       alert(response);
@@ -110,13 +115,13 @@ export default function TxCard(props) {
       } else {
         setTransactionState(TransactionStateEnum.FAIL);
       }
-      sendProofStatusHsndler(true);
+      sendProofStatusHandler(true);
       // TODO:: change the status of the transaction to verified and update the UI accordingly
       // TODO:: send the proof to the backend to update the status of the transaction
     } else if (isVerified === false) {
       alert("Error verifying the proof, proof is invalid");
       setTransactionState(TransactionStateEnum.INSUFFICIENT);
-      sendProofStatusHsndler(false);
+      sendProofStatusHandler(false);
       //TODO:: change the status of the transaction to inverified and update the UI accordingly
       //TODO:: send the proof to the backend to update the status of the transaction
     }
@@ -125,7 +130,7 @@ export default function TxCard(props) {
   useEffect(() => {
     if (verificationError) {
       alert(verificationError);
-      sendProofStatusHsndler(false);
+      sendProofStatusHandler(false);
     }
   }, [verificationError]);
 
@@ -152,8 +157,8 @@ export default function TxCard(props) {
           >
             Status: <span style={{ color: color }}>{statusText}</span>
           </h3>
-          {state.Pending_Threshold &&
-            renderThresholdField({ setThreshold, color })}
+          {state.Pending_Threshold && renderThresholdField({ setThreshold, color })}
+          {state.Pending_Client_Data && renderClientDataButton(color, txId )}
         </div>
       </div>
       <div className={iconClasses}>
