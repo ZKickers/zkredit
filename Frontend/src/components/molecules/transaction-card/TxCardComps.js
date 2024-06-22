@@ -3,14 +3,17 @@ import { useState } from "react";
 import { TextField } from "@mui/material";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { DataThresholdingIcon } from "assets";
+import { generateProof, sendThreshold } from "API/proofsAPIs";
+import ProofModal from "components/organisms/proof-modal/ProofModal";
 
-const renderThresholdField = ({ setThreshold, color }) => {
+const renderThresholdField = ({ color, txId }) => {
+  const [threshold, setThreshold] = useState(0);
 
-  const [t, setT] = useState(0);
-  const handleThresholdSubmit = (t) => {
-    if(t > 0 && t <= 850){
-      setThreshold(t);
-    }else{
+  const handleThresholdSubmit = async () => {
+    if (threshold > 0 && threshold <= 850) {
+      const response = await sendThreshold({ threshold, txId });
+      // ! Either ignore or log the response.
+    } else {
       alert("Threshold must be between 1 and 850");
     }
   };
@@ -21,7 +24,7 @@ const renderThresholdField = ({ setThreshold, color }) => {
         type="number"
         fullWidth
         label="Threshold"
-        onChange={(e) => setT(e.target.value)}
+        onChange={(e) => setThreshold(e.target.value)}
         InputLabelProps={{
           style: {
             color: color,
@@ -45,7 +48,7 @@ const renderThresholdField = ({ setThreshold, color }) => {
           ),
           endAdornment: (
             <SubmitButton
-              onClick={() => handleThresholdSubmit(t)}
+              onClick={() => handleThresholdSubmit()}
               style={{
                 backgroundColor: color,
                 margin: "10px 0 10px 10px",
@@ -61,7 +64,57 @@ const renderThresholdField = ({ setThreshold, color }) => {
   );
 };
 
+const renderGetProofButton = (color, txId) => {
+  return (
+    <SubmitButton
+      className="mt-4"
+      onClick={() => handleGetProofClicked(txId)}
+      style={{
+        backgroundColor: color,
+        width: "100%",
+        height: "75px",
+        fontSize: "24px",
+        borderRadius: "10px",
+      }}
+    >
+      Get Proof
+    </SubmitButton>
+  );
+};
 
+const handleGetProofClicked = async (color, txId) => {
+  console.log(`Attempting to get proof for tx with ID ${txId}`);
+  const { scheme, curve, proof } = await generateProof(txId);
+
+  // TODO: Add a toast/feedback to show that the proof has been loaded.
+  setProof(proof);
+};
+
+const renderShowProofButton = (color) => {
+  return (
+    <SubmitButton
+      className="mt-4"
+      onClick={() => setShowProof(true)}
+      style={{
+        backgroundColor: color,
+        width: "100%",
+        height: "75px",
+        fontSize: "24px",
+        borderRadius: "10px",
+      }}
+    >
+      Show Proof
+    </SubmitButton>
+  );
+};
+
+const renderProofModal = ({ showProof, setShowProof, proof }) => {
+  return (
+    <ModalPage show={showProof} handleClose={() => setShowProof(false)}>
+      <ProofModal proof={proof} handleClose={() => setShowProof(false)} />
+    </ModalPage>
+  );
+};
 
 const renderValidationButton = (color) => {
   return (
@@ -109,6 +162,9 @@ const iconClasses = classNames(
 
 export {
   renderThresholdField,
+  renderGetProofButton,
+  renderShowProofButton,
+  renderProofModal,
   renderValidationButton,
   contentContainer,
   iconClasses,

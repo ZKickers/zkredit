@@ -4,10 +4,14 @@ import { CloseIcon, LockIcon, LockOpenIcon } from "assets";
 import { useEffect, useState } from "react";
 import {
   renderThresholdField,
+  renderGetProofButton,
+  renderShowProofButton,
+  renderProofModal,
+  renderValidationButton,
   contentContainer,
   iconClasses,
 } from "./TxCardComps";
-import { useSendThreshold, sendProofStatus } from "API/proofsAPIs";
+import { useSendThreshold, validateProof } from "API/proofsAPIs";
 import useVerify from "utils/useVerify";
 import TransactionStateEnum from "utils/TransactionStateEnum";
 
@@ -20,6 +24,9 @@ export default function TxCard(props) {
     transactionState,
     setTransactionState,
   } = props;
+
+  const [proof, setProof] = useState(null);
+  const [showProof, setShowProof] = useState(null);
 
   const state = {
     Verified: transactionState === TransactionStateEnum.SUCCESS,
@@ -39,6 +46,7 @@ export default function TxCard(props) {
     Declined: state.Declined,
     "Pending Threshold": state.Pending_Threshold,
     "Pending Validation": state.Pending_Validation,
+    "Pending Proof": state.Pending_Proof,
   });
 
   const color = classNames({
@@ -57,11 +65,6 @@ export default function TxCard(props) {
 
   const [threshold, setThreshold] = useState(0);
   const {
-    proof,
-    error: thresholdError,
-    sendThreshold,
-  } = useSendThreshold();
-  const {
     verify,
     isVerified,
     verificationResult,
@@ -76,12 +79,12 @@ export default function TxCard(props) {
     }
   }, [threshold]);
 
-  useEffect(() => {
-    if (thresholdError) {
-      // TODO:: handle error in UI
-      alert(thresholdError);
-    }
-  }, [thresholdError]);
+  // useEffect(() => {
+  //   if (thresholdError) {
+  //     // TODO:: handle error in UI
+  //     alert(thresholdError);
+  //   }
+  // }, [thresholdError]);
 
   useEffect(() => {
     if (proof != null) {
@@ -95,7 +98,7 @@ export default function TxCard(props) {
 
   const sendProofStatusHsndler = async (verificationResult) => {
     try {
-      const response = await sendProofStatus(txId, verificationResult);
+      const response = await validateProof(txId, verificationResult);
       alert(response);
     } catch (error) {
       alert(error);
@@ -152,8 +155,11 @@ export default function TxCard(props) {
           >
             Status: <span style={{ color: color }}>{statusText}</span>
           </h3>
-          {state.Pending_Threshold &&
-            renderThresholdField({ setThreshold, color })}
+          {state.Pending_Threshold && renderThresholdField({ color, txId })}
+          {state.Pending_Proof && renderGetProofButton({ color, txId })}
+          {proof && renderShowProofButton(color)}
+          {proof && renderProofModal({ showProof, setShowProof, proof })}
+          {proof && renderValidationButton(color)}
         </div>
       </div>
       <div className={iconClasses}>
