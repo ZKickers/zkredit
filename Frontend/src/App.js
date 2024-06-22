@@ -6,8 +6,8 @@ import ProofsPage from "pages/proofs-page/ProofsPage";
 import useGetUser from "API/useGetUser";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import Snackbar from './components/Snackbar';
-import SuccessSnackbar from './components/SuccessSnackbar';
+import Snackbar from './components/atoms/Snackbar/Snackbar';
+import SuccessSnackbar from './components/atoms/Snackbar/SuccessSnackbar';
 export default function App() {
   const getUser = useGetUser();
   const user = useSelector((state) => state.user);

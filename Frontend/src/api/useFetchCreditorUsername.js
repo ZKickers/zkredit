@@ -2,11 +2,12 @@ import axiosInstance from "./axios";
 import { useState } from "react";
 import { showSnackbar } from '../features/snackbar/snackbarSlice';
 import { showSuccessSnackbar } from '../features/snackbar/successSnackbarSlice';
+import { useDispatch } from "react-redux";
 const useFetchCreditorUsername = () => {
   const url = "/getTX/CreditorUsername";
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const dispatch = useDispatch();
   const fetchCreditorUsername = async ({ txId, creditorId }) => {
     setLoading(true);
     try {
