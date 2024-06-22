@@ -21,9 +21,9 @@ function serializeResponse(apiResponse) {
         S: BigInt('0x' + signature.S).toString()
       }
     };
-    console.log("TAHHHHAAAA")
-    console.log(signature.R.map(big => BigInt('0x' + big).toString()))
-    console.log(BigInt('0x' + signature.S).toString())
+    // console.log("TAHHHHAAAA")
+    // console.log(signature.R.map(big => BigInt('0x' + big).toString()))
+    // console.log(BigInt('0x' + signature.S).toString())
     
     return response;
 }
