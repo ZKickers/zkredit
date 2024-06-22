@@ -12,10 +12,11 @@ const useLogin = () => {
         url, 
         user
       ).catch((error) => {
-        if (response.status === 401) {
+        if (error.response.status === 401) {
           dispatch(showSnackbar("Invalid credentials"));
         }
-        dispatch(showSnackbar(error.message));
+        dispatch(showSnackbar(error.response.data));
+        throw error;
       });
       console.log(response);
     

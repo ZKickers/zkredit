@@ -12,13 +12,13 @@ const useClientConnectReq = () => {
     const response = await axiosInstance.post(
       url, 
       data
-    ).catch((error) => {
-      dispatch(showSnackbar(error.message));
- 
+    ).then(()=>{
+      dispatch(showSuccessSnackbar('Transaction issued successfully'));
+      dispatch(addTransaction(response.data.transaction));
+    }).catch((error) => {
+      dispatch(showSnackbar(error.response.data.error));
+      throw error;
     });
-    dispatch(showSuccessSnackbar('Transaction issued successfully'));
-    dispatch(addTransaction(response.data.transaction));
-
     return response.data;
   };
 

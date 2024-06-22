@@ -9,8 +9,8 @@ const useSignUp = () => {
   const dispatch = useDispatch();
   const signup = async (user) => {
     const response = await axiosInstance.post(url, user).catch((error) => {
-      dispatch(showSnackbar(error.message));
-      throw new Error(error.message);
+      console.log(error);
+      dispatch(showSnackbar(error.response.data));
     });
     console.log(response);
 

@@ -9,11 +9,13 @@ const useClientRequest = () => {
     const response = await axiosInstance.post(
       url, 
       data
-    ).catch((error) => {
-      dispatch(showSnackbar(error.message));
+    ).then(()=>{
+      dispatch(showSuccessSnackbar('Data Sent successfully'));
+    }).catch((error) => {
+      dispatch(showSnackbar(error.response.data));
      
     });
-    dispatch(showSuccessSnackbar('Data Sent successfully'));
+    
     return response;
   };
 
