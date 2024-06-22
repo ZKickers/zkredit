@@ -4,6 +4,7 @@ import { TextField } from "@mui/material";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { DataThresholdingIcon } from "assets";
 import ClientRequestForm from "components/organisms/client-request-form/ClientRequestForm";
+import ModalPage from "pages/modal-page/ModalPage";
 
 const renderThresholdField = ({ setThreshold, color }) => {
   const [t, setT] = useState(0);
@@ -62,7 +63,7 @@ const renderThresholdField = ({ setThreshold, color }) => {
   );
 };
 
-const renderClientDataButton = (color) => {
+const renderClientDataButton = (color, txId) => {
   const [showForm, setShowForm] = useState(false);
 
   return (
@@ -78,10 +79,10 @@ const renderClientDataButton = (color) => {
           borderRadius: "10px",
         }}
       >
-        Begin Proof Validation
+        Send Your Data
       </SubmitButton>
       <ModalPage show={showForm} handleClose={() => setShowForm(false)}>
-        <ClientRequestForm handleClose={() => setShowForm(false)} />
+        <ClientRequestForm handleClose={() => setShowForm(false)} txId={txId} />
       </ModalPage>
     </>
   );

@@ -158,7 +158,7 @@ export default function TxCard(props) {
             Status: <span style={{ color: color }}>{statusText}</span>
           </h3>
           {state.Pending_Threshold && renderThresholdField({ setThreshold, color })}
-          {state.Pending_Client_Data && renderClientDataButton({ color })}
+          {state.Pending_Client_Data && renderClientDataButton(color, txId )}
         </div>
       </div>
       <div className={iconClasses}>

@@ -27,6 +27,7 @@ export default function Transaction({
       transactionState === TransactionStateEnum.PENDING_CLIENT_DATA,
   };
   useEffect(() => {
+    console.log(status);
     switch (status) {
       case "Success":
         setTransactionState(TransactionStateEnum.SUCCESS);
@@ -43,6 +44,7 @@ export default function Transaction({
         break;
       case "Pending_Client_Data":
         setTransactionState(TransactionStateEnum.PENDING_CLIENT_DATA);
+        break;
       case "Insufficient":
         setTransactionState(TransactionStateEnum.INSUFFICIENT);
         break;
