@@ -23,9 +23,7 @@ export default function ClientConnectRequestForm({ handleClose }) {
     };
 
     try{
-      const response = await ClientConnectReq(jsonData);
-      console.log("result");
-      console.log(response);
+      await ClientConnectReq(jsonData);
     }catch(err){
       console.log(err);
     }
