@@ -31,7 +31,7 @@ const useFetchTransactions = () => {
       transactionsReceived = clientTxRecieved;
       transactionsFailed = clientTxFailed;
     } else {
-      throw new Error(`Error : there is no type ${type} in fetchTransactions`);
+      dispatch(showSnackbar(error.message));
     }
 
     dispatch(transactionsLoading());
@@ -42,7 +42,7 @@ const useFetchTransactions = () => {
       });
 
       if (response.status !== 200) {
-        throw new Error(`Error: ${response.status}`);
+        dispatch(showSnackbar(response.data));
       }
 
       dispatch(transactionsReceived(response.data));

@@ -12,7 +12,6 @@ const useGetVK = (token) => {
     } catch (error) {
       dispatch(showSnackbar(error.message));
       console.error("Error fetching the verification key:", error);
-      throw error; 
     }
   };
   return getVK;

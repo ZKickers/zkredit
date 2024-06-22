@@ -11,9 +11,9 @@ const useClientRequest = () => {
       data
     ).catch((error) => {
       dispatch(showSnackbar(error.message));
-      throw new Error(error.message);
+     
     });
-    dispatch(showSuccessSnackbar('Transaction issued successfully'));
+    dispatch(showSuccessSnackbar('Data Sent successfully'));
     return response;
   };
 

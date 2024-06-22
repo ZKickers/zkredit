@@ -14,7 +14,7 @@ const useClientConnectReq = () => {
       data
     ).catch((error) => {
       dispatch(showSnackbar(error.message));
-      throw new Error(error.message);
+ 
     });
     dispatch(showSuccessSnackbar('Transaction issued successfully'));
     dispatch(addTransaction(response.data.transaction));

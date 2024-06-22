@@ -9,12 +9,11 @@ const useGetUser = () => {
 
   const getUser = async () => {
     const response = await axiosInstance.get(url).catch((error) => {
-      throw new Error(error.message);
+      dispatch(showSnackbar(error.message));
     });
 
     if (response.status !== 200) {
       dispatch(showSnackbar(error.message));
-      throw new Error(response.status);
     }
     dispatch(
       setUser({

@@ -17,7 +17,6 @@ const useFetchCreditorUsername = () => {
 
       if (response.status !== 200) {
         dispatch(showSnackbar(response.data));
-        throw new Error(`Error: ${response.data}`);
       }
 
       console.log(response.data);
