@@ -1,13 +1,6 @@
 from zokrates_pycrypto.eddsa import PrivateKey, FQ, Point
 from functions import *
-
-MSG_LIMITS = {
-    "fullname": 70,
-    "address": 100,
-    "birthdate": 10,
-    "ssn": 9,
-    "score": 2
-}
+from config import MSG_LIMITS
 
 def decompress_point(p):
     p = Point.decompress(bytes.fromhex(p))

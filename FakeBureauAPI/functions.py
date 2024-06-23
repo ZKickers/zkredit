@@ -2,6 +2,8 @@ import json
 import base64
 import textwrap
 import hashlib
+from config import MSG_LIMITS, REQUEST_PARAMS, DEFAULT_SCORE
+
 
 
 PUBLIC = "PUBLIC KEY"
@@ -24,13 +26,14 @@ def save_key(hex_key, path, key_type):
         pem_file.write(pem_content)
 
 
-def compare_data(request_data, user_data):
-    return (
-        request_data['fullname'] == user_data['fullname'] and
-        request_data['address'] == user_data['address'] and
-        request_data['birthdate'] == user_data['birthdate'] and
-        request_data['ssn'] == user_data['ssn']
-    )
+def validate_data(request_data):
+    if len(request_data) != len(REQUEST_PARAMS):
+        return False
+    for param in REQUEST_PARAMS:
+        item = request_data[param]
+        if not item or len(item) > MSG_LIMITS[param]:
+            return False
+    return True
 
 def read_key(pem_path):
     with open(pem_path, 'r') as f: return f.read()
@@ -77,3 +80,7 @@ def int_to_ascii(num):
 
 def str_to_intArr(input_string):
     return [str(ord(char)) for char in input_string]
+
+def get_report(user_data):
+    user_data['score'] = DEFAULT_SCORE
+    return user_data
