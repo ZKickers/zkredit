@@ -2,7 +2,7 @@ import json
 import base64
 import textwrap
 import hashlib
-from config import MSG_LIMITS, REQUEST_PARAMS, DEFAULT_SCORE
+from config import LAMBDA_MSG_LIMITS, REQUEST_PARAMS, DEFAULT_SCORE
 
 
 
@@ -31,7 +31,7 @@ def validate_data(request_data):
         return False
     for param in REQUEST_PARAMS:
         item = request_data[param]
-        if not item or len(item) > MSG_LIMITS[param]:
+        if not item or not LAMBDA_MSG_LIMITS[param](item):
             return False
     return True
 
