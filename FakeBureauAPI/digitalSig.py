@@ -10,6 +10,7 @@ def sign_bjj(msg,sk):
     sk_hex = pem_to_hex(sk,PRIVATE)
     sk_hex = int(sk_hex, 16)
     sk = PrivateKey(FQ(sk_hex))
+    msg = stick_ts(msg)
     msg = conc_msg(msg,MSG_LIMITS)
     save_json(str_to_intArr(msg),'msg.json')
     msg = sha256Padded(msg)

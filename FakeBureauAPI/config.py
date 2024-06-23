@@ -5,7 +5,8 @@ MSG_LIMITS = {
     "address": 100,
     "birthdate": 10,
     "ssn": 9,
-    "score": 2
+    "score": 2,
+    "timestamp" : 8
 }
 
 LAMBDA_MSG_LIMITS = {

@@ -2,6 +2,7 @@ import json
 import base64
 import textwrap
 import hashlib
+import time
 from config import LAMBDA_MSG_LIMITS, REQUEST_PARAMS, DEFAULT_SCORE
 
 
@@ -84,3 +85,7 @@ def str_to_intArr(input_string):
 def get_report(user_data):
     user_data['score'] = DEFAULT_SCORE
     return user_data
+
+def stick_ts(msg):
+    msg['timestamp'] = int(time.time()*1000)
+    return msg
