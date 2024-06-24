@@ -27,8 +27,8 @@ function serializeClientData(clientInput) {
   // Extract relevant fields from the API response
   const { fullname, address, birthdate, ssn } = clientInput;
   const clientData = {
-    name: serializePadded(fullname,NAME_MAX),
-    address: serializePadded(address,ADDRESS_MAX),
+    name: serializePadded(fullname,DATA_BYTES.name),
+    address: serializePadded(address,DATA_BYTES.address),
     birthdate: [...birthdate].map(char => char.charCodeAt(0).toString()),
     ssn: [...ssn].map(char => char.charCodeAt(0).toString()),
   }
