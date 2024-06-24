@@ -69,8 +69,6 @@ async function generateProof(serialized_clientData, serialized_resp, transaction
     try {
         let proof_arr = [];
         proof_arr.push(serialized_clientData);
-        const nonce = await generateNonce();
-        proof_arr.push(await nonceToArray(nonce));
         proof_arr.push(serialized_resp);
         proof_arr.push(await Serial.serializePK(PK_X_PATH, PK_Y_PATH));
         proof_arr.push(await Serial.serializeThreshold(transaction.threshold));
