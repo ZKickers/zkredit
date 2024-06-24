@@ -64,7 +64,7 @@ def conc_msg(msg,limits):
     for key, value in msg.items():
         val = ""
         if isinstance(value, int):
-            val += int_to_ascii(value)
+            val += int_to_ascii(value,limits[key])
         elif isinstance(value, str):
             val += value
         while (len(val)<limits[key]):
@@ -72,12 +72,13 @@ def conc_msg(msg,limits):
         res += val
     return res
 
-def int_to_ascii(num):
-    ascii_chars = ''
-    while num > 0:
-        ascii_chars = chr(num % 256) + ascii_chars
-        num //= 256
-    return ascii_chars
+def int_to_ascii(int_val, bytes_count):
+    ascii_array = []
+    for i in range(bytes_count):
+        bytes_shifted = bytes_count - 1 - i
+        byte = (int_val >> (8 * bytes_shifted)) & 0xFF
+        ascii_array.append(chr(byte))
+    return ''.join(ascii_array)
 
 def str_to_intArr(input_string):
     return [str(ord(char)) for char in input_string]
@@ -88,4 +89,5 @@ def get_report(user_data):
 
 def stick_ts(msg):
     msg['timestamp'] = int(time.time()*1000)
+    print(msg)
     return msg

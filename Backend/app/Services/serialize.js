@@ -79,16 +79,16 @@ function serializeThreshold(thresh) {
 }
 
 function intToBytes(intVal,bytesCount) {
-  let byteArray = new Array(bytesCount);
+    var byteArray = new Array(bytesCount);
 
-  for (let i = 0; i < bytesCount; i++) {
-    let bytesShifted = bytesCount - 1 - i;
-    byteArray[i] = (intVal >> (8 * bytesShifted)) & 0xFF;
-    byteArray[i] = byteArray[i].toString()
-  }
-  
-  return byteArray;
-}
+    for ( var i = bytesCount - 1; i >= 0; i-- ) {
+        var byte = intVal & 0xff;
+        byteArray[i] = byte.toString();
+        intVal = (intVal - byte) / 256;
+    }
+
+    return byteArray;
+};
   
 // Export the function to be used in other files
 module.exports = {
