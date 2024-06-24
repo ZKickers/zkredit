@@ -127,12 +127,14 @@ async function sendClientInfo(transaction, address, birthdate, ssn) {
         ssn: ssn
     };
 
-    try {
+    // try {
         const response = await axios.post(CREDIT_BUREAU_API, clientInfo, {
             timeout: 2000
         });
         if (response && response.data) {
             const { serialized_clientData, serialized_resp } = serializeData(clientInfo, response.data);
+            console.log(serialized_clientData);
+            console.log(serialized_resp);
             const updatedTransaction = await Transaction.findOneAndUpdate(
                 { _id: transaction._id },
                 { status: 'Pending_Proof' },
@@ -148,19 +150,19 @@ async function sendClientInfo(transaction, address, birthdate, ssn) {
         } else {
             throw new Error('No response received from the server');
         }
-    } catch (error) {
-        if (error.code === 'ECONNREFUSED') {
-            return { status: 'timeout', message: 'The request timed out' };
-        }
-        else if(error.response.data.error === 'Data mismatch')
-        {
-            await invalidateTransaction(transaction._id);
-            return { status: 'Mismatch', message: 'An error occurred', details: error.message };
-        }
-        else {
-            return { status: 'error', message: 'An error occurred', details: error.message };
-        }
-    }
+    // } catch (error) {
+    //     if (error.code === 'ECONNREFUSED') {
+    //         return { status: 'timeout', message: 'The request timed out' };
+    //     }
+    //     else if(error.response.data.error === 'Data mismatch')
+    //     {
+    //         await invalidateTransaction(transaction._id);
+    //         return { status: 'Mismatch', message: 'An error occurred', details: error.message };
+    //     }
+    //     else {
+    //         return { status: 'error', message: 'An error occurred', details: error.message };
+    //     }
+    // }
 }
 
 module.exports = sendClientInfo;

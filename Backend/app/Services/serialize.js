@@ -5,11 +5,12 @@ const { DATA_BYTES } = require("../../config");
 
 
 function serializeResponse(apiResponse) {
+  console.log("Serializing Response")
   // Extract relevant fields from the API response
   const { fullname, address, birthdate, ssn, score, timestamp, signature } = apiResponse;
   const response = {
-      name: serializePadded(fullname,NAME_MAX),
-      address: serializePadded(address,ADDRESS_MAX),
+      name: serializePadded(fullname,DATA_BYTES.name),
+      address: serializePadded(address,DATA_BYTES.address),
       birthdate: [...birthdate].map(char => char.charCodeAt(0).toString()),
       ssn: [...ssn].map(char => char.charCodeAt(0).toString()),
       score:  intToBytes(score, DATA_BYTES.score),
