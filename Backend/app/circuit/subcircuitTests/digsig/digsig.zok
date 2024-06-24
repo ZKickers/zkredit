@@ -10,11 +10,11 @@ def verify<N>(field[2] R, field S, field[2] A, u8[N] M) -> bool{
     return verifyEddsa(R,S,A,M0,M1,BABYJUBJUB_PARAMS);
 }
 
-def main<N_name,N_adr,N_bd,N_ssn,N_score>(
-        Response<N_name,N_adr,N_bd,N_ssn,N_score> resp,
+def main<N_name,N_adr,N_bd,N_ssn,N_score,N_timestamp>(
+        Response<N_name,N_adr,N_bd,N_ssn,N_score,N_timestamp> resp,
         field[2] publicKey
     ) -> bool {
-        u32 N = N_name + N_adr + N_bd + N_ssn + N_score;
+        u32 N = N_name + N_adr + N_bd + N_ssn + N_score + N_timestamp;
         u8[N] respConc = respConcat(resp);
         assert(verify(resp.sig.R,resp.sig.S,publicKey,respConc));
         return true;       

@@ -1,6 +1,6 @@
 from "./digsig.zok" import main as isValidSignature;
 from "./interface.zok" import Response;
 
-def main(private Response<70,100,10,9,2> response, private field[2] publicKey){
+def main(private Response<70,100,10,9,2,8> response, private field[2] publicKey){
     assert(isValidSignature(response,publicKey));
 }

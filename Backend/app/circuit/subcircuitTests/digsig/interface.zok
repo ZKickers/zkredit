@@ -3,7 +3,7 @@ struct Signature {
     field S;
 }
 
-struct Response <N_name, N_adr, N_bd, N_ssn, N_score> { 
+struct Response <N_name, N_adr, N_bd, N_ssn, N_score, N_timestamp> { 
     u8[N_name] name;
     u8[N_adr] address;
     u8[N_bd] birthdate;

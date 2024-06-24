@@ -9,12 +9,12 @@ def clientConcat <N_name, N_adr, N_bd, N_ssn, N>(
         return res;
 }
 
-def respConcat <N_name, N_adr, N_bd, N_ssn, N_score,N>(
-      Response <N_name, N_adr, N_bd, N_ssn, N_score> response
+def respConcat <N_name, N_adr, N_bd, N_ssn, N_score, N_timestamp, N>(
+      Response <N_name, N_adr, N_bd, N_ssn, N_score, N_timestamp> response
     ) -> u8[N]{
-        assert(N == N_name + N_adr + N_bd + N_ssn + N_score);
+        assert(N == N_name + N_adr + N_bd + N_ssn + N_score + N_timestamp);
         u8[N] res = [...response.name, ...response.address,
                         ...response.birthdate,...response.ssn,
-                        ...response.score];
+                        ...response.score,...response.timestamp];
         return res;
 }
