@@ -1,20 +1,11 @@
-from "./interface.zok" import ClientData, Response;
+from "./interface.zok" import Response;
 
-def clientConcat <N_name, N_adr, N_bd, N_ssn, N>(
-      ClientData <N_name, N_adr, N_bd, N_ssn> clientData
+def respConcat <N_name, N_adr, N_bd, N_ssn, N_score, N>(
+      Response <N_name, N_adr, N_bd, N_ssn, N_score> response
     ) -> u8[N]{
-        assert(N == N_name + N_adr + N_bd + N_ssn);
-        u8[N] res = [...clientData.name, ...clientData.address,
-                        ...clientData.birthdate,...clientData.ssn];
-        return res;
-}
-
-def respConcat <N_name, N_adr, N_bd, N_ssn, N_score, N_timestamp, N>(
-      Response <N_name, N_adr, N_bd, N_ssn, N_score, N_timestamp> response
-    ) -> u8[N]{
-        assert(N == N_name + N_adr + N_bd + N_ssn + N_score + N_timestamp);
+        assert(N == N_name + N_adr + N_bd + N_ssn + N_score);
         u8[N] res = [...response.name, ...response.address,
                         ...response.birthdate,...response.ssn,
-                        ...response.score,...response.timestamp];
+                        ...response.score];
         return res;
 }

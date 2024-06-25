@@ -2,7 +2,7 @@
 zokrates compile --debug -i root.zok
 
 # Perform the setup phase
-# zokrates setup
+zokrates setup
 
 # Execute the program
 zokrates compute-witness --abi --stdin < input.json

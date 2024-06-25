@@ -1,8 +1,8 @@
 # Compile
-zokrates compile -i root.zok
+zokrates compile --debug -i root.zok
 
 # Perform the setup phase
-zokrates setup
+# zokrates setup
 
 # Execute the program
 zokrates compute-witness --abi --stdin < input.json
@@ -11,7 +11,7 @@ zokrates compute-witness --abi --stdin < input.json
 zokrates generate-proof
 
 # Export a Solidity verifier
-zokrates export-verifier
+# zokrates export-verifier
 
 # Alternatively, verify natively
 zokrates verify
