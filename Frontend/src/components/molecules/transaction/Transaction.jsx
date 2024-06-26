@@ -1,7 +1,6 @@
 import classNames from "classnames";
 import "./Transaction.css";
 import { LockIcon, LockOpenIcon, CloseIcon } from "assets";
-import useFetchCreditorUsername from "API/useFetchCreditorUsername";
 import { datePrettier } from "./datePrettier";
 import TransactionStateEnum from "utils/TransactionStateEnum";
 import { useState, useEffect } from "react";
@@ -11,6 +10,7 @@ export default function Transaction({
   clientFullName,
   isClient,
   creditorId,
+  creditorUsername,
   updateDate,
   status,
   isButton,
@@ -27,7 +27,6 @@ export default function Transaction({
       transactionState === TransactionStateEnum.PENDING_CLIENT_DATA,
   };
   useEffect(() => {
-    console.log(status);
     switch (status) {
       case "Success":
         setTransactionState(TransactionStateEnum.SUCCESS);
@@ -52,30 +51,6 @@ export default function Transaction({
   }, [status]);
 
   const { formattedDate, formattedTime } = datePrettier(updateDate);
-
-  const [creditorUsername, setCreditorUsername] = useState("");
-  const { fetchCreditorUsername, loading, error } = useFetchCreditorUsername();
-
-  useEffect(() => {
-    let isMounted = true;
-  
-    async function fetchData() {
-      try {
-        const CUN = await fetchCreditorUsername({ txId, creditorId });
-        if (isMounted) {
-          setCreditorUsername(CUN);
-        }
-      } catch (error) {
-        console.error("Error fetching creditor username:", error);
-      }
-    }
-  
-    fetchData();
-  
-    return () => {
-      isMounted = false; // Cleanup function to prevent state updates on unmounted component
-    };
-  }, [txId, creditorId]);
 
   const handleShowCard = () =>
     renderCard({

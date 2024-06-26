@@ -12,7 +12,7 @@ import {
   iconClasses,
   renderClientDataButton,
 } from "./TxCardComps";
-import { useSendThreshold, validateProof } from "API/proofsAPIs";
+import { validateProof } from "API/proofsAPIs";
 import useVerify from "utils/useVerify";
 import TransactionStateEnum from "utils/TransactionStateEnum";
 
@@ -70,28 +70,12 @@ export default function TxCard(props) {
     else if (pending) return <LockOpenIcon sx={iconStyle} />;
   };
 
-  const [threshold, setThreshold] = useState(0);
   const {
     verify,
     isVerified,
     verificationResult,
     error: verificationError,
   } = useVerify();
-
-  useEffect(() => {
-    if (threshold != 0) {
-      // TODO:: set UI to be pending the proof
-      setTransactionState(TransactionStateEnum.PENDING_PROOF);
-      sendThreshold(threshold, txId);
-    }
-  }, [threshold]);
-
-  // useEffect(() => {
-  //   if (thresholdError) {
-  //     // TODO:: handle error in UI
-  //     alert(thresholdError);
-  //   }
-  // }, [thresholdError]);
 
   useEffect(() => {
     // if (proof != null) {

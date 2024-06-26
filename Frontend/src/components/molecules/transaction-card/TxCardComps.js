@@ -3,17 +3,19 @@ import { useState } from "react";
 import { TextField } from "@mui/material";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { DataThresholdingIcon } from "assets";
-import { getProof, sendThreshold } from "API/proofsAPIs";
+import useSendThreshold from "API/useSendThreshold";
+import { getProof } from "API/proofsAPIs";
 import ProofModal from "components/organisms/proof-modal/ProofModal";
 import ClientRequestForm from "components/organisms/client-request-form/ClientRequestForm";
 import ModalPage from "pages/modal-page/ModalPage";
 
 const renderThresholdField = ({ color, txId }) => {
   const [threshold, setThreshold] = useState(0);
+  const { sendThreshold } = useSendThreshold();
 
   const handleThresholdSubmit = async () => {
     if (threshold > 0 && threshold <= 850) {
-      const response = await sendThreshold({ threshold, txId });
+      sendThreshold(threshold, txId);
       // ! Either ignore or log the response.
     } else {
       alert("Threshold must be between 1 and 850");
@@ -87,6 +89,7 @@ const renderGetProofButton = (color, txId, setProof) => {
 const handleGetProofClicked = async (txId, setProof) => {
   console.log(`Attempting to get proof for tx with ID ${txId}`);
   const proof = await getProof(txId);
+  console.log("Proof received: ", proof);
 
   setProof(proof);
 };
