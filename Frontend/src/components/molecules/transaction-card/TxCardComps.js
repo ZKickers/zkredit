@@ -1,13 +1,21 @@
 import classNames from "classnames";
+import { useState } from "react";
+import { TextField } from "@mui/material";
+import SubmitButton from "components/atoms/submit-button/SubmitButton";
+import { DataThresholdingIcon } from "assets";
+import ClientRequestForm from "components/organisms/client-request-form/ClientRequestForm";
+import ModalPage from "pages/modal-page/ModalPage";
 
-const { TextField } = require("@mui/material");
-const { DataThresholdingIcon } = require("assets");
-const {
-  default: SubmitButton,
-} = require("components/atoms/submit-button/SubmitButton");
+const renderThresholdField = ({ setThreshold, color }) => {
+  const [t, setT] = useState(0);
 
-const renderThresholdField = (props) => {
-  const { threshold, setThreshold, color } = props;
+  const handleThresholdSubmit = (t) => {
+    if (t > 0 && t <= 850) {
+      setThreshold(t);
+    } else {
+      alert("Threshold must be between 1 and 850");
+    }
+  };
 
   return (
     <div className="mt-4">
@@ -15,7 +23,7 @@ const renderThresholdField = (props) => {
         type="number"
         fullWidth
         label="Threshold"
-        onChange={(e) => setThreshold(e.target.value)}
+        onChange={(e) => setT(e.target.value)}
         InputLabelProps={{
           style: {
             color: color,
@@ -39,7 +47,7 @@ const renderThresholdField = (props) => {
           ),
           endAdornment: (
             <SubmitButton
-              onClick={() => handleThresholdSubmit(threshold)}
+              onClick={() => handleThresholdSubmit(t)}
               style={{
                 backgroundColor: color,
                 margin: "10px 0 10px 10px",
@@ -55,15 +63,35 @@ const renderThresholdField = (props) => {
   );
 };
 
-const handleThresholdSubmit = (threshold) => {
-  // TODO: SEND THE THRESHOLD TO THE BACKEND
-  console.log(threshold);
+const renderClientDataButton = (color, txId) => {
+  const [showForm, setShowForm] = useState(false);
+
+  return (
+    <>
+      <SubmitButton
+        className="mt-4"
+        onClick={() => setShowForm(true)}
+        style={{
+          backgroundColor: color,
+          width: "100%",
+          height: "75px",
+          fontSize: "24px",
+          borderRadius: "10px",
+        }}
+      >
+        Send Your Data
+      </SubmitButton>
+      <ModalPage show={showForm} handleClose={() => setShowForm(false)}>
+        <ClientRequestForm handleClose={() => setShowForm(false)} txId={txId} />
+      </ModalPage>
+    </>
+  );
 };
 
 const renderValidationButton = (color) => {
   return (
     <SubmitButton
-    className="mt-4"
+      className="mt-4"
       onClick={() => handleValidationClicked()}
       style={{
         backgroundColor: color,
@@ -106,6 +134,7 @@ const iconClasses = classNames(
 
 export {
   renderThresholdField,
+  renderClientDataButton,
   renderValidationButton,
   contentContainer,
   iconClasses,

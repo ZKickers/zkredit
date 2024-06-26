@@ -26,11 +26,6 @@ router.post('/', verifyToken, async (req, res) => {
         }
         await validateTx(txId, accepted);
         res.status(200).json({ message: 'Transaction updated successfully' });
-    // if (accepted) {
-    //     res.status(200).json({ message: 'Transaction updated successfully' });
-    // } else {
-    //     res.status(200).json({ message: 'Transaction update failed ' });
-    // }
     }catch (error) {
         console.error('Error validate transaction:', error);
         res.status(500).json({ message: 'Transaction update failed ' });

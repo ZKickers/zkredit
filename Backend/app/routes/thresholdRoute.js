@@ -1,11 +1,9 @@
-const fs_extra = require('fs-extra');
 const express = require('express');
 const router = express.Router();
 const verifyToken = require('../Services/authMiddleware');
 const Transaction = require('../models/Transaction');
 const { handleThresholdEvent } = require('../Services/thresholdHandler');
-const index = __dirname.indexOf("/routes");
-const PROOFS_PATH = __dirname.substring(0, index) + "/proofs/"
+
 
 const validateParams = (req, res, next) => {
     const requiredParams = ["txId", "threshold"];
@@ -20,7 +18,8 @@ router.post('/trigger-threshold', verifyToken, validateParams, async (req, res) 
     try {
         const { txId, threshold } = req.body;
         const transaction = await Transaction.findById(txId);
-        if (!(threshold >= 0 && threshold <= 65535))
+        console.log(transaction)
+        if (!(threshold >= 0 && threshold <= 850))
         {
             return res.status(403).send("Threshold is not within (0-65535)")
         }
@@ -33,18 +32,12 @@ router.post('/trigger-threshold', verifyToken, validateParams, async (req, res) 
         }
         if(transaction.status != "Pending_Threshold")
         {
+            console.log(transaction.status )
             return res.status(403).send('Transaction is not Pending_Threshold');
         }
-        await handleThresholdEvent(req.user.accountId, transaction, threshold)
-        const filePath = PROOFS_PATH + transaction._id.toString() + "/proof.json"
-        await res.status(200).download(filePath);
-        await fs_extra.remove(PROOFS_PATH + transaction._id.toString(), (err) => {
-                if (err) {
-                    console.error('Error removing directory:', err);
-                } else {
-                    console.log('Directory removed successfully');
-                }
-            });
+        updatedTransaction = await handleThresholdEvent(transaction, threshold)
+        console.log(updatedTransaction)
+        res.status(200).json(updatedTransaction);
     } catch (error) {
         console.error('Error triggering threshold event:', error);
         res.status(500).json({ error: 'Internal server error' });

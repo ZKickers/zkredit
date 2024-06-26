@@ -22,3 +22,22 @@
 .height-60 {
   height: 60vh;
 }
+
+.reload-button {
+  border-color: #666666;
+  width: 35px; /* Set width */
+  height: 35px; /* Set height */
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+  border-radius: 50%; /* Make it a circle */
+  display: flex; /* Flex display to center the icon */
+  align-items: center; /* Center the icon vertically */
+  justify-content: center; /* Center the icon horizontally */
+}
+
+.reload-button:hover {
+  background-color: #b3b3b3; /* Lighter grey on hover */
+}
+
+.reload-button:active {
+  background-color: #666666; /* Darker grey on click */
+}

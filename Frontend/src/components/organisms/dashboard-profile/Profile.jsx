@@ -1,10 +1,10 @@
 import "./Profile.css";
-import AuthContext from "store/auth-context";
-import { useContext } from "react";
+import { useSelector } from "react-redux";
+
 
 export default function Profile() {
-  const auth = useContext(AuthContext);
-  const originalDate = new Date(auth.createdAt);
+  const user = useSelector((state) => state.user);
+  const originalDate = new Date(user.createdAt);
   const formattedDate = `${originalDate.getMonth() + 1}/${originalDate.getDate()}/${originalDate.getFullYear()}`;
   
 
@@ -12,7 +12,7 @@ export default function Profile() {
     <div className="profile d-flex flex-column w-100">
       <div className="profile-header">
         <div className="profile-header-text">
-          <h1 className="fs-1">{auth.username}</h1>
+          <h1 className="fs-1">{user.username}</h1>
           <h2 className="fs-5">
             Joined <span className="fw-bold">ZKredit</span> on{" "}
             <span className="fw-bold">{formattedDate}</span>

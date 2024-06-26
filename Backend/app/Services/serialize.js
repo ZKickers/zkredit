@@ -1,36 +1,25 @@
 const fs = require("fs")
-const path = require("path")
-const NAME_MAX = 70
-const ADDRESS_MAX = 100
+const path = require("path");
+const { DATA_BYTES } = require("../../config");
+
+
 
 function serializeResponse(apiResponse) {
+  console.log("Serializing Response")
   // Extract relevant fields from the API response
-  // const { fullname, address, birthdate, ssn, score, signature } = apiResponse;
-  address =  "123 Oak Saint Anytown, WI. 1111";
-  birthdate =  "02-07-2001";
-  fullname = "John Q. Doe";
-  ssn = "210734803";
-  score = 850;
-  signature = {'R': ["24287f104fa8e92cc6379234ff6ae148f478af5b701c34ed573a01cc3b662f10","2076bcd6ea13565ab2d0290d8b0ced81f2289e28c02e9ae843fdab56147a72a5"], 'S':"2b07d92dada2d51d8231642762c3000e2f1e31e7f6f26de273bd4a282c90d166"}
-
-  // console.log("looooooool")
-  // console.log(signature.R)
-  // console.log(signature.S)
+  const { fullname, address, birthdate, ssn, score, timestamp, signature } = apiResponse;
   const response = {
-      name: serializePadded(fullname,NAME_MAX),
-      address: serializePadded(address,ADDRESS_MAX),
+      name: serializePadded(fullname,DATA_BYTES.name),
+      address: serializePadded(address,DATA_BYTES.address),
       birthdate: [...birthdate].map(char => char.charCodeAt(0).toString()),
       ssn: [...ssn].map(char => char.charCodeAt(0).toString()),
-      score:  [(score >> 8).toString(), (score & 0xFF).toString()],
+      score:  intToBytes(score, DATA_BYTES.score),
+      timestamp: intToBytes(timestamp, DATA_BYTES.timestamp),
       sig: {
         R: signature.R.map(big => BigInt('0x' + big).toString()),
         S: BigInt('0x' + signature.S).toString()
       }
     };
-    console.log("TAHHHHAAAA")
-    console.log(signature.R.map(big => BigInt('0x' + big).toString()))
-    console.log(BigInt('0x' + signature.S).toString())
-    
     return response;
 }
 
@@ -38,8 +27,8 @@ function serializeClientData(clientInput) {
   // Extract relevant fields from the API response
   const { fullname, address, birthdate, ssn } = clientInput;
   const clientData = {
-    name: serializePadded(fullname,NAME_MAX),
-    address: serializePadded(address,ADDRESS_MAX),
+    name: serializePadded(fullname,DATA_BYTES.name),
+    address: serializePadded(address,DATA_BYTES.address),
     birthdate: [...birthdate].map(char => char.charCodeAt(0).toString()),
     ssn: [...ssn].map(char => char.charCodeAt(0).toString()),
   }
@@ -89,6 +78,17 @@ function serializeThreshold(thresh) {
   return [mostSignificantPart.toString(), leastSignificantPart.toString()];
 }
 
+function intToBytes(intVal,bytesCount) {
+    var byteArray = new Array(bytesCount);
+
+    for ( var i = bytesCount - 1; i >= 0; i-- ) {
+        var byte = intVal & 0xff;
+        byteArray[i] = byte.toString();
+        intVal = (intVal - byte) / 256;
+    }
+
+    return byteArray;
+};
   
 // Export the function to be used in other files
 module.exports = {

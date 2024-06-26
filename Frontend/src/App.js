@@ -3,11 +3,20 @@ import { NavigationProvider } from "contexts/NavigationContext";
 import LandingPage from "pages/landing-page/LandingPage";
 import DashboardPage from "pages/dashboard-page/DashboardPage";
 import ProofsPage from "pages/proofs-page/ProofsPage";
-import AuthContext from "store/auth-context";
-import { useContext, useEffect } from "react";
+import useGetUser from "API/useGetUser";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 export default function App() {
-  const auth = useContext(AuthContext);
+  const getUser = useGetUser();
+  const user = useSelector((state) => state.user);
+  console.log(user);
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      sessionStorage.setItem("token", localStorage.getItem("token"));
+      getUser();
+    }
+  }, []);
 
   return (
     <NavigationProvider>
@@ -15,13 +24,16 @@ export default function App() {
         <LandingPage />
       </Route>
       <Route routePath={"/"}>
-        {(auth.isLoggedIn && <DashboardPage />) || <LandingPage />}
+        {(user.isLoggedIn && <DashboardPage />) || <LandingPage />}
       </Route>
       <Route routePath={"/dashboard"}>
-        {(auth.isLoggedIn && <DashboardPage />) || <LandingPage />}
+        {(user.isLoggedIn && <DashboardPage />) || <LandingPage />}
       </Route>
-      <Route routePath={"/proofs"}>
-        <ProofsPage />
+      <Route routePath={"/received"}>
+        {(user.isLoggedIn && <ProofsPage isCreditor={true} />) || <LandingPage />}
+      </Route>
+      <Route routePath={"/sent"}>
+        {(user.isLoggedIn && <ProofsPage isCreditor={false} />) || <LandingPage />}
       </Route>
     </NavigationProvider>
   );
