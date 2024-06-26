@@ -5,6 +5,7 @@ import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { DataThresholdingIcon } from "assets";
 import { generateProof, sendThreshold } from "API/proofsAPIs";
 import ProofModal from "components/organisms/proof-modal/ProofModal";
+import ClientRequestForm from "components/organisms/client-request-form/ClientRequestForm";
 
 const renderThresholdField = ({ color, txId }) => {
   const [threshold, setThreshold] = useState(0);
@@ -113,6 +114,30 @@ const renderProofModal = ({ showProof, setShowProof, proof }) => {
     <ModalPage show={showProof} handleClose={() => setShowProof(false)}>
       <ProofModal proof={proof} handleClose={() => setShowProof(false)} />
     </ModalPage>
+      );
+    };
+const renderClientDataButton = (color, txId) => {
+  const [showForm, setShowForm] = useState(false);
+
+  return (
+    <>
+      <SubmitButton
+        className="mt-4"
+        onClick={() => setShowForm(true)}
+        style={{
+          backgroundColor: color,
+          width: "100%",
+          height: "75px",
+          fontSize: "24px",
+          borderRadius: "10px",
+        }}
+      >
+        Send Your Data
+      </SubmitButton>
+      <ModalPage show={showForm} handleClose={() => setShowForm(false)}>
+        <ClientRequestForm handleClose={() => setShowForm(false)} txId={txId} />
+      </ModalPage>
+    </>
   );
 };
 
@@ -165,6 +190,7 @@ export {
   renderGetProofButton,
   renderShowProofButton,
   renderProofModal,
+  renderClientDataButton,
   renderValidationButton,
   contentContainer,
   iconClasses,

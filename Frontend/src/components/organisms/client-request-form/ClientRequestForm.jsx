@@ -12,17 +12,15 @@ import { ClientRequestValidationSchema } from "utils/validators/ClientRequestVal
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { toast, ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
-import { useAddTransactionMutation } from "store";
+import useClientRequest from "API/useClientRequest";
 
-//  Sample JSON data for the form{
-//   "fullname": "John Q. Doe",
-//   "creditorUserName": "joe",
+//  Sample JSON data for the form {
 //   "address": "123 Oak Saint Anytown, WI. 1111",
 //   "birthdate": "02-07-2001",
 //   "ssn": "210734803"
 // }
 
-export default function ClientRequestForm({ handleClose }) {
+export default function ClientRequestForm({ handleClose, txId }) {
   const {
     register,
     handleSubmit,
@@ -33,24 +31,11 @@ export default function ClientRequestForm({ handleClose }) {
     clearErrors,
   } = useForm({ resolver: yupResolver(ClientRequestValidationSchema) });
 
-  const user = useSelector((state) => state.user);
-
-  const [addTransaction, results] = useAddTransactionMutation();
+  const postClientData = useClientRequest();
 
   const onRequestSubmit = async (data) => {
-    //create json object from form data
-    const jsonData = {
-      creditorUsername: data.creditorUserName,
-      username: user.username,
-      ...data,
-    };
-
-    const response = await addTransaction({
-      token: user.token,
-      data: jsonData,
-    });
+    const response = await postClientData({ ...data, txId });
     console.log(response);
-
     try {
       toast.success("Request initiated successfully!", {
         autoClose: 3000,
@@ -63,8 +48,6 @@ export default function ClientRequestForm({ handleClose }) {
     }
 
     //clear form
-    setValue("fullname", "");
-    setValue("creditorUserName", "");
     setValue("address", "");
     setValue("birthdate", "");
     setValue("ssn", "");
@@ -96,48 +79,6 @@ export default function ClientRequestForm({ handleClose }) {
             Fill in the necessary data. Please be advised your data will be
             reviewed by a credit bureau.
           </h4>
-        </div>
-        <div className="row mt-3 mx-auto w-100">
-          <TextField
-            label="Full Name"
-            variant="outlined"
-            fullWidth
-            {...register("fullname")}
-            error={!!errors.fullname}
-            helperText={errors.fullname?.message || ""}
-            InputLabelProps={{ style: textStyle }}
-            InputProps={{
-              style: { borderRadius: "14px", ...textStyle },
-              startAdornment: (
-                <img
-                  src={signatureIcon}
-                  alt="signature-icon"
-                  style={{ marginRight: "10px", ...textStyle }}
-                />
-              ),
-            }}
-          />
-        </div>
-        <div className="row mt-3 mx-auto w-100">
-          <TextField
-            label="Creditor Username"
-            variant="outlined"
-            fullWidth
-            {...register("creditorUserName")}
-            error={!!errors.creditorUserName}
-            helperText={errors.creditorUserName?.message || ""}
-            InputLabelProps={{ style: textStyle }}
-            InputProps={{
-              style: { borderRadius: "14px", ...textStyle },
-              startAdornment: (
-                <img
-                  src={maskIcon}
-                  alt="mask-icon"
-                  style={{ marginRight: "10px", ...textStyle }}
-                />
-              ),
-            }}
-          />
         </div>
         <div className="row mt-3 mx-auto w-100">
           <TextField

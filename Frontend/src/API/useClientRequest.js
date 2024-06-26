@@ -1,7 +1,7 @@
 import axiosInstance from "./axios";
 
 const useClientRequest = () => {
-  const url = '/ClientRequest';
+  const url = '/ClientRequest/generate-proof';
 
   const clientRequest = async (data) => {
     const response = await axiosInstance.post(
