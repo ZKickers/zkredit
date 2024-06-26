@@ -163,10 +163,12 @@ export default function TxCard(props) {
             Status: <span style={{ color: color }}>{statusText}</span>
           </h3>
           {state.Pending_Threshold && renderThresholdField({ color, txId })}
+          {state.Pending_Client_Data && renderClientDataButton(color, txId )}
           {state.Pending_Proof && renderGetProofButton({ color, txId })}
           {proof && renderShowProofButton(color)}
           {proof && renderProofModal({ showProof, setShowProof, proof })}
           {proof && renderValidationButton(color)}
+
         </div>
       </div>
       <div className={iconClasses}>

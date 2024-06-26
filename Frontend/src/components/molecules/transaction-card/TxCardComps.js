@@ -6,6 +6,7 @@ import { DataThresholdingIcon } from "assets";
 import { generateProof, sendThreshold } from "API/proofsAPIs";
 import ProofModal from "components/organisms/proof-modal/ProofModal";
 import ClientRequestForm from "components/organisms/client-request-form/ClientRequestForm";
+import ModalPage from "pages/modal-page/ModalPage";
 
 const renderThresholdField = ({ color, txId }) => {
   const [threshold, setThreshold] = useState(0);
@@ -114,8 +115,8 @@ const renderProofModal = ({ showProof, setShowProof, proof }) => {
     <ModalPage show={showProof} handleClose={() => setShowProof(false)}>
       <ProofModal proof={proof} handleClose={() => setShowProof(false)} />
     </ModalPage>
-      );
-    };
+  );
+};
 const renderClientDataButton = (color, txId) => {
   const [showForm, setShowForm] = useState(false);
 
