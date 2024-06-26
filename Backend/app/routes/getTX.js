@@ -22,9 +22,6 @@ router.get("/client/", verifyToken, async (req, res) => {
 
 router.get("/creditor/", verifyToken, async (req, res) => {
   try {
-    // if (req.user.accountId !== req.params.clientId) {
-    //     return res.status(403).send('Forbidden: You are not authorized to view this transactions');
-    // }
     const transactions = await Transaction.find({
       creditorAccountId: req.user.accountId,
     });
