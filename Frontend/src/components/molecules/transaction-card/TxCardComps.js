@@ -3,7 +3,7 @@ import { useState } from "react";
 import { TextField } from "@mui/material";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { DataThresholdingIcon } from "assets";
-import { generateProof, sendThreshold } from "API/proofsAPIs";
+import { getProof, sendThreshold } from "API/proofsAPIs";
 import ProofModal from "components/organisms/proof-modal/ProofModal";
 import ClientRequestForm from "components/organisms/client-request-form/ClientRequestForm";
 import ModalPage from "pages/modal-page/ModalPage";
@@ -66,11 +66,11 @@ const renderThresholdField = ({ color, txId }) => {
   );
 };
 
-const renderGetProofButton = (color, txId) => {
+const renderGetProofButton = (color, txId, setProof) => {
   return (
     <SubmitButton
       className="mt-4"
-      onClick={() => handleGetProofClicked(txId)}
+      onClick={() => handleGetProofClicked(txId, setProof)}
       style={{
         backgroundColor: color,
         width: "100%",
@@ -84,15 +84,14 @@ const renderGetProofButton = (color, txId) => {
   );
 };
 
-const handleGetProofClicked = async (color, txId) => {
+const handleGetProofClicked = async (txId, setProof) => {
   console.log(`Attempting to get proof for tx with ID ${txId}`);
-  const { scheme, curve, proof } = await generateProof(txId);
+  const proof = await getProof(txId);
 
-  // TODO: Add a toast/feedback to show that the proof has been loaded.
   setProof(proof);
 };
 
-const renderShowProofButton = (color) => {
+const renderShowProofButton = (color, setShowProof) => {
   return (
     <SubmitButton
       className="mt-4"

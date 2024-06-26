@@ -22,7 +22,7 @@ export default function Transaction({
     Declined: transactionState === TransactionStateEnum.FAIL,
     Pending:
       transactionState === TransactionStateEnum.PENDING_THRESHOLD ||
-      transactionState === TransactionStateEnum.PENDING_VALIDATION ||
+      transactionState === TransactionStateEnum.PENDING_VERIFICATION ||
       transactionState === TransactionStateEnum.PENDING_PROOF ||
       transactionState === TransactionStateEnum.PENDING_CLIENT_DATA,
   };
@@ -39,8 +39,8 @@ export default function Transaction({
       case "Pending_Threshold":
         setTransactionState(TransactionStateEnum.PENDING_THRESHOLD);
         break;
-      case "Pending_Validation":
-        setTransactionState(TransactionStateEnum.PENDING_VALIDATION);
+      case "Pending_Verification":
+        setTransactionState(TransactionStateEnum.PENDING_VERIFICATION);
         break;
       case "Pending_Client_Data":
         setTransactionState(TransactionStateEnum.PENDING_CLIENT_DATA);

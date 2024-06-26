@@ -43,11 +43,10 @@ export const sendThreshold = async ({ threshold, txId }) => {
   return response.data; // * May not return any data.
 };
 
-export const generateProof = async (txId) => {
-  const url = `/get-proof`; // TODO: SUPPLY THIS WITH THE CORRECT API CALL
-  const data = { txId };
+export const getProof = async (txId) => {
+  const url = `/getProof/${txId}`;
 
-  const response = await axiosInstance.post(url, data).catch((error) => {
+  const response = await axiosInstance.get(url).catch((error) => {
     console.log(error);
     throw new Error(
       `Encountered an error while fetching the proof associated with tx ID ${txId}`

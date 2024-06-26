@@ -30,20 +30,20 @@ export default function TxCard(props) {
   const [showProof, setShowProof] = useState(null);
 
   const state = {
-    Verified: transactionState === TransactionStateEnum.SUCCESS,
-    Declined: transactionState === TransactionStateEnum.FAIL,
     Pending_Threshold:
       transactionState === TransactionStateEnum.PENDING_THRESHOLD,
-    Pending_Validation:
-      transactionState === TransactionStateEnum.PENDING_VALIDATION,
-    Pending_Proof: transactionState === TransactionStateEnum.PENDING_PROOF,
     Pending_Client_Data:
       transactionState === TransactionStateEnum.PENDING_CLIENT_DATA,
+    Pending_Proof: transactionState === TransactionStateEnum.PENDING_PROOF,
+    Pending_Verification:
+      transactionState === TransactionStateEnum.PENDING_VERIFICATION,
+    Verified: transactionState === TransactionStateEnum.SUCCESS,
+    Declined: transactionState === TransactionStateEnum.FAIL,
   };
 
   const pending =
     state.Pending_Threshold ||
-    state.Pending_Validation ||
+    state.Pending_Verification ||
     state.Pending_Proof ||
     state.Pending_Client_Data;
 
@@ -51,7 +51,7 @@ export default function TxCard(props) {
     Verified: state.Verified,
     Declined: state.Declined,
     "Pending Threshold": state.Pending_Threshold,
-    "Pending Validation": state.Pending_Validation,
+    "Pending Verification": state.Pending_Verification,
     "Pending Proof": state.Pending_Proof,
     "Pending Client Data": state.Pending_Client_Data,
   });
@@ -94,13 +94,13 @@ export default function TxCard(props) {
   // }, [thresholdError]);
 
   useEffect(() => {
-    if (proof != null) {
-      // TODO:: set UI to be pending the verification
-      console.log("proof is valid");
-      console.log(proof);
-      setTransactionState(TransactionStateEnum.PENDING_VALIDATION);
-      verify(proof);
-    }
+    // if (proof != null) {
+    //   // TODO:: set UI to be pending the verification
+    //   console.log("proof is valid");
+    //   console.log(proof);
+    //   setTransactionState(TransactionStateEnum.PENDING_VALIDATION);
+    //   verify(proof);
+    // }
   }, [proof]);
 
   const sendProofStatusHandler = async (verificationResult) => {
@@ -163,12 +163,13 @@ export default function TxCard(props) {
             Status: <span style={{ color: color }}>{statusText}</span>
           </h3>
           {state.Pending_Threshold && renderThresholdField({ color, txId })}
-          {state.Pending_Client_Data && renderClientDataButton(color, txId )}
-          {state.Pending_Proof && renderGetProofButton({ color, txId })}
-          {proof && renderShowProofButton(color)}
+          {state.Pending_Client_Data && renderClientDataButton(color, txId)}
+          {state.Pending_Verification &&
+            !proof &&
+            renderGetProofButton(color, txId, setProof)}
+          {proof && renderShowProofButton(color, setShowProof)}
           {proof && renderProofModal({ showProof, setShowProof, proof })}
           {proof && renderValidationButton(color)}
-
         </div>
       </div>
       <div className={iconClasses}>
