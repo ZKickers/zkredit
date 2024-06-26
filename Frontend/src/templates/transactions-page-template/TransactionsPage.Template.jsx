@@ -15,9 +15,12 @@ import { useEffect, useState } from "react";
 import classNames from "classnames";
 import TxCard from "components/molecules/transaction-card/TxCard";
 import { useSelector } from "react-redux";
+import TransactionStateEnum from "utils/TransactionStateEnum";
+import { updateTransactionStatus as creditorUpdateStatus } from "../../redux/creditorTransactionSlice";
+import { updateTransactionStatus as clientUpdateStatus } from "../../redux/clientTransactionSlice";
 
 export default function TPTemplate({ isCreditor }) {
-  const [txCard, setTxCard] = useState();
+  const [currentTx, setCurrentTx] = useState(null);
 
   const handleGoBack = () => {
     window.history.back();
@@ -28,7 +31,10 @@ export default function TPTemplate({ isCreditor }) {
     isCreditor ? state.creditorTransactions : state.clientTransactions
   );
 
-  const renderCard = (props) => setTxCard(<TxCard {...props} />);
+  const renderCard = (txId) => {
+    setCurrentTx(transactions.transactions.find((tx) => tx._id === txId));
+    console.log(transactions.transactions.find((tx) => tx._id === txId));
+  };
 
   const fetchTransactions = useFetchTransactions();
   const loadTx = () => {
@@ -43,6 +49,12 @@ export default function TPTemplate({ isCreditor }) {
       loadTx();
     }
   }, []);
+
+  useEffect(() => {
+    if (currentTx) {
+      renderCard(currentTx._id);
+    }
+  }, [transactions]);
 
   const renderContent = () => {
     if (transactions.status === "loading") {
@@ -60,14 +72,43 @@ export default function TPTemplate({ isCreditor }) {
         txId={tx._id}
         clientFullName={tx.fullNameOfClient}
         isClient={!isCreditor}
-        creditorId={tx.creditorAccountId}
         creditorUsername={tx.creditorUsername}
         updateDate={tx.updatedAt}
-        status={tx.status}
+        status={mapStatusToEnum(tx.status)}
         isButton
         renderCard={renderCard}
       />
     ));
+  };
+
+  const mapStatusToEnum = (status) => {
+    switch (status) {
+      case "Success" || TransactionStateEnum.SUCCESS:
+        return TransactionStateEnum.SUCCESS;
+      case "Fail" || TransactionStateEnum.FAIL:
+        return TransactionStateEnum.FAIL;
+      case "Pending_Threshold" || TransactionStateEnum.PENDING_THRESHOLD:
+        return TransactionStateEnum.PENDING_THRESHOLD;
+      case "Pending_Verification" || TransactionStateEnum.PENDING_VERIFICATION:
+        return TransactionStateEnum.PENDING_VERIFICATION;
+      case "Pending_Client_Data" || TransactionStateEnum.PENDING_CLIENT_DATA:
+        return TransactionStateEnum.PENDING_CLIENT_DATA;
+      case "Insufficient" || TransactionStateEnum.INSUFFICIENT:
+        return TransactionStateEnum.INSUFFICIENT;
+    }
+  };
+  const setCurrentTxStatus = (status) => {
+    if (isCreditor) {
+      creditorUpdateStatus({
+        id: currentTx._id,
+        status: status,
+      });
+    } else {
+      clientUpdateStatus({
+        id: currentTx._id,
+        status: status,
+      });
+    }
   };
 
   return (
@@ -85,7 +126,19 @@ export default function TPTemplate({ isCreditor }) {
       </PageHeader>
       <div className={pageClasses}>
         <div className={leftClasses}>
-          <div className={classNames(txBox, "h-100")}>{txCard}</div>
+          <div className={classNames(txBox, "h-100")}>
+            {currentTx && (
+              <TxCard
+                txId={currentTx._id}
+                updateDate={currentTx.updatedAt}
+                isClient={!isCreditor}
+                creditorUsername={currentTx.creditorUsername}
+                clientFullName={currentTx.fullNameOfClient}
+                transactionState={mapStatusToEnum(currentTx.status)}
+                setTransactionState={setCurrentTxStatus}
+              />
+            )}
+          </div>
         </div>
         <div className={rightClasses}>
           <div className="d-flex align-items-center">

@@ -12,6 +12,8 @@ const useClientRequest = () => {
       // TODO add snakebar
     });
     return response;
+    // TODO add snakebar with response.data.message
+    // TODO add the response.data.transaction to the redux store 
   };
 
   return clientRequest;

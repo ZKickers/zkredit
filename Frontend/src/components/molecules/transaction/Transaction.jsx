@@ -3,67 +3,29 @@ import "./Transaction.css";
 import { LockIcon, LockOpenIcon, CloseIcon } from "assets";
 import { datePrettier } from "./datePrettier";
 import TransactionStateEnum from "utils/TransactionStateEnum";
-import { useState, useEffect } from "react";
 
 export default function Transaction({
   txId,
   clientFullName,
   isClient,
-  creditorId,
   creditorUsername,
   updateDate,
   status,
   isButton,
   renderCard,
 }) {
-  const [transactionState, setTransactionState] = useState(null);
   const state = {
-    Verified: transactionState === TransactionStateEnum.SUCCESS,
-    Declined: transactionState === TransactionStateEnum.FAIL,
-    Pending_Threshold:
-      transactionState === TransactionStateEnum.PENDING_THRESHOLD,
-    Pending_Client_Data:
-      transactionState === TransactionStateEnum.PENDING_CLIENT_DATA,
-    Pending_Proof: transactionState === TransactionStateEnum.PENDING_PROOF,
-    Pending_Verification:
-      transactionState === TransactionStateEnum.PENDING_VERIFICATION,
+    Verified: status === TransactionStateEnum.SUCCESS,
+    Declined: status === TransactionStateEnum.FAIL,
+    Pending_Threshold: status === TransactionStateEnum.PENDING_THRESHOLD,
+    Pending_Client_Data: status === TransactionStateEnum.PENDING_CLIENT_DATA,
+    Pending_Proof: status === TransactionStateEnum.PENDING_PROOF,
+    Pending_Verification: status === TransactionStateEnum.PENDING_VERIFICATION,
   };
-  useEffect(() => {
-    switch (status) {
-      case "Success":
-        setTransactionState(TransactionStateEnum.SUCCESS);
-        // TODO:: need to check the result and set it SUCCESS or FAIL
-        break;
-      case "Fail":
-        setTransactionState(TransactionStateEnum.FAIL);
-        break;
-      case "Pending_Threshold":
-        setTransactionState(TransactionStateEnum.PENDING_THRESHOLD);
-        break;
-      case "Pending_Verification":
-        setTransactionState(TransactionStateEnum.PENDING_VERIFICATION);
-        break;
-      case "Pending_Client_Data":
-        setTransactionState(TransactionStateEnum.PENDING_CLIENT_DATA);
-        break;
-      case "Insufficient":
-        setTransactionState(TransactionStateEnum.INSUFFICIENT);
-        break;
-    }
-  }, [status]);
 
   const { formattedDate, formattedTime } = datePrettier(updateDate);
 
-  const handleShowCard = () =>
-    renderCard({
-      txId,
-      isClient,
-      date: `${formattedDate} ${formattedTime}`,
-      creditorUsername,
-      clientFullName,
-      transactionState,
-      setTransactionState,
-    });
+  const handleShowCard = () => renderCard(txId);
   const base = "tx row container w-100 p-md-2 p-sm-3 my-md-1 my-sm-3";
   const classes = classNames(base, {
     "tx-verified": state.Verified,
@@ -90,7 +52,7 @@ export default function Transaction({
     "#FFB800": state.Pending_Threshold,
     "#33A1DE": state.Pending_Verification,
     "#8E44AD": state.Pending_Proof,
-    "#F39C12": state.Pending_Client_Data,
+    "#F09C52": state.Pending_Client_Data,
   });
 
   const iconStyle = {

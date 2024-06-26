@@ -71,7 +71,6 @@ export default function DashboardPageTemplate() {
         txId={tx._id}
         clientFullName={tx.fullNameOfClient}
         isClient={tx.isClient}
-        creditorId={tx.creditorAccountId}
         creditorUsername={tx.creditorUsername}
         updateDate={tx.updatedAt}
         status={tx.status}

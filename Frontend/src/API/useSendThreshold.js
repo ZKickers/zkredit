@@ -1,6 +1,6 @@
 import axiosInstance from "./axios";
 import { useDispatch } from "react-redux";
-import { updateTransaction } from "../redux/creditorTransactionSlice";
+import { updateTransactionStatus } from "../redux/creditorTransactionSlice";
 
 const useSendThreshold = () => {
   const url = "/Creditor/trigger-threshold";
@@ -20,9 +20,9 @@ const useSendThreshold = () => {
     }
     // dispatch the update
     dispatch(
-      updateTransaction({
+      updateTransactionStatus({
         id: txId,
-        updates: response.data,
+        status: response.data.status,
       })
     );
   };

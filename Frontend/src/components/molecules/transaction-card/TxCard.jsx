@@ -15,11 +15,12 @@ import {
 import { validateProof } from "API/proofsAPIs";
 import useVerify from "utils/useVerify";
 import TransactionStateEnum from "utils/TransactionStateEnum";
+import { datePrettier } from "../transaction/datePrettier";
 
 export default function TxCard(props) {
   const {
     txId,
-    date,
+    updateDate,
     isClient,
     creditorUsername,
     clientFullName,
@@ -42,6 +43,8 @@ export default function TxCard(props) {
     Declined: transactionState === TransactionStateEnum.FAIL,
   };
 
+  const { formattedDate, formattedTime } = datePrettier(updateDate);
+
   const pending =
     state.Pending_Threshold ||
     state.Pending_Verification ||
@@ -63,7 +66,7 @@ export default function TxCard(props) {
     "#FFB800": state.Pending_Threshold,
     "#33A1DE": state.Pending_Verification,
     "#8E44AD": state.Pending_Proof,
-    "#F39C12": state.Pending_Client_Data,
+    "#F09C52": state.Pending_Client_Data,
   });
 
   const iconStyle = { color: "white", fontSize: "160px" };
@@ -120,7 +123,6 @@ export default function TxCard(props) {
     }
   }, [isVerified, verificationResult]);
 
-
   useEffect(() => {
     if (verificationError) {
       alert(verificationError);
@@ -134,7 +136,7 @@ export default function TxCard(props) {
       <div className={contentContainer}>
         <div className="w-100" style={{ height: "fit-content" }}>
           <h1 style={{ color: color, fontSize: "36px", fontWeight: "bold" }}>
-            {date}
+            {formattedDate}" "{formattedTime}
           </h1>
           <h2 style={{ fontSize: "24px", fontWeight: "400" }}>
             Creditor Username: &nbsp;
