@@ -59,6 +59,7 @@ export default function TPTemplate({ isCreditor }) {
         key={tx._id}
         txId={tx._id}
         clientFullName={tx.fullNameOfClient}
+        isClient={!isCreditor}
         creditorId={tx.creditorAccountId}
         creditorUsername={tx.creditorUsername}
         updateDate={tx.updatedAt}

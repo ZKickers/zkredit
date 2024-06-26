@@ -20,6 +20,7 @@ export default function TxCard(props) {
   const {
     txId,
     date,
+    isClient,
     creditorUsername,
     clientFullName,
     transactionState,
@@ -146,14 +147,23 @@ export default function TxCard(props) {
           >
             Status: <span style={{ color: color }}>{statusText}</span>
           </h3>
-          {state.Pending_Threshold && renderThresholdField({ color, txId })}
-          {state.Pending_Client_Data && renderClientDataButton(color, txId)}
-          {state.Pending_Verification &&
+          {isClient &&
+            state.Pending_Client_Data &&
+            renderClientDataButton(color, txId)}
+
+          {!isClient &&
+            state.Pending_Threshold &&
+            renderThresholdField({ color, txId })}
+
+          {!isClient &&
+            state.Pending_Verification &&
             !proof &&
             renderGetProofButton(color, txId, setProof)}
-          {proof && renderShowProofButton(color, setShowProof)}
-          {proof && renderProofModal({ showProof, setShowProof, proof })}
-          {proof && renderValidationButton(color)}
+          {!isClient && proof && renderShowProofButton(color, setShowProof)}
+          {!isClient &&
+            proof &&
+            renderProofModal({ showProof, setShowProof, proof })}
+          {!isClient && proof && renderValidationButton(color)}
         </div>
       </div>
       <div className={iconClasses}>
