@@ -144,11 +144,11 @@ const renderClientDataButton = (color, txId) => {
   );
 };
 
-const renderValidationButton = (color) => {
+const renderValidationButton = (color, handleVerification) => {
   return (
     <SubmitButton
       className="mt-4"
-      onClick={() => handleValidationClicked()}
+      onClick={() => handleVerification()}
       style={{
         backgroundColor: color,
         width: "100%",
@@ -160,11 +160,6 @@ const renderValidationButton = (color) => {
       Begin Proof Validation
     </SubmitButton>
   );
-};
-
-const handleValidationClicked = () => {
-  // TODO: SEND THE REQUEST TO THE BACKEND
-  console.log("Validation requested");
 };
 
 const contentContainer = classNames(

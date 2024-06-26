@@ -20,11 +20,13 @@ export default function Transaction({
   const state = {
     Verified: transactionState === TransactionStateEnum.SUCCESS,
     Declined: transactionState === TransactionStateEnum.FAIL,
-    Pending:
-      transactionState === TransactionStateEnum.PENDING_THRESHOLD ||
-      transactionState === TransactionStateEnum.PENDING_VERIFICATION ||
-      transactionState === TransactionStateEnum.PENDING_PROOF ||
+    Pending_Threshold:
+      transactionState === TransactionStateEnum.PENDING_THRESHOLD,
+    Pending_Client_Data:
       transactionState === TransactionStateEnum.PENDING_CLIENT_DATA,
+    Pending_Proof: transactionState === TransactionStateEnum.PENDING_PROOF,
+    Pending_Verification:
+      transactionState === TransactionStateEnum.PENDING_VERIFICATION,
   };
   useEffect(() => {
     switch (status) {
@@ -66,19 +68,29 @@ export default function Transaction({
   const classes = classNames(base, {
     "tx-verified": state.Verified,
     "tx-failed": state.Declined,
-    "tx-pending": state.Pending,
+    "tx-pending":
+      state.Pending_Client_Data ||
+      state.Pending_Proof ||
+      state.Pending_Threshold ||
+      state.Pending_Verification,
   });
 
   const statusText = classNames({
     Verified: state.Verified,
     Declined: state.Declined,
-    Pending: state.Pending,
+    "Pending Threshold": state.Pending_Threshold,
+    "Pending Verification": state.Pending_Verification,
+    "Pending Proof": state.Pending_Proof,
+    "Pending Client Data": state.Pending_Client_Data,
   });
 
   const color = classNames({
     "#009A2B": state.Verified,
     "#F62525": state.Declined,
-    "#FFB800": state.Pending,
+    "#FFB800": state.Pending_Threshold,
+    "#33A1DE": state.Pending_Verification,
+    "#8E44AD": state.Pending_Proof,
+    "#F39C12": state.Pending_Client_Data,
   });
 
   const iconStyle = {
@@ -92,7 +104,12 @@ export default function Transaction({
       return <LockIcon className="rounded-circle p-2" sx={iconStyle} />;
     if (state.Declined)
       return <CloseIcon className="rounded-circle p-2" sx={iconStyle} />;
-    if (state.Pending)
+    if (
+      state.Pending_Client_Data ||
+      state.Pending_Proof ||
+      state.Pending_Threshold ||
+      state.Pending_Verification
+    )
       return <LockOpenIcon className="rounded-circle p-2" sx={iconStyle} />;
   };
 

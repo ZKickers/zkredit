@@ -60,7 +60,10 @@ export default function TxCard(props) {
   const color = classNames({
     "#009A2B": state.Verified,
     "#F62525": state.Declined,
-    "#FFB800": pending,
+    "#FFB800": state.Pending_Threshold,
+    "#33A1DE": state.Pending_Verification,
+    "#8E44AD": state.Pending_Proof,
+    "#F39C12": state.Pending_Client_Data,
   });
 
   const iconStyle = { color: "white", fontSize: "160px" };
@@ -78,16 +81,6 @@ export default function TxCard(props) {
     error: verificationError,
   } = useVerify();
 
-  useEffect(() => {
-    // if (proof != null) {
-    //   // TODO:: set UI to be pending the verification
-    //   console.log("proof is valid");
-    //   console.log(proof);
-    //   setTransactionState(TransactionStateEnum.PENDING_VALIDATION);
-    //   verify(proof);
-    // }
-  }, [proof]);
-
   const sendProofStatusHandler = async (verificationResult) => {
     try {
       const response = await validateProof(txId, verificationResult);
@@ -97,9 +90,19 @@ export default function TxCard(props) {
     }
   };
 
+  const handleVerification = () => {
+    if (proof != null) {
+      verify(proof);
+    } else {
+      alert(
+        "Proof is not available, please provide proof to verify the transaction"
+      );
+    }
+  };
+
   useEffect(() => {
     if (isVerified && verificationResult != null) {
-      alert(verificationResult ? "Threshold reached" : "Threshold not reached");
+      //alert(verificationResult ? "Threshold reached" : "Threshold not reached");
       if (verificationResult) {
         setTransactionState(TransactionStateEnum.SUCCESS);
       } else {
@@ -117,9 +120,11 @@ export default function TxCard(props) {
     }
   }, [isVerified, verificationResult]);
 
+
   useEffect(() => {
     if (verificationError) {
       alert(verificationError);
+      // TODO:: snakebar
       sendProofStatusHandler(false);
     }
   }, [verificationError]);
@@ -163,7 +168,9 @@ export default function TxCard(props) {
           {!isClient &&
             proof &&
             renderProofModal({ showProof, setShowProof, proof })}
-          {!isClient && proof && renderValidationButton(color)}
+          {!isClient &&
+            proof &&
+            renderValidationButton(color, handleVerification)}
         </div>
       </div>
       <div className={iconClasses}>
