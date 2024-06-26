@@ -51,7 +51,7 @@ export default function TPTemplate({ isCreditor }) {
 
     if (transactions.error) {
       console.error(transactions.error);
-      content = <div>Error loading transactions...</div>;
+      return <div>Error loading transactions...</div>;
     }
 
     return transactions.transactions.map((tx) => (
@@ -60,6 +60,7 @@ export default function TPTemplate({ isCreditor }) {
         txId={tx._id}
         clientFullName={tx.fullNameOfClient}
         creditorId={tx.creditorAccountId}
+        creditorUsername={tx.creditorUsername}
         updateDate={tx.updatedAt}
         status={tx.status}
         isButton
