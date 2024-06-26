@@ -5,6 +5,7 @@ from "./concat.zok" import respConcat;
 from "./interface.zok" import Response,Signature;
 
 def verify<N>(field[2] R, field S, field[2] A, u8[N] M) -> bool{
+    log("M{}",M);
     u32[8] M0 = sha256(M);
     log("Hash{}",M0);
     u32[8] M1 = [0;8];

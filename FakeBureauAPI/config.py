@@ -1,6 +1,6 @@
 import re
 
-MSG_LIMITS = {
+MSG_BYTES_LIMITS = {
     "fullname": 70,
     "address": 100,
     "birthdate": 10,
@@ -9,9 +9,9 @@ MSG_LIMITS = {
     "timestamp" : 8
 }
 
-LAMBDA_MSG_LIMITS = {
-    "fullname": lambda x: len(x) <= 70,
-    "address": lambda x: len(x) <= 100,
+LAMBDA_MSG_HEX_CHECKS = {
+    "fullname": lambda hex_x: len(hex_x)//2 <= MSG_BYTES_LIMITS["fullname"],
+    "address": lambda hex_x: len(hex_x)//2 <= MSG_BYTES_LIMITS["address"],
     "birthdate": lambda x: re.compile(r'^\d{2}-\d{2}-\d{4}$').match(x),
     "ssn": lambda x: re.compile(r'^\d{9}$').match(x)
 }

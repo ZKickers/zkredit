@@ -3,7 +3,7 @@ import base64
 import textwrap
 import hashlib
 import time
-from config import LAMBDA_MSG_LIMITS, REQUEST_PARAMS, DEFAULT_SCORE
+from config import LAMBDA_MSG_HEX_CHECKS, REQUEST_PARAMS, DEFAULT_SCORE
 
 
 
@@ -32,7 +32,7 @@ def validate_data(request_data):
         return False
     for param in REQUEST_PARAMS:
         item = request_data[param]
-        if not item or not LAMBDA_MSG_LIMITS[param](item):
+        if not item or not LAMBDA_MSG_HEX_CHECKS[param](item):
             return False
     return True
 
@@ -51,24 +51,24 @@ def json_to_str(obj):
 def ascii_to_hex(text):
     return ''.join(format(ord(char), '02x') for char in text)
 
-def sha256Padded(msg):
-    input_bytes = msg.encode('utf-8')
+def sha256Padded(bytes):
     sha256_hash = hashlib.sha256()
-    sha256_hash.update(input_bytes)
+    sha256_hash.update(bytes)
     hash = sha256_hash.hexdigest()
     padded_hash = hash + '0' * 64
     return padded_hash
+
 
 def conc_msg(msg,limits):
     res = ""
     for key, value in msg.items():
         val = ""
         if isinstance(value, int):
-            val += int_to_ascii(value,limits[key])
+            val += int_to_hex(value,limits[key])
         elif isinstance(value, str):
-            val += value
-        while (len(val)<limits[key]):
-            val += '\0'
+            val += ascii_to_hex(value)
+            while (len(val)<limits[key] * 2):
+                val += '00'
         res += val
     return res
 
@@ -89,5 +89,24 @@ def get_report(user_data):
 
 def stick_ts(msg):
     msg['timestamp'] = int(time.time()*1000)
-    print(msg)
     return msg
+
+
+def hex_to_intArr(hex_str):
+    return [str(int(hex_str[i:i+2], 16)) for i in range(0, len(hex_str), 2)]
+
+def ascii_to_hex(ascii_char):
+    byte = ord(ascii_char)
+    hex_value = f'{byte:02x}'
+    return hex_value
+
+def int_to_hex(int_val, bytes_count):
+    hex_array = []
+    for i in range(bytes_count):
+        bytes_shifted = bytes_count - 1 - i
+        byte = (int_val >> (8 * bytes_shifted)) & 0xFF
+        hex_array.append(f'{byte:02x}')
+    return ''.join(hex_array)
+
+def ascii_to_hex(text):
+    return ''.join(format(ord(char), '02x') for char in text)

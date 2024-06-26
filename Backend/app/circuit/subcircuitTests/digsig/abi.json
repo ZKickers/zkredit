@@ -11,8 +11,7 @@
           100,
           10,
           9,
-          2,
-          8
+          2
         ],
         "members": [
           {
@@ -52,14 +51,6 @@
             "type": "array",
             "components": {
               "size": 2,
-              "type": "u8"
-            }
-          },
-          {
-            "name": "timestamp",
-            "type": "array",
-            "components": {
-              "size": 8,
               "type": "u8"
             }
           },
