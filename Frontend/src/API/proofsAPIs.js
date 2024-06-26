@@ -1,48 +1,5 @@
 import axiosInstance from "./axios";
 
-// ! An ignored part
-/*
-export const useSendThreshold = () => {
-  const url = "/Creditor/trigger-threshold";
-  const [proof, setProof] = useState(null);
-  const [error, setError] = useState(null);
-
-  const sendThreshold = async (threshold, txId) => {
-    try {
-      const response = await axiosInstance.post(url, {
-        threshold: threshold,
-        txId: txId,
-      });
-      if (response.status === 200) {
-        console.log(response);
-        setProof(response.data);
-      } else {
-        setError("Problem connecting with the server!");
-      }
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-  return { proof, error, sendThreshold };
-};
-*/
-
-export const sendThreshold = async ({ threshold, txId }) => {
-  const url = "/Creditor/trigger-threshold";
-  const data = { threshold, txId };
-
-  const response = await axiosInstance.post(url, data).catch((error) => {
-    console.log(error);
-    throw new Error(
-      `Encountered an error while setting the threshold associated with tx ID ${txId}`
-    );
-  });
-
-  console.log("Attempted a send threshold request. Response:\n", response);
-
-  return response.data; // * May not return any data.
-};
-
 export const getProof = async (txId) => {
   const url = `/getProof/${txId}`;
 
@@ -53,7 +10,7 @@ export const getProof = async (txId) => {
     );
   });
 
-  return response.data;
+  return response.data.proof;
 };
 
 export const validateProof = async ({ transactionId, isAccepted }) => {
