@@ -119,9 +119,7 @@ const renderProofModal = ({ showProof, setShowProof, proof }) => {
     </ModalPage>
   );
 };
-const renderClientDataButton = (color, txId) => {
-  const [showForm, setShowForm] = useState(false);
-
+const renderClientDataButton = (color, txId, showForm, setShowForm) => {
   return (
     <>
       <SubmitButton

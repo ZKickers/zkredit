@@ -12,9 +12,9 @@ const useVerify = () => {
 
   const verify = async (proof) => {
     let vk;
-    if(vkStore.vk !== null) {
+    if (vkStore.vk !== null) {
       vk = vkStore.vk;
-    }else{
+    } else {
       vk = await getVK();
     }
 
@@ -41,7 +41,13 @@ const useVerify = () => {
       });
   };
 
-  return { verify, isVerified, verificationResult, error };
+  const reset = () => {
+    setIsVerified(null);
+    setVerificationResult(null);
+    setError(null);
+  };
+
+  return { verify, isVerified, verificationResult, error, reset };
 };
 
 export default useVerify;

@@ -16,6 +16,7 @@ const TxCardButton = (props) => {
 
   const [proof, setProof] = useState(null);
   const [showProof, setShowProof] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
   // to verify the proof
   const {
@@ -23,7 +24,16 @@ const TxCardButton = (props) => {
     isVerified,
     verificationResult,
     error: verificationError,
+    reset: resetVerification,
   } = useVerify();
+
+  // Reset proof, verification result, and verification status when txId changes
+  useEffect(() => {
+    setProof(null);
+    setShowProof(null);
+    setShowForm(false);
+    resetVerification();
+  }, [txId]);
 
   useEffect(() => {
     if (isVerified && verificationResult != null) {
@@ -71,21 +81,32 @@ const TxCardButton = (props) => {
       );
     }
   };
+  console.log("isVerified", isVerified, verificationResult);
+  console.log("proof", !!proof);
+  console.log("isClient", isClient);
 
   if (isClient) {
-    if (state.Pending_Client_Data) return renderClientDataButton(color, txId);
+    if (state.Pending_Client_Data)
+      return renderClientDataButton(color, txId, showForm, setShowForm);
   } else {
     // creditor
     if (state.Pending_Threshold) return renderThresholdField({ color, txId });
     if (state.Pending_Verification) {
       if (!proof) return renderGetProofButton(color, txId, setProof);
       // if proof is available
+      if (isVerified === null || isVerified === false) {
+        console.log("isVerified", isVerified, verificationResult);
+        console.log("proof", !!proof);
+        return renderValidationButton(color, handleVerification);
+      }
+    }
+    if (proof && isVerified) {
+      // if proof is verified
       return (
-        <div>
+        <>
           {renderShowProofButton(color, setShowProof)}
           {renderProofModal({ showProof, setShowProof, proof })}
-          {renderValidationButton(color, handleVerification)}
-        </div>
+        </>
       );
     }
   }
