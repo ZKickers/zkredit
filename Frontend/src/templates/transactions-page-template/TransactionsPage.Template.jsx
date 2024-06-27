@@ -89,10 +89,12 @@ export default function TPTemplate({ isCreditor }) {
         return TransactionStateEnum.FAIL;
       case "Pending_Threshold" || TransactionStateEnum.PENDING_THRESHOLD:
         return TransactionStateEnum.PENDING_THRESHOLD;
-      case "Pending_Verification" || TransactionStateEnum.PENDING_VERIFICATION:
-        return TransactionStateEnum.PENDING_VERIFICATION;
       case "Pending_Client_Data" || TransactionStateEnum.PENDING_CLIENT_DATA:
         return TransactionStateEnum.PENDING_CLIENT_DATA;
+      case "Pending_Proof" || TransactionStateEnum.PENDING_PROOF:
+        return TransactionStateEnum.PENDING_PROOF;
+      case "Pending_Verification" || TransactionStateEnum.PENDING_VERIFICATION:
+        return TransactionStateEnum.PENDING_VERIFICATION;
       case "Insufficient" || TransactionStateEnum.INSUFFICIENT:
         return TransactionStateEnum.INSUFFICIENT;
     }

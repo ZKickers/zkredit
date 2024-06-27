@@ -30,11 +30,10 @@ export default function Transaction({
   const classes = classNames(base, {
     "tx-verified": state.Verified,
     "tx-failed": state.Declined,
-    "tx-pending":
-      state.Pending_Client_Data ||
-      state.Pending_Proof ||
-      state.Pending_Threshold ||
-      state.Pending_Verification,
+    "tx-pending-client-data": state.Pending_Client_Data,
+    "tx-pending-proof": state.Pending_Proof,
+    "tx-pending-threshold": state.Pending_Threshold,
+    "tx-pending-verification": state.Pending_Verification
   });
 
   const statusText = classNames({

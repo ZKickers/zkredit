@@ -1,21 +1,10 @@
 import classNames from "classnames";
 import "./TxCard.css";
 import { CloseIcon, LockIcon, LockOpenIcon } from "assets";
-import { useEffect, useState } from "react";
-import {
-  renderThresholdField,
-  renderGetProofButton,
-  renderShowProofButton,
-  renderProofModal,
-  renderValidationButton,
-  contentContainer,
-  iconClasses,
-  renderClientDataButton,
-} from "./TxCardComps";
-import { validateProof } from "API/proofsAPIs";
-import useVerify from "utils/useVerify";
+import { contentContainer, iconClasses } from "./TxCardComps";
 import TransactionStateEnum from "utils/TransactionStateEnum";
 import { datePrettier } from "../transaction/datePrettier";
+import TxCardButton from "./TxCardButton";
 
 export default function TxCard(props) {
   const {
@@ -28,9 +17,7 @@ export default function TxCard(props) {
     setTransactionState,
   } = props;
 
-  const [proof, setProof] = useState(null);
-  const [showProof, setShowProof] = useState(null);
-
+  // the state of the transaction in map form
   const state = {
     Pending_Threshold:
       transactionState === TransactionStateEnum.PENDING_THRESHOLD,
@@ -77,66 +64,12 @@ export default function TxCard(props) {
     else if (pending) return <LockOpenIcon sx={iconStyle} />;
   };
 
-  const {
-    verify,
-    isVerified,
-    verificationResult,
-    error: verificationError,
-  } = useVerify();
-
-  const sendProofStatusHandler = async (verificationResult) => {
-    try {
-      const response = await validateProof(txId, verificationResult);
-      alert(response);
-    } catch (error) {
-      alert(error);
-    }
-  };
-
-  const handleVerification = () => {
-    if (proof != null) {
-      verify(proof);
-    } else {
-      alert(
-        "Proof is not available, please provide proof to verify the transaction"
-      );
-    }
-  };
-
-  useEffect(() => {
-    if (isVerified && verificationResult != null) {
-      //alert(verificationResult ? "Threshold reached" : "Threshold not reached");
-      if (verificationResult) {
-        setTransactionState(TransactionStateEnum.SUCCESS);
-      } else {
-        setTransactionState(TransactionStateEnum.FAIL);
-      }
-      sendProofStatusHandler(true);
-      // TODO:: change the status of the transaction to verified and update the UI accordingly
-      // TODO:: send the proof to the backend to update the status of the transaction
-    } else if (isVerified === false) {
-      alert("Error verifying the proof, proof is invalid");
-      setTransactionState(TransactionStateEnum.INSUFFICIENT);
-      sendProofStatusHandler(false);
-      //TODO:: change the status of the transaction to inverified and update the UI accordingly
-      //TODO:: send the proof to the backend to update the status of the transaction
-    }
-  }, [isVerified, verificationResult]);
-
-  useEffect(() => {
-    if (verificationError) {
-      alert(verificationError);
-      // TODO:: snakebar
-      sendProofStatusHandler(false);
-    }
-  }, [verificationError]);
-
   return (
     <div className="row container-fluid h-100 p-4">
       <div className={contentContainer}>
         <div className="w-100" style={{ height: "fit-content" }}>
           <h1 style={{ color: color, fontSize: "36px", fontWeight: "bold" }}>
-            {formattedDate}" "{formattedTime}
+            {formattedDate} {formattedTime}
           </h1>
           <h2 style={{ fontSize: "24px", fontWeight: "400" }}>
             Creditor Username: &nbsp;
@@ -154,25 +87,13 @@ export default function TxCard(props) {
           >
             Status: <span style={{ color: color }}>{statusText}</span>
           </h3>
-          {isClient &&
-            state.Pending_Client_Data &&
-            renderClientDataButton(color, txId)}
-
-          {!isClient &&
-            state.Pending_Threshold &&
-            renderThresholdField({ color, txId })}
-
-          {!isClient &&
-            state.Pending_Verification &&
-            !proof &&
-            renderGetProofButton(color, txId, setProof)}
-          {!isClient && proof && renderShowProofButton(color, setShowProof)}
-          {!isClient &&
-            proof &&
-            renderProofModal({ showProof, setShowProof, proof })}
-          {!isClient &&
-            proof &&
-            renderValidationButton(color, handleVerification)}
+          <TxCardButton
+            isClient={isClient}
+            state={state}
+            setTransactionState={setTransactionState}
+            color={color}
+            txId={txId}
+          />
         </div>
       </div>
       <div className={iconClasses}>
