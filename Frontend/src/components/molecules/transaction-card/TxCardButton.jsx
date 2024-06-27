@@ -62,8 +62,8 @@ const TxCardButton = (props) => {
 
   const sendProofStatusHandler = async (verificationResult) => {
     try {
-      // const response = await validateProof(txId, verificationResult);
-      // console.log("response", response);
+      const response = await validateProof(txId, verificationResult);
+      console.log("response", response);
     } catch (error) {
       dispatch(showSnackbar(error.message));
     }
