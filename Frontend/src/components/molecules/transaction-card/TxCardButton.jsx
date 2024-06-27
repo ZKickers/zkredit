@@ -62,8 +62,8 @@ const TxCardButton = (props) => {
 
   const sendProofStatusHandler = async (verificationResult) => {
     try {
-      const response = await validateProof(txId, verificationResult);
-      console.log("response", response);
+      // const response = await validateProof(txId, verificationResult);
+      // console.log("response", response);
     } catch (error) {
       dispatch(showSnackbar(error.message));
     }
@@ -78,9 +78,6 @@ const TxCardButton = (props) => {
       );
     }
   };
-  console.log("isVerified", isVerified, verificationResult);
-  console.log("proof", !!proof);
-  console.log("isClient", isClient);
 
   if (isClient) {
     if (state.Pending_Client_Data)
@@ -94,8 +91,6 @@ const TxCardButton = (props) => {
       if (!proof) return renderGetProofButton(color, txId, setProof);
       // if proof is available
       if (isVerified === null || isVerified === false) {
-        console.log("isVerified", isVerified, verificationResult);
-        console.log("proof", !!proof);
         return renderValidationButton(color, handleVerification);
       }
     }
