@@ -10,6 +10,8 @@ import useVerify from "utils/useVerify";
 import TransactionStateEnum from "utils/TransactionStateEnum";
 import { validateProof } from "API/proofsAPIs";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "features/snackbar/snackbarSlice";
 
 const TxCardButton = (props) => {
   const { isClient, state, setTransactionState, color, txId } = props;
@@ -18,6 +20,7 @@ const TxCardButton = (props) => {
   const [showProof, setShowProof] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [threshold, setThreshold] = useState(0);
+  const dispatch = useDispatch();
 
   // to verify the proof
   const {
@@ -41,20 +44,19 @@ const TxCardButton = (props) => {
     if (isVerified && verificationResult != null) {
       if (verificationResult) {
         setTransactionState(TransactionStateEnum.PASSED);
+        sendProofStatusHandler(true);
       } else {
         setTransactionState(TransactionStateEnum.FAILED);
+        sendProofStatusHandler(false);
       }
-      sendProofStatusHandler(true);
     } else if (isVerified === false) {
-      console.log("Error verifying the proof, proof is invalid aaaaaaaaaaaaaaaaaaaaa");
+      dispatch(showSnackbar("Error verifying the proof, proof is invalid"));
     }
   }, [isVerified, verificationResult]);
 
   useEffect(() => {
     if (verificationError) {
-      console.log("verificationError", verificationError);
-      // TODO:: snakebar
-      // sendProofStatusHandler(false);
+      dispatch(showSnackbar("Error verifying the proof, proof is invalid"));
     }
   }, [verificationError]);
 
@@ -63,7 +65,7 @@ const TxCardButton = (props) => {
       const response = await validateProof(txId, verificationResult);
       console.log("response", response);
     } catch (error) {
-      console.error("response", response);
+      dispatch(showSnackbar(error.message));
     }
   };
 

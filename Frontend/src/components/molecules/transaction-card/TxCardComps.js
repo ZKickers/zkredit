@@ -4,7 +4,7 @@ import { TextField } from "@mui/material";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { DataThresholdingIcon } from "assets";
 import useSendThreshold from "API/useSendThreshold";
-import { getProof } from "API/proofsAPIs";
+import { useGetProof } from "API/proofsAPIs";
 import ProofModal from "components/organisms/proof-modal/ProofModal";
 import ClientRequestForm from "components/organisms/client-request-form/ClientRequestForm";
 import ModalPage from "pages/modal-page/ModalPage";
@@ -69,6 +69,13 @@ const renderThresholdField = ({ color, txId, threshold, setThreshold }) => {
 };
 
 const renderGetProofButton = (color, txId, setProof) => {
+  const getProof = useGetProof();
+
+  const handleGetProofClicked = async (txId, setProof) => {
+    const proof = await getProof(txId);  
+    setProof(proof);
+  };
+
   return (
     <SubmitButton
       className="mt-4"
@@ -84,14 +91,6 @@ const renderGetProofButton = (color, txId, setProof) => {
       Get Proof
     </SubmitButton>
   );
-};
-
-const handleGetProofClicked = async (txId, setProof) => {
-  console.log(`Attempting to get proof for tx with ID ${txId}`);
-  const proof = await getProof(txId);
-  console.log("Proof received: ", proof);
-
-  setProof(proof);
 };
 
 const renderShowProofButton = (color, setShowProof) => {

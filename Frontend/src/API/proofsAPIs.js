@@ -21,7 +21,6 @@ export const useGetProof = () => {
 
 export const validateProof = async (transactionId, isAccepted) => {
   const url = "/verifyTx";
-  const dispatch = useDispatch();
   const data = {
     txId: transactionId,
     accepted: isAccepted,
@@ -29,13 +28,11 @@ export const validateProof = async (transactionId, isAccepted) => {
 
   const response = await axiosInstance.post(url, data).catch((error) => {
     console.log(error);
-    dispatch(showSnackbar(error.message));
   });
 
   if (response.status !== 200) {
     const message = response.data;
-    dispatch(showSnackbar(message));
+    throw new Error(message);
   }
-  dispatch(showSuccessSnackbar("Proof Sent Successfully"));
   return response.data;
 };
