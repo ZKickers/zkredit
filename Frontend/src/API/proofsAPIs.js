@@ -13,7 +13,6 @@ export const useGetProof = () => {
       dispatch(showSnackbar(error.message));
     });
 
-    dispatch(showSuccessSnackbar("Threshold sent Successfully"));
     return response.data.proof;
   };
   return getProof;
