@@ -2,6 +2,9 @@ import json
 import base64
 import textwrap
 import hashlib
+import time
+from config import LAMBDA_MSG_HEX_CHECKS, REQUEST_PARAMS, DEFAULT_SCORE
+
 
 
 PUBLIC = "PUBLIC KEY"
@@ -24,13 +27,14 @@ def save_key(hex_key, path, key_type):
         pem_file.write(pem_content)
 
 
-def compare_data(request_data, user_data):
-    return (
-        request_data['fullname'] == user_data['fullname'] and
-        request_data['address'] == user_data['address'] and
-        request_data['birthdate'] == user_data['birthdate'] and
-        request_data['ssn'] == user_data['ssn']
-    )
+def validate_data(request_data):
+    if len(request_data) != len(REQUEST_PARAMS):
+        return False
+    for param in REQUEST_PARAMS:
+        item = request_data[param]
+        if not item or not LAMBDA_MSG_HEX_CHECKS[param](item):
+            return False
+    return True
 
 def read_key(pem_path):
     with open(pem_path, 'r') as f: return f.read()
@@ -47,33 +51,62 @@ def json_to_str(obj):
 def ascii_to_hex(text):
     return ''.join(format(ord(char), '02x') for char in text)
 
-def sha256Padded(msg):
-    input_bytes = msg.encode('utf-8')
+def sha256Padded(bytes):
     sha256_hash = hashlib.sha256()
-    sha256_hash.update(input_bytes)
+    sha256_hash.update(bytes)
     hash = sha256_hash.hexdigest()
     padded_hash = hash + '0' * 64
     return padded_hash
+
 
 def conc_msg(msg,limits):
     res = ""
     for key, value in msg.items():
         val = ""
         if isinstance(value, int):
-            val += int_to_ascii(value)
+            val += int_to_hex(value,limits[key])
         elif isinstance(value, str):
-            val += value
-        while (len(val)<limits[key]):
-            val += '\0'
+            val += ascii_to_hex(value)
+            while (len(val)<limits[key] * 2):
+                val += '00'
         res += val
     return res
 
-def int_to_ascii(num):
-    ascii_chars = ''
-    while num > 0:
-        ascii_chars = chr(num % 256) + ascii_chars
-        num //= 256
-    return ascii_chars
+def int_to_ascii(int_val, bytes_count):
+    ascii_array = []
+    for i in range(bytes_count):
+        bytes_shifted = bytes_count - 1 - i
+        byte = (int_val >> (8 * bytes_shifted)) & 0xFF
+        ascii_array.append(chr(byte))
+    return ''.join(ascii_array)
 
 def str_to_intArr(input_string):
     return [str(ord(char)) for char in input_string]
+
+def get_report(user_data):
+    user_data['score'] = DEFAULT_SCORE
+    return user_data
+
+def stick_ts(msg):
+    msg['timestamp'] = int(time.time()*1000)
+    return msg
+
+
+def hex_to_intArr(hex_str):
+    return [str(int(hex_str[i:i+2], 16)) for i in range(0, len(hex_str), 2)]
+
+def ascii_to_hex(ascii_char):
+    byte = ord(ascii_char)
+    hex_value = f'{byte:02x}'
+    return hex_value
+
+def int_to_hex(int_val, bytes_count):
+    hex_array = []
+    for i in range(bytes_count):
+        bytes_shifted = bytes_count - 1 - i
+        byte = (int_val >> (8 * bytes_shifted)) & 0xFF
+        hex_array.append(f'{byte:02x}')
+    return ''.join(hex_array)
+
+def ascii_to_hex(text):
+    return ''.join(format(ord(char), '02x') for char in text)

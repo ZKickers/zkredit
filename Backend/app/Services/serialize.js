@@ -1,30 +1,25 @@
 const fs = require("fs")
-const path = require("path")
-const NAME_MAX = 70
-const ADDRESS_MAX = 100
+const path = require("path");
+const { DATA_BYTES } = require("../../config");
+
+
 
 function serializeResponse(apiResponse) {
+  console.log("Serializing Response")
   // Extract relevant fields from the API response
-  const { fullname, address, birthdate, ssn, score, signature } = apiResponse;
-
-  // console.log("looooooool")
-  // console.log(signature.R)
-  // console.log(signature.S)
+  const { fullname, address, birthdate, ssn, score, timestamp, signature } = apiResponse;
   const response = {
-      name: serializePadded(fullname,NAME_MAX),
-      address: serializePadded(address,ADDRESS_MAX),
+      name: serializePadded(fullname,DATA_BYTES.name),
+      address: serializePadded(address,DATA_BYTES.address),
       birthdate: [...birthdate].map(char => char.charCodeAt(0).toString()),
       ssn: [...ssn].map(char => char.charCodeAt(0).toString()),
-      score:  [(score >> 8).toString(), (score & 0xFF).toString()],
+      score:  intToBytes(score, DATA_BYTES.score),
+      timestamp: intToBytes(timestamp, DATA_BYTES.timestamp),
       sig: {
         R: signature.R.map(big => BigInt('0x' + big).toString()),
         S: BigInt('0x' + signature.S).toString()
       }
     };
-    // console.log("TAHHHHAAAA")
-    // console.log(signature.R.map(big => BigInt('0x' + big).toString()))
-    // console.log(BigInt('0x' + signature.S).toString())
-    
     return response;
 }
 
@@ -32,8 +27,8 @@ function serializeClientData(clientInput) {
   // Extract relevant fields from the API response
   const { fullname, address, birthdate, ssn } = clientInput;
   const clientData = {
-    name: serializePadded(fullname,NAME_MAX),
-    address: serializePadded(address,ADDRESS_MAX),
+    name: serializePadded(fullname,DATA_BYTES.name),
+    address: serializePadded(address,DATA_BYTES.address),
     birthdate: [...birthdate].map(char => char.charCodeAt(0).toString()),
     ssn: [...ssn].map(char => char.charCodeAt(0).toString()),
   }
@@ -83,6 +78,17 @@ function serializeThreshold(thresh) {
   return [mostSignificantPart.toString(), leastSignificantPart.toString()];
 }
 
+function intToBytes(intVal,bytesCount) {
+    var byteArray = new Array(bytesCount);
+
+    for ( var i = bytesCount - 1; i >= 0; i-- ) {
+        var byte = intVal & 0xff;
+        byteArray[i] = byte.toString();
+        intVal = (intVal - byte) / 256;
+    }
+
+    return byteArray;
+};
   
 // Export the function to be used in other files
 module.exports = {

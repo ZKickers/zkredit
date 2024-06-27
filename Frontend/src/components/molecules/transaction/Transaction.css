@@ -3,10 +3,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: fit-content
+  height: fit-content;
 }
 
-.tx-verified {
+.tx-passed {
   background: linear-gradient(to right, rgba(0, 154, 43, 0.2), transparent);
 }
 
@@ -14,25 +14,40 @@
   background: linear-gradient(to right, rgba(246, 37, 37, 0.2), transparent);
 }
 
-.tx-pending {
+.tx-pending-proof {
+  background: linear-gradient(to right, rgba(142, 68, 173, 0.2), transparent);
+}
+
+.tx-pending-threshold {
   background: linear-gradient(to right, rgba(255, 184, 0, 0.2), transparent);
 }
 
-.tx-content {
-  display: flex;
-  flex-direction: column;
+.tx-pending-verification {
+  background: linear-gradient(to right, rgba(51, 161, 222, 0.2), transparent);
+}
+
+.tx-pending-client-data {
+  background: linear-gradient(to right, rgba(240, 156, 82, 0.2), transparent);
 }
 
 @media screen and (max-width: 768px) {
-  .tx-verified {
+  .tx-passed {
     background: linear-gradient(to bottom, rgba(0, 154, 43, 0.2), transparent);
   }
-  
+
   .tx-failed {
     background: linear-gradient(to bottom, rgba(246, 37, 37, 0.2), transparent);
   }
-  
-  .tx-pending {
+
+  .tx-pending-proof {
+    background: linear-gradient(to bottom, rgba(142, 68, 173, 0.2), transparent);
+  }
+
+  .tx-pending-threshold {
     background: linear-gradient(to bottom, rgba(255, 184, 0, 0.2), transparent);
+  }
+
+  .tx-pending-client-data {
+    background: linear-gradient(to bottom, rgba(240, 156, 82, 0.2), transparent);
   }
 }

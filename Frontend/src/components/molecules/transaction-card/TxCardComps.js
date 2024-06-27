@@ -3,16 +3,21 @@ import { useState } from "react";
 import { TextField } from "@mui/material";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { DataThresholdingIcon } from "assets";
+import useSendThreshold from "API/useSendThreshold";
+import { getProof } from "API/proofsAPIs";
+import ProofModal from "components/organisms/proof-modal/ProofModal";
 import ClientRequestForm from "components/organisms/client-request-form/ClientRequestForm";
 import ModalPage from "pages/modal-page/ModalPage";
 
-const renderThresholdField = ({ setThreshold, color }) => {
-  const [t, setT] = useState(0);
+const renderThresholdField = ({ color, txId, threshold, setThreshold }) => {
+  const { sendThreshold } = useSendThreshold();
 
-  const handleThresholdSubmit = (t) => {
-    if (t > 0 && t <= 850) {
-      setThreshold(t);
+  const handleThresholdSubmit = async () => {
+    if (threshold > 0 && threshold <= 850) {
+      sendThreshold(threshold, txId);
+      // ! Either ignore or log the response.
     } else {
+      // TODP:: Snackbar
       alert("Threshold must be between 1 and 850");
     }
   };
@@ -23,7 +28,7 @@ const renderThresholdField = ({ setThreshold, color }) => {
         type="number"
         fullWidth
         label="Threshold"
-        onChange={(e) => setT(e.target.value)}
+        onChange={(e) => setThreshold(e.target.value)}
         InputLabelProps={{
           style: {
             color: color,
@@ -47,7 +52,7 @@ const renderThresholdField = ({ setThreshold, color }) => {
           ),
           endAdornment: (
             <SubmitButton
-              onClick={() => handleThresholdSubmit(t)}
+              onClick={() => handleThresholdSubmit()}
               style={{
                 backgroundColor: color,
                 margin: "10px 0 10px 10px",
@@ -63,9 +68,58 @@ const renderThresholdField = ({ setThreshold, color }) => {
   );
 };
 
-const renderClientDataButton = (color, txId) => {
-  const [showForm, setShowForm] = useState(false);
+const renderGetProofButton = (color, txId, setProof) => {
+  return (
+    <SubmitButton
+      className="mt-4"
+      onClick={() => handleGetProofClicked(txId, setProof)}
+      style={{
+        backgroundColor: color,
+        width: "100%",
+        height: "75px",
+        fontSize: "24px",
+        borderRadius: "10px",
+      }}
+    >
+      Get Proof
+    </SubmitButton>
+  );
+};
 
+const handleGetProofClicked = async (txId, setProof) => {
+  console.log(`Attempting to get proof for tx with ID ${txId}`);
+  const proof = await getProof(txId);
+  console.log("Proof received: ", proof);
+
+  setProof(proof);
+};
+
+const renderShowProofButton = (color, setShowProof) => {
+  return (
+    <SubmitButton
+      className="mt-4"
+      onClick={() => setShowProof(true)}
+      style={{
+        backgroundColor: color,
+        width: "100%",
+        height: "75px",
+        fontSize: "24px",
+        borderRadius: "10px",
+      }}
+    >
+      Show Proof
+    </SubmitButton>
+  );
+};
+
+const renderProofModal = ({ showProof, setShowProof, proof }) => {
+  return (
+    <ModalPage show={showProof} handleClose={() => setShowProof(false)}>
+      <ProofModal proof={proof} handleClose={() => setShowProof(false)} />
+    </ModalPage>
+  );
+};
+const renderClientDataButton = (color, txId, showForm, setShowForm) => {
   return (
     <>
       <SubmitButton
@@ -88,11 +142,11 @@ const renderClientDataButton = (color, txId) => {
   );
 };
 
-const renderValidationButton = (color) => {
+const renderValidationButton = (color, handleVerification) => {
   return (
     <SubmitButton
       className="mt-4"
-      onClick={() => handleValidationClicked()}
+      onClick={() => handleVerification()}
       style={{
         backgroundColor: color,
         width: "100%",
@@ -104,11 +158,6 @@ const renderValidationButton = (color) => {
       Begin Proof Validation
     </SubmitButton>
   );
-};
-
-const handleValidationClicked = () => {
-  // TODO: SEND THE REQUEST TO THE BACKEND
-  console.log("Validation requested");
 };
 
 const contentContainer = classNames(
@@ -134,6 +183,9 @@ const iconClasses = classNames(
 
 export {
   renderThresholdField,
+  renderGetProofButton,
+  renderShowProofButton,
+  renderProofModal,
   renderClientDataButton,
   renderValidationButton,
   contentContainer,

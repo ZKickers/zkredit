@@ -1,36 +1,25 @@
-import { useState } from "react";
 import axiosInstance from "./axios";
-import { showSnackbar } from '../features/snackbar/snackbarSlice';
-import { showSuccessSnackbar } from '../features/snackbar/successSnackbarSlice';
+import { showSnackbar } from "../features/snackbar/snackbarSlice";
+import { showSuccessSnackbar } from "../features/snackbar/successSnackbarSlice";
 import { useDispatch } from "react-redux";
-export const useSendThreshold = () => {
-  const url = "/Creditor/trigger-threshold";
-  const [proof, setProof] = useState(null);
-  const [error, setError] = useState(null);
+
+export const useGetProof = () => {
   const dispatch = useDispatch();
-  const sendThreshold = async (threshold, txId) => {
-    try {
-      const response = await axiosInstance.post(url, {
-        threshold: threshold,
-        txId: txId,
-      });
-      if (response.status === 200) {
-        console.log(response);
-        dispatch(showSuccessSnackbar("Threshold sent Successfully"));
-        setProof(response.data);
-      } else {
-        dispatch(showSnackbar(error.message));
-        setError(error.message);
-      }
-    } catch (error) {
+  const getProof = async (txId) => {
+    const url = `/getProof/${txId}`;
+
+    const response = await axiosInstance.get(url).catch((error) => {
+      console.log(error);
       dispatch(showSnackbar(error.message));
-      setError(error.message);
-    }
+    });
+
+    dispatch(showSuccessSnackbar("Threshold sent Successfully"));
+    return response.data.proof;
   };
-  return { proof, error, sendThreshold };
+  return getProof;
 };
 
-export const sendProofStatus = async (transactionId, isAccepted) => {
+export const validateProof = async (transactionId, isAccepted) => {
   const url = "/verifyTx";
   const dispatch = useDispatch();
   const data = {
@@ -46,7 +35,6 @@ export const sendProofStatus = async (transactionId, isAccepted) => {
   if (response.status !== 200) {
     const message = response.data;
     dispatch(showSnackbar(message));
-    
   }
   dispatch(showSuccessSnackbar("Proof Sent Successfully"));
   return response.data;

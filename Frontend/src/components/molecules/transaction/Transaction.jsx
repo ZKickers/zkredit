@@ -1,108 +1,57 @@
 import classNames from "classnames";
 import "./Transaction.css";
 import { LockIcon, LockOpenIcon, CloseIcon } from "assets";
-import useFetchCreditorUsername from "API/useFetchCreditorUsername";
 import { datePrettier } from "./datePrettier";
 import TransactionStateEnum from "utils/TransactionStateEnum";
-import { useState, useEffect } from "react";
 
 export default function Transaction({
   txId,
   clientFullName,
   isClient,
-  creditorId,
+  creditorUsername,
   updateDate,
   status,
   isButton,
   renderCard,
 }) {
-  const [transactionState, setTransactionState] = useState(null);
   const state = {
-    Verified: transactionState === TransactionStateEnum.SUCCESS,
-    Declined: transactionState === TransactionStateEnum.FAIL,
-    Pending:
-      transactionState === TransactionStateEnum.PENDING_THRESHOLD ||
-      transactionState === TransactionStateEnum.PENDING_VALIDATION ||
-      transactionState === TransactionStateEnum.PENDING_PROOF ||
-      transactionState === TransactionStateEnum.PENDING_CLIENT_DATA,
+    Passed: status === TransactionStateEnum.PASSED,
+    Failed: status === TransactionStateEnum.FAILED,
+    Pending_Threshold: status === TransactionStateEnum.PENDING_THRESHOLD,
+    Pending_Client_Data: status === TransactionStateEnum.PENDING_CLIENT_DATA,
+    Pending_Proof: status === TransactionStateEnum.PENDING_PROOF,
+    Pending_Verification: status === TransactionStateEnum.PENDING_VERIFICATION,
   };
-  useEffect(() => {
-    console.log(status);
-    switch (status) {
-      case "Success":
-        setTransactionState(TransactionStateEnum.SUCCESS);
-        // TODO:: need to check the result and set it SUCCESS or FAIL
-        break;
-      case "Fail":
-        setTransactionState(TransactionStateEnum.FAIL);
-        break;
-      case "Pending_Threshold":
-        setTransactionState(TransactionStateEnum.PENDING_THRESHOLD);
-        break;
-      case "Pending_Validation":
-        setTransactionState(TransactionStateEnum.PENDING_VALIDATION);
-        break;
-      case "Pending_Client_Data":
-        setTransactionState(TransactionStateEnum.PENDING_CLIENT_DATA);
-        break;
-      case "Insufficient":
-        setTransactionState(TransactionStateEnum.INSUFFICIENT);
-        break;
-    }
-  }, [status]);
 
   const { formattedDate, formattedTime } = datePrettier(updateDate);
 
-  const [creditorUsername, setCreditorUsername] = useState("");
-  const { fetchCreditorUsername, loading, error } = useFetchCreditorUsername();
-
-  useEffect(() => {
-    let isMounted = true;
-  
-    async function fetchData() {
-      try {
-        const CUN = await fetchCreditorUsername({ txId, creditorId });
-        if (isMounted) {
-          setCreditorUsername(CUN);
-        }
-      } catch (error) {
-        console.error("Error fetching creditor username:", error);
-      }
-    }
-  
-    fetchData();
-  
-    return () => {
-      isMounted = false; // Cleanup function to prevent state updates on unmounted component
-    };
-  }, [txId, creditorId]);
-
-  const handleShowCard = () =>
-    renderCard({
-      txId,
-      date: `${formattedDate} ${formattedTime}`,
-      creditorUsername,
-      clientFullName,
-      transactionState,
-      setTransactionState,
-    });
+  const handleShowCard = () => renderCard(txId);
   const base = "tx row container w-100 p-md-2 p-sm-3 my-md-1 my-sm-3";
   const classes = classNames(base, {
-    "tx-verified": state.Verified,
-    "tx-failed": state.Declined,
-    "tx-pending": state.Pending,
+    "tx-passed": state.Passed,
+    "tx-failed": state.Failed,
+    "tx-pending-client-data": state.Pending_Client_Data,
+    "tx-pending-proof": state.Pending_Proof,
+    "tx-pending-threshold": state.Pending_Threshold,
+    "tx-pending-verification": state.Pending_Verification
   });
 
   const statusText = classNames({
-    Verified: state.Verified,
-    Declined: state.Declined,
-    Pending: state.Pending,
+    Passed: state.Passed,
+    Failed: state.Failed,
+    "Pending Threshold": state.Pending_Threshold,
+    "Pending Verification": state.Pending_Verification,
+    "Pending Proof": state.Pending_Proof,
+    "Pending Client Data": state.Pending_Client_Data,
   });
 
   const color = classNames({
-    "#009A2B": state.Verified,
-    "#F62525": state.Declined,
-    "#FFB800": state.Pending,
+    "#009A2B": state.Passed,
+    "#F62525": state.Failed,
+    "#FFB800": state.Pending_Threshold,
+    "#33A1DE": state.Pending_Verification,
+    "#8E44AD": state.Pending_Proof,
+    "#F09C52": state.Pending_Client_Data,
   });
 
   const iconStyle = {
@@ -112,11 +61,16 @@ export default function Transaction({
   };
 
   const renderIcon = () => {
-    if (state.Verified)
+    if (state.Passed)
       return <LockIcon className="rounded-circle p-2" sx={iconStyle} />;
-    if (state.Declined)
+    if (state.Failed)
       return <CloseIcon className="rounded-circle p-2" sx={iconStyle} />;
-    if (state.Pending)
+    if (
+      state.Pending_Client_Data ||
+      state.Pending_Proof ||
+      state.Pending_Threshold ||
+      state.Pending_Verification
+    )
       return <LockOpenIcon className="rounded-circle p-2" sx={iconStyle} />;
   };
 

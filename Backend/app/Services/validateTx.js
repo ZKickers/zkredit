@@ -1,4 +1,5 @@
 const Transaction = require('../models/Transaction');
+const { deleteProof } = require('../Services/deleteTx'); 
 
 
 async function validateTx(txId, accepted)
@@ -16,7 +17,7 @@ async function validateTx(txId, accepted)
             { status: status },
             { new: true }
         );
-        console.log(updatedTransaction);
+        await deleteProof(txId);
     } catch (error) {
         throw error;
     }

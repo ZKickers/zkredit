@@ -6,6 +6,7 @@ from "./interface.zok" import Response,Signature;
 
 def verify<N>(field[2] R, field S, field[2] A, u8[N] M) -> bool{
     u32[8] M0 = sha256(M);
+    log("Hash{}",M0);
     u32[8] M1 = [0;8];
     return verifyEddsa(R,S,A,M0,M1,BABYJUBJUB_PARAMS);
 }

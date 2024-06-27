@@ -9,6 +9,10 @@ const transactionSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    creditorUsername: {
+        type: String,
+        required: true
+    },
     fullNameOfClient: {
         type: String,
         required: true
@@ -30,12 +34,3 @@ const transactionSchema = new mongoose.Schema({
 const Transaction = mongoose.model('Transaction', transactionSchema);
 
 module.exports = Transaction;
-
-// Pending_Threshold,
-//         Pending_Client_Data,
-//         Pending_Proof,
-//         Pending_Verification,
-//         Accepted,
-//         Invalid,
-//         Failed,
-//         Rejected,

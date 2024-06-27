@@ -1,4 +1,5 @@
 const Transaction = require('../models/Transaction');
+const TxDeletionState = require('../models/TransactionDeletionState');
 const User = require('../models/User');
 
 async function createTransaction(clientFullname, creditorUserName, clientId) {
@@ -10,10 +11,16 @@ async function createTransaction(clientFullname, creditorUserName, clientId) {
                 clientAccountId: clientId,
                 creditorAccountId: creditor.accountId,
                 fullNameOfClient: clientFullname,
+                creditorUsername: creditorUserName,
                 status: 'Pending_Threshold',
     };
     const transaction = new Transaction(transactionData);
     await transaction.save();
+    const deletionStateData = {
+        txId: transaction._id,
+    }
+    const deletionState = new TxDeletionState(deletionStateData);
+    await deletionState.save();
     return transaction;
 }
 

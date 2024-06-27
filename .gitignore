@@ -2,5 +2,4 @@
 .DS_Store
 Frontend/.env.local
 Backend/app/out
-Backend/app/out
-Backend/app/out
+Paths.txt
