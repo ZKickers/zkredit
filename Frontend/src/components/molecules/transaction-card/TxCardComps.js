@@ -17,6 +17,7 @@ const renderThresholdField = ({ color, txId, threshold, setThreshold }) => {
       sendThreshold(threshold, txId);
       // ! Either ignore or log the response.
     } else {
+      // TODP:: Snackbar
       alert("Threshold must be between 1 and 850");
     }
   };

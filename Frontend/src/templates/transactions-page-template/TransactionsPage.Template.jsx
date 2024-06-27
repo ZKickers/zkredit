@@ -18,9 +18,11 @@ import { useSelector } from "react-redux";
 import TransactionStateEnum from "utils/TransactionStateEnum";
 import { updateTransactionStatus as creditorUpdateStatus } from "../../redux/creditorTransactionSlice";
 import { updateTransactionStatus as clientUpdateStatus } from "../../redux/clientTransactionSlice";
+import { useDispatch } from "react-redux";
 
 export default function TPTemplate({ isCreditor }) {
   const [currentTx, setCurrentTx] = useState(null);
+  const dispatch = useDispatch();
 
   const handleGoBack = () => {
     window.history.back();
@@ -66,7 +68,9 @@ export default function TPTemplate({ isCreditor }) {
       return <div>Error loading transactions...</div>;
     }
 
-    return transactions.transactions.map((tx) => (
+    const sortedTransactions = [...transactions.transactions].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+
+    return sortedTransactions.map((tx) => (
       <Transaction
         key={tx._id}
         txId={tx._id}
@@ -101,15 +105,19 @@ export default function TPTemplate({ isCreditor }) {
   };
   const setCurrentTxStatus = (status) => {
     if (isCreditor) {
-      creditorUpdateStatus({
-        id: currentTx._id,
-        status: status,
-      });
+      dispatch(
+        creditorUpdateStatus({
+          id: currentTx._id,
+          status: status,
+        })
+      );
     } else {
-      clientUpdateStatus({
-        id: currentTx._id,
-        status: status,
-      });
+      dispatch(
+        clientUpdateStatus({
+          id: currentTx._id,
+          status: status,
+        })
+      );
     }
   };
 

@@ -61,9 +61,9 @@ const TxCardButton = (props) => {
   const sendProofStatusHandler = async (verificationResult) => {
     try {
       const response = await validateProof(txId, verificationResult);
-      alert(response);
+      console.log("response", response);
     } catch (error) {
-      alert(error);
+      console.error("response", response);
     }
   };
 
@@ -71,7 +71,7 @@ const TxCardButton = (props) => {
     if (proof != null) {
       verify(proof);
     } else {
-      alert(
+      console.error(
         "Proof is not available, please provide proof to verify the transaction"
       );
     }
