@@ -1,19 +1,24 @@
 import axiosInstance from "./axios";
+import { showSnackbar } from "../features/snackbar/snackbarSlice";
+import { showSuccessSnackbar } from "../features/snackbar/successSnackbarSlice";
+import { useDispatch } from "react-redux";
 
-export const getProof = async (txId) => {
-  const url = `/getProof/${txId}`;
+export const useGetProof = () => {
+  const dispatch = useDispatch();
+  const getProof = async (txId) => {
+    const url = `/getProof/${txId}`;
 
-  const response = await axiosInstance.get(url).catch((error) => {
-    console.log(error);
-    throw new Error(
-      `Encountered an error while fetching the proof associated with tx ID ${txId}`
-    );
-  });
+    const response = await axiosInstance.get(url).catch((error) => {
+      console.log(error);
+      dispatch(showSnackbar(error.message));
+    });
 
-  return response.data.proof;
+    return response.data.proof;
+  };
+  return getProof;
 };
 
-export const validateProof = async (transactionId, isAccepted ) => {
+export const validateProof = async (transactionId, isAccepted) => {
   const url = "/verifyTx";
   const data = {
     txId: transactionId,
@@ -22,13 +27,11 @@ export const validateProof = async (transactionId, isAccepted ) => {
 
   const response = await axiosInstance.post(url, data).catch((error) => {
     console.log(error);
-    throw new Error("Problem connecting with the server!");
   });
 
   if (response.status !== 200) {
     const message = response.data;
     throw new Error(message);
   }
-
   return response.data;
 };

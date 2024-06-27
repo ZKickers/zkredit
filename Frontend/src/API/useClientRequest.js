@@ -1,5 +1,7 @@
 import axiosInstance from "./axios";
 import { useDispatch } from "react-redux";
+import { showSnackbar } from '../features/snackbar/snackbarSlice';
+import { showSuccessSnackbar } from '../features/snackbar/successSnackbarSlice';
 import { updateTransactionStatus } from "../redux/clientTransactionSlice";
 
 const useClientRequest = () => {
@@ -7,19 +9,22 @@ const useClientRequest = () => {
   const dispatch = useDispatch();
 
   const clientRequest = async (data) => {
+    let error = false;
     const response = await axiosInstance.post(url, data).catch((error) => {
-      throw new Error(error.message);
-      // TODO add snakebar
+      dispatch(showSnackbar(error.response.data));
+      error = true;
     });
-    // TODO add snakebar with response.data.message
-    // dispatch the update
-    dispatch(
-      updateTransactionStatus({
-        id: response.data.transaction._id,
-        status: response.data.transaction.status,
-      })
-    );
-    return response.data;
+    if(!error){
+      dispatch(showSuccessSnackbar('Data Sent successfully'));
+      dispatch(
+        updateTransactionStatus({
+          id: response.data.transaction._id,
+          status: response.data.transaction.status,
+        })
+      );
+      return response.data;
+    }
+
   };
 
   return clientRequest;

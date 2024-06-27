@@ -6,7 +6,6 @@ import "bootstrap/dist/css/bootstrap.css";
 import { NavigationProvider } from "contexts/NavigationContext";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
-
 const element = document.getElementById("root");
 const root = ReactDOM.createRoot(element);
 
