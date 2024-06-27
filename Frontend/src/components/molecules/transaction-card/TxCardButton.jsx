@@ -17,6 +17,7 @@ const TxCardButton = (props) => {
   const [proof, setProof] = useState(null);
   const [showProof, setShowProof] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [threshold, setThreshold] = useState(0);
 
   // to verify the proof
   const {
@@ -32,6 +33,7 @@ const TxCardButton = (props) => {
     setProof(null);
     setShowProof(null);
     setShowForm(false);
+    setThreshold(0);
     resetVerification();
   }, [txId]);
 
@@ -90,7 +92,9 @@ const TxCardButton = (props) => {
       return renderClientDataButton(color, txId, showForm, setShowForm);
   } else {
     // creditor
-    if (state.Pending_Threshold) return renderThresholdField({ color, txId });
+    if (state.Pending_Threshold) {
+      return renderThresholdField({ color, txId, threshold, setThreshold });
+    }
     if (state.Pending_Verification) {
       if (!proof) return renderGetProofButton(color, txId, setProof);
       // if proof is available
