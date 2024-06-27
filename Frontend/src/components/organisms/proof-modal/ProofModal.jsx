@@ -6,7 +6,7 @@ export default function ProofModal({ proof, handleClose }) {
   const { threshold, result, timestamp, clientFullName } = extractProof(proof);
 
   // Format the timestamp
-  const date = new Date(timestamp * 1000);
+  const date = new Date(Number(timestamp));
   const formattedDate = date.toLocaleString();
 
   // Display the proof data

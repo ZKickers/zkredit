@@ -11,13 +11,10 @@ const concatenateBytesToLong = (hexStrings) => {
   // Convert each hex string to bytes
   const bytes = hexStrings.map((hexString) => getSingleByteFromHex(hexString));
 
-  // Calculate the number of bytes based on the array length
-  const numBytes = bytes.length;
-
-  // Combine the bytes to form an integer
-  let result = 0;
-  for (let i = 0; i < numBytes; i++) {
-    result = (result << 8) | bytes[i];
+  // Combine the bytes to form a BigInt
+  var result = BigInt(0);
+  for (let i = 0; i < bytes.length; i++) {
+    result = (result << BigInt(8)) | BigInt(bytes[i]);
   }
 
   return result;

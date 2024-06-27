@@ -7,13 +7,13 @@ export const useGetProof = () => {
   const dispatch = useDispatch();
   const getProof = async (txId) => {
     const url = `/getProof/${txId}`;
-
-    const response = await axiosInstance.get(url).catch((error) => {
+    try {
+      const response = await axiosInstance.get(url);
+      return response.data.proof;
+    } catch (error) {
       console.log(error);
       dispatch(showSnackbar(error.message));
-    });
-
-    return response.data.proof;
+    }
   };
   return getProof;
 };
