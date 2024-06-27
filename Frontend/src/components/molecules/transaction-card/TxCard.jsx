@@ -26,8 +26,8 @@ export default function TxCard(props) {
     Pending_Proof: transactionState === TransactionStateEnum.PENDING_PROOF,
     Pending_Verification:
       transactionState === TransactionStateEnum.PENDING_VERIFICATION,
-    Verified: transactionState === TransactionStateEnum.SUCCESS,
-    Declined: transactionState === TransactionStateEnum.FAIL,
+    Passed: transactionState === TransactionStateEnum.PASSED,
+    Failed: transactionState === TransactionStateEnum.FAILED,
   };
 
   const { formattedDate, formattedTime } = datePrettier(updateDate);
@@ -39,8 +39,8 @@ export default function TxCard(props) {
     state.Pending_Client_Data;
 
   const statusText = classNames({
-    Verified: state.Verified,
-    Declined: state.Declined,
+    Passed: state.Passed,
+    Failed: state.Failed,
     "Pending Threshold": state.Pending_Threshold,
     "Pending Verification": state.Pending_Verification,
     "Pending Proof": state.Pending_Proof,
@@ -48,8 +48,8 @@ export default function TxCard(props) {
   });
 
   const color = classNames({
-    "#009A2B": state.Verified,
-    "#F62525": state.Declined,
+    "#009A2B": state.Passed,
+    "#F62525": state.Failed,
     "#FFB800": state.Pending_Threshold,
     "#33A1DE": state.Pending_Verification,
     "#8E44AD": state.Pending_Proof,
@@ -59,8 +59,8 @@ export default function TxCard(props) {
   const iconStyle = { color: "white", fontSize: "160px" };
 
   const renderStatusIcon = () => {
-    if (state.Verified) return <LockIcon sx={iconStyle} />;
-    else if (state.Declined) return <CloseIcon sx={iconStyle} />;
+    if (state.Passed) return <LockIcon sx={iconStyle} />;
+    else if (state.Failed) return <CloseIcon sx={iconStyle} />;
     else if (pending) return <LockOpenIcon sx={iconStyle} />;
   };
 

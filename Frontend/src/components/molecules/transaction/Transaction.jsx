@@ -15,8 +15,8 @@ export default function Transaction({
   renderCard,
 }) {
   const state = {
-    Verified: status === TransactionStateEnum.SUCCESS,
-    Declined: status === TransactionStateEnum.FAIL,
+    Passed: status === TransactionStateEnum.PASSED,
+    Failed: status === TransactionStateEnum.FAILED,
     Pending_Threshold: status === TransactionStateEnum.PENDING_THRESHOLD,
     Pending_Client_Data: status === TransactionStateEnum.PENDING_CLIENT_DATA,
     Pending_Proof: status === TransactionStateEnum.PENDING_PROOF,
@@ -28,8 +28,8 @@ export default function Transaction({
   const handleShowCard = () => renderCard(txId);
   const base = "tx row container w-100 p-md-2 p-sm-3 my-md-1 my-sm-3";
   const classes = classNames(base, {
-    "tx-verified": state.Verified,
-    "tx-failed": state.Declined,
+    "tx-passed": state.Passed,
+    "tx-failed": state.Failed,
     "tx-pending-client-data": state.Pending_Client_Data,
     "tx-pending-proof": state.Pending_Proof,
     "tx-pending-threshold": state.Pending_Threshold,
@@ -37,8 +37,8 @@ export default function Transaction({
   });
 
   const statusText = classNames({
-    Verified: state.Verified,
-    Declined: state.Declined,
+    Passed: state.Passed,
+    Failed: state.Failed,
     "Pending Threshold": state.Pending_Threshold,
     "Pending Verification": state.Pending_Verification,
     "Pending Proof": state.Pending_Proof,
@@ -46,8 +46,8 @@ export default function Transaction({
   });
 
   const color = classNames({
-    "#009A2B": state.Verified,
-    "#F62525": state.Declined,
+    "#009A2B": state.Passed,
+    "#F62525": state.Failed,
     "#FFB800": state.Pending_Threshold,
     "#33A1DE": state.Pending_Verification,
     "#8E44AD": state.Pending_Proof,
@@ -61,9 +61,9 @@ export default function Transaction({
   };
 
   const renderIcon = () => {
-    if (state.Verified)
+    if (state.Passed)
       return <LockIcon className="rounded-circle p-2" sx={iconStyle} />;
-    if (state.Declined)
+    if (state.Failed)
       return <CloseIcon className="rounded-circle p-2" sx={iconStyle} />;
     if (
       state.Pending_Client_Data ||

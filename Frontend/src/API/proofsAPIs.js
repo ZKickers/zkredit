@@ -13,8 +13,8 @@ export const getProof = async (txId) => {
   return response.data.proof;
 };
 
-export const validateProof = async ({ transactionId, isAccepted }) => {
-  const url = "/verify-proof"; // TODO: DOUBLE CHECK THE API CALL
+export const validateProof = async (transactionId, isAccepted ) => {
+  const url = "/verifyTx";
   const data = {
     txId: transactionId,
     accepted: isAccepted,

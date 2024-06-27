@@ -83,10 +83,10 @@ export default function TPTemplate({ isCreditor }) {
 
   const mapStatusToEnum = (status) => {
     switch (status) {
-      case "Success" || TransactionStateEnum.SUCCESS:
-        return TransactionStateEnum.SUCCESS;
-      case "Fail" || TransactionStateEnum.FAIL:
-        return TransactionStateEnum.FAIL;
+      case "Passed" || TransactionStateEnum.PASSED:
+        return TransactionStateEnum.PASSED;
+      case "Failed" || TransactionStateEnum.FAILED:
+        return TransactionStateEnum.FAILED;
       case "Pending_Threshold" || TransactionStateEnum.PENDING_THRESHOLD:
         return TransactionStateEnum.PENDING_THRESHOLD;
       case "Pending_Client_Data" || TransactionStateEnum.PENDING_CLIENT_DATA:

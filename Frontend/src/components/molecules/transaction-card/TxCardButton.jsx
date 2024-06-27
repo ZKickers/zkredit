@@ -39,29 +39,22 @@ const TxCardButton = (props) => {
 
   useEffect(() => {
     if (isVerified && verificationResult != null) {
-      //alert(verificationResult ? "Threshold reached" : "Threshold not reached");
       if (verificationResult) {
-        setTransactionState(TransactionStateEnum.SUCCESS);
+        setTransactionState(TransactionStateEnum.PASSED);
       } else {
-        setTransactionState(TransactionStateEnum.FAIL);
+        setTransactionState(TransactionStateEnum.FAILED);
       }
       sendProofStatusHandler(true);
-      // TODO:: change the status of the transaction to verified and update the UI accordingly
-      // TODO:: send the proof to the backend to update the status of the transaction
     } else if (isVerified === false) {
-      alert("Error verifying the proof, proof is invalid");
-      setTransactionState(TransactionStateEnum.INSUFFICIENT);
-      sendProofStatusHandler(false);
-      //TODO:: change the status of the transaction to inverified and update the UI accordingly
-      //TODO:: send the proof to the backend to update the status of the transaction
+      console.log("Error verifying the proof, proof is invalid aaaaaaaaaaaaaaaaaaaaa");
     }
   }, [isVerified, verificationResult]);
 
   useEffect(() => {
     if (verificationError) {
-      alert(verificationError);
+      console.log("verificationError", verificationError);
       // TODO:: snakebar
-      sendProofStatusHandler(false);
+      // sendProofStatusHandler(false);
     }
   }, [verificationError]);
 
