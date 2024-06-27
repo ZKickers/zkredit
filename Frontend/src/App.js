@@ -2,7 +2,7 @@ import Route from "components/atoms/navigation/Route";
 import { NavigationProvider } from "contexts/NavigationContext";
 import LandingPage from "pages/landing-page/LandingPage";
 import DashboardPage from "pages/dashboard-page/DashboardPage";
-import ProofsPage from "pages/proofs-page/ProofsPage";
+import TransactionsPage from "pages/transactions-page/TransactionsPage";
 import useGetUser from "API/useGetUser";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -30,10 +30,10 @@ export default function App() {
         {(user.isLoggedIn && <DashboardPage />) || <LandingPage />}
       </Route>
       <Route routePath={"/received"}>
-        {(user.isLoggedIn && <ProofsPage isCreditor={true} />) || <LandingPage />}
+        {(user.isLoggedIn && <TransactionsPage isCreditor={true} />) || <LandingPage />}
       </Route>
       <Route routePath={"/sent"}>
-        {(user.isLoggedIn && <ProofsPage isCreditor={false} />) || <LandingPage />}
+        {(user.isLoggedIn && <TransactionsPage isCreditor={false} />) || <LandingPage />}
       </Route>
     </NavigationProvider>
   );

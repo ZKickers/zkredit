@@ -60,16 +60,18 @@ export default function DashboardPageTemplate() {
     }
 
     const transactions = [
-      ...creditorTransactions.transactions,
-      ...clientTransactions.transactions,
+      ...creditorTransactions.transactions.map(tx => ({ ...tx, isClient: false })),
+      ...clientTransactions.transactions.map(tx => ({ ...tx, isClient: true })),
     ].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+    
 
     return transactions.map((tx) => (
       <Transaction
         key={tx._id}
         txId={tx._id}
         clientFullName={tx.fullNameOfClient}
-        creditorId={tx.creditorAccountId}
+        isClient={tx.isClient}
+        creditorUsername={tx.creditorUsername}
         updateDate={tx.updatedAt}
         status={tx.status}
       />

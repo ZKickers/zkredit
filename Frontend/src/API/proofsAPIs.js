@@ -1,31 +1,19 @@
-import { useState } from "react";
 import axiosInstance from "./axios";
 
-export const useSendThreshold = () => {
-  const url = "/Creditor/trigger-threshold";
-  const [proof, setProof] = useState(null);
-  const [error, setError] = useState(null);
+export const getProof = async (txId) => {
+  const url = `/getProof/${txId}`;
 
-  const sendThreshold = async (threshold, txId) => {
-    try {
-      const response = await axiosInstance.post(url, {
-        threshold: threshold,
-        txId: txId,
-      });
-      if (response.status === 200) {
-        console.log(response);
-        setProof(response.data);
-      } else {
-        setError("Problem connecting with the server!");
-      }
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-  return { proof, error, sendThreshold };
+  const response = await axiosInstance.get(url).catch((error) => {
+    console.log(error);
+    throw new Error(
+      `Encountered an error while fetching the proof associated with tx ID ${txId}`
+    );
+  });
+
+  return response.data.proof;
 };
 
-export const sendProofStatus = async (transactionId, isAccepted) => {
+export const validateProof = async (transactionId, isAccepted ) => {
   const url = "/verifyTx";
   const data = {
     txId: transactionId,
