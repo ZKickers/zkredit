@@ -2,16 +2,22 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth');
-const getTX = require('./routes/getTX')
-const cors = require('cors')
+const getTX = require('./routes/getTX');
+const cors = require('cors');
 const app = express();
-const deleteTX = require('./routes/deleteTXRoute')
+const deleteTX = require('./routes/deleteTXRoute');
 const ClientRequest = require('./routes/ClientRequest');
-const thresholdRoute = require('./routes/thresholdRoute')
-const verificationRoutes = require('./routes/verificationRoutes')
-const verificationKeyRoute = require('./routes/verificationKeyRoute')
-const getProofRoute = require('./routes/getProofRoute')
+const thresholdRoute = require('./routes/thresholdRoute');
+const verificationRoutes = require('./routes/verificationRoutes');
+const verificationKeyRoute = require('./routes/verificationKeyRoute');
+const getProofRoute = require('./routes/getProofRoute');
 const { BACKEND_PORT, FRONTEND_URL, MONGODB_URI } = require('../config');
+const os = require('os');
+
+if (os.platform() === 'win32') {
+  console.error('This application cannot run on Windows.');
+  process.exit(1);
+}
 
 app.use(cors({
   origin: FRONTEND_URL
