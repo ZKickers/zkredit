@@ -69,8 +69,6 @@ async function generateProof(serialized_clientData, serialized_resp, transaction
     try {
         let proof_arr = [];
         proof_arr.push(serialized_clientData);
-        const nonce = await generateNonce();
-        proof_arr.push(await nonceToArray(nonce));
         proof_arr.push(serialized_resp);
         proof_arr.push(await Serial.serializePK(PK_X_PATH, PK_Y_PATH));
         proof_arr.push(await Serial.serializeThreshold(transaction.threshold));
@@ -133,6 +131,8 @@ async function sendClientInfo(transaction, address, birthdate, ssn) {
         });
         if (response && response.data) {
             const { serialized_clientData, serialized_resp } = serializeData(clientInfo, response.data);
+            console.log(serialized_clientData);
+            console.log(serialized_resp);
             const updatedTransaction = await Transaction.findOneAndUpdate(
                 { _id: transaction._id },
                 { status: 'Pending_Proof' },
