@@ -34,7 +34,7 @@ export default function ProofModal({ proof, handleClose }) {
   return (
     <div className="proof-modal">
       <div className="status-img">
-        <img src={img} alt="celebration-confetti" />
+        <img src={img} alt="status-confetti" />
       </div>
       <div className="status-mark">
         <img src={mark} alt="circled-mark" />
@@ -48,9 +48,9 @@ export default function ProofModal({ proof, handleClose }) {
           className="text-center fw-bold text-warning"
           style={{ fontSize: "30px" }}
         >
-          {clientFullName} provided {thresholdInt} as a threshold
+          {clientFullName} exceeded the {thresholdInt} threshold you provided
         </h2>
-        <p>
+        <p className="text-center">
           Please pay attention as this page will no longer be available after you close it.
         </p>
         <SubmitButton
