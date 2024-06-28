@@ -1,5 +1,5 @@
 import { initialize } from "zokrates-js";
-import useGetVK from "API/useGetVk";
+import useGetVK from "api/useGetVk";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 

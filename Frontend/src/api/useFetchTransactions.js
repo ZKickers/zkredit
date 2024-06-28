@@ -1,5 +1,5 @@
-import { useDispatch } from "react-redux";
 import axiosInstance from "./axios";
+import { useDispatch } from "react-redux";
 import { showSnackbar } from '../features/snackbar/snackbarSlice';
 import { showSuccessSnackbar } from '../features/snackbar/successSnackbarSlice';
 import {
@@ -12,6 +12,8 @@ import {
   transactionsReceived as clientTxRecieved,
   transactionsFailed as clientTxFailed,
 } from "../redux/clientTransactionSlice";
+import DOMPurify from 'dompurify';
+
 
 const useFetchTransactions = () => {
   const dispatch = useDispatch();
@@ -31,7 +33,7 @@ const useFetchTransactions = () => {
       transactionsReceived = clientTxRecieved;
       transactionsFailed = clientTxFailed;
     } else {
-      dispatch(showSnackbar(error.message));
+      dispatch(showSnackbar(DOMPurify.sanitize(error.message)));
     }
 
     dispatch(transactionsLoading());
@@ -41,14 +43,17 @@ const useFetchTransactions = () => {
         params: { clientId: accountId },
       });
 
+      const sanitizedResp = DOMPurify.sanitize(response.data);
+
       if (response.status !== 200) {
-        dispatch(showSnackbar(response.data));
+        dispatch(showSnackbar(sanitizedResp));
       }
 
       dispatch(transactionsReceived(response.data));
     } catch (error) {
-      dispatch(showSnackbar(error.message));
-      dispatch(transactionsFailed(error.message));
+      const sanitizedResp = DOMPurify.sanitize(error.message);
+      dispatch(showSnackbar(sanitizedResp));
+      dispatch(transactionsFailed(sanitizedResp));
     }
   };
 
