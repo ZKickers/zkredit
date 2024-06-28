@@ -9,7 +9,7 @@ import {
 import { KeyboardBackspaceIcon } from "assets";
 import CachedIcon from "@mui/icons-material/Cached";
 import Transaction from "components/molecules/transaction/Transaction";
-import useFetchTransactions from "API/useFetchTransactions";
+import useFetchTransactions from "api/useFetchTransactions";
 import Skeleton from "components/molecules/skeleton/Skeleton";
 import { useEffect, useState } from "react";
 import classNames from "classnames";

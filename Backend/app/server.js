@@ -11,7 +11,7 @@ const thresholdRoute = require('./routes/thresholdRoute');
 const verificationRoutes = require('./routes/verificationRoutes');
 const verificationKeyRoute = require('./routes/verificationKeyRoute');
 const getProofRoute = require('./routes/getProofRoute');
-const { BACKEND_PORT, FRONTEND_URL, MONGODB_URI } = require('../config');
+const { BACKEND_PORT, FRONTEND_URL, MONGODB_URI, CREDIT_BUREAU_API } = require('../config');
 const os = require('os');
 
 if (os.platform() === 'win32') {

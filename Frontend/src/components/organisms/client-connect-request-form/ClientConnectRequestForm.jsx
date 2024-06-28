@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ClientConnectRequestValidationSchema } from "utils/validators/ClientConnectRequestValidationSchema";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
-import useClientConnectReq from "API/useClientConnectReq";
+import useClientConnectReq from "api/useClientConnectReq";
 
 export default function ClientConnectRequestForm({ handleClose }) {
   const {
@@ -22,9 +22,9 @@ export default function ClientConnectRequestForm({ handleClose }) {
       ...data,
     };
 
-    try{
+    try {
       await ClientConnectReq(jsonData);
-    }catch(err){
+    } catch (err) {
       console.log(err);
     }
 

@@ -3,7 +3,7 @@ import { NavigationProvider } from "contexts/NavigationContext";
 import LandingPage from "pages/landing-page/LandingPage";
 import DashboardPage from "pages/dashboard-page/DashboardPage";
 import TransactionsPage from "pages/transactions-page/TransactionsPage";
-import useGetUser from "API/useGetUser";
+import useGetUser from "api/useGetUser";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import Snackbar from './components/atoms/Snackbar/Snackbar';
