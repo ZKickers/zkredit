@@ -8,6 +8,10 @@ import emailIcon from "assets/email.png";
 import maskIcon from "assets/mask.png";
 import signatureIcon from "assets/signature.png";
 import idCardIcon from "assets/id-card.png";
+import confetti from "assets/confetti.png";
+import sadCat from "assets/sad cat.png";
+import circleCheck from "assets/circle-check.png"
+import circleRefuse from "assets/circle-refuse.png"
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LockIcon from "@mui/icons-material/Lock";
@@ -15,6 +19,10 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CloseIcon from "@mui/icons-material/Close";
 import DataThresholdingIcon from "@mui/icons-material/DataThresholding";
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
+import EnhancedEncryptionIcon from '@mui/icons-material/EnhancedEncryption';
+import SendIcon from '@mui/icons-material/Send';
+import CallReceivedIcon from '@mui/icons-material/CallReceived';
 
 export {
   checkMark,
@@ -27,6 +35,10 @@ export {
   maskIcon,
   signatureIcon,
   idCardIcon,
+  confetti,
+  sadCat,
+  circleCheck,
+  circleRefuse,
   LogoutIcon,
   AccountCircleIcon,
   LockIcon,
@@ -34,4 +46,8 @@ export {
   KeyboardBackspaceIcon,
   CloseIcon,
   DataThresholdingIcon,
+  PriorityHighIcon,
+  EnhancedEncryptionIcon,
+  SendIcon,
+  CallReceivedIcon,
 };

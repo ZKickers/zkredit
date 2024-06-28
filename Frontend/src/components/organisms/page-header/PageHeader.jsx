@@ -40,11 +40,11 @@ export default function PageHeader({ children }) {
           <span className="username">&nbsp; {user.username}</span>
         </h3>
         <div className="options w-75">
-          <button onClick={handleShowProfile} className="opt-profile m-0">
+          {/* <button onClick={handleShowProfile} className="opt-profile m-0">
             <AccountCircleIcon sx={{ fontSize: "32px" }} />
             <span>Profile</span>
-          </button>
-          <div className="opt-separator"></div>
+          </button> */}
+          {/* <div className="opt-separator"></div> */}
           <button className="opt-logout m-0" onClick={handleLogout}>
             <LogoutIcon sx={{ fontSize: "32px", transform: "scaleX(-1)" }} />
             <span>Logout</span>
