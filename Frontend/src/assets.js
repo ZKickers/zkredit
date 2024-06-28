@@ -20,6 +20,9 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CloseIcon from "@mui/icons-material/Close";
 import DataThresholdingIcon from "@mui/icons-material/DataThresholding";
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
+import EnhancedEncryptionIcon from '@mui/icons-material/EnhancedEncryption';
+import SendIcon from '@mui/icons-material/Send';
+import CallReceivedIcon from '@mui/icons-material/CallReceived';
 
 export {
   checkMark,
@@ -44,4 +47,7 @@ export {
   CloseIcon,
   DataThresholdingIcon,
   PriorityHighIcon,
+  EnhancedEncryptionIcon,
+  SendIcon,
+  CallReceivedIcon,
 };
