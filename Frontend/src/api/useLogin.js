@@ -18,7 +18,7 @@ const useLogin = () => {
         if (error.response.status === 401) {
           dispatch(showSnackbar("Invalid credentials"));
         }
-        dispatch(showSnackbar(DOMPurify.sanitize(error.response.data)));
+        dispatch(showSnackbar(DOMPurify.sanitize(error.response.data.message)));
         throw error;
       });
       console.log(response);

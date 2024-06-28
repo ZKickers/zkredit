@@ -42,6 +42,7 @@ const csrfProtection = csurf({
 app.use(csrfProtection);
 app.use((req, res, next) => {
   res.locals.csrfToken = req.csrfToken();
+  console.log('Logging with:' );
   console.log(req.csrfToken())
   next();
 });

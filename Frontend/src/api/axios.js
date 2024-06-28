@@ -3,7 +3,6 @@ const baseUrl = process.env.REACT_APP_BACKEND_SERVER;
 
 const axiosInstance = axios.create({
   baseURL: baseUrl,
-  withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(async (config) => {
