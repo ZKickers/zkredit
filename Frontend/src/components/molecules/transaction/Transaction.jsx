@@ -50,8 +50,7 @@ export default function Transaction({
 
   const color = classNames({
     "#009A2B": state.Passed,
-    "#F62525": state.Failed,
-    "#F62525": state.Invalid,
+    "#F62525": state.Failed || state.Invalid,
     "#FFB800": state.Pending_Threshold,
     "#33A1DE": state.Pending_Verification,
     "#8E44AD": state.Pending_Proof,
