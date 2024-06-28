@@ -2,6 +2,7 @@ import axiosInstance from "./axios";
 import { showSnackbar } from "../features/snackbar/snackbarSlice";
 import { useDispatch } from "react-redux";
 import { vkLoading, vkReceived, vkFailed } from "../redux/vkSlice";
+import DOMPurify from 'dompurify';
 
 const useGetVK = () => {
   const url = "/verification-key";
@@ -10,15 +11,16 @@ const useGetVK = () => {
   const getVK = async () => {
     dispatch(vkLoading());
     const response = await axiosInstance.get(url).catch((error) => {
-      dispatch(showSnackbar(error.message));
-      vkFailed(error.message);
+      const sanitizedError = DOMPurify.sanitize(error.message);
+      dispatch(showSnackbar(sanitizedError));
+      vkFailed(sanitizedError);
     });
+    const sanitizedResp = DOMPurify.sanitize(response.data);
     if (response.status !== 200) {
-      dispatch(showSnackbar(response.data));
-      console.error("Error fetching the verification key:", response.data);
-      vkFailed(response.data);
+      dispatch(showSnackbar(sanitizedResp));
+      console.error("Error fetching the verification key:", sanitizedResp);
+      vkFailed(sanitizedResp);
     }else{
-      console.log(response.data);
       dispatch(vkReceived(response.data));
       return response.data;
     }
