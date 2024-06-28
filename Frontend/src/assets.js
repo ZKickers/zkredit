@@ -15,6 +15,7 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CloseIcon from "@mui/icons-material/Close";
 import DataThresholdingIcon from "@mui/icons-material/DataThresholding";
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 
 export {
   checkMark,
@@ -34,4 +35,5 @@ export {
   KeyboardBackspaceIcon,
   CloseIcon,
   DataThresholdingIcon,
+  PriorityHighIcon,
 };
