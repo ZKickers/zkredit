@@ -24,9 +24,9 @@ app.use(cors({
 }));
 app.use(bodyParser.json());
 
-mongoose.connect(MONGODB_URI)
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error('MongoDB connection error:', err));
+// mongoose.connect(MONGODB_URI)
+// .then(() => console.log('MongoDB connected'))
+// .catch(err => console.error('MongoDB connection error:', err));
 
 // Routes
 app.use('/auth', authRoutes);

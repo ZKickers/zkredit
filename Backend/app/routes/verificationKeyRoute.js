@@ -13,7 +13,7 @@ router.get('/', verifyToken, async (req, res) => {
         res.status(200).json(vk);
     } catch (error) {
         console.error('Error sending verification key:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).send("Couldn't retrieve verification key. Please retry proof validation.");
     }
 });
 

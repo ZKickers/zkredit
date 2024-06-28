@@ -28,7 +28,7 @@ router.post('/', verifyToken, async (req, res) => {
         res.status(200).json({ message: 'Transaction updated successfully' });
     }catch (error) {
         console.error('Error validate transaction:', error);
-        res.status(500).json({ message: 'Transaction update failed ' });
+        res.status(500).send("Couldn't update transaction in server. Please refresh.");
     }
 });
 

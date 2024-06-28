@@ -21,7 +21,7 @@ router.get('/:txId', verifyToken, async (req, res) => {
         res.status(200).json({ proof: proof });
     } catch (error) {
         console.error('Error getting proof:', error);
-        res.status(500).json({ message: 'Getting Proof failed' });
+        res.status(500).send('Getting Proof failed. Try refreshing please.');
     }
 });
 

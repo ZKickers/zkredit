@@ -19,9 +19,9 @@ router.post('/trigger-threshold', verifyToken, validateParams, async (req, res) 
         const { txId, threshold } = req.body;
         const transaction = await Transaction.findById(txId);
         console.log(transaction)
-        if (!(threshold >= 0 && threshold <= 850))
+        if (!(threshold >= 350 && threshold <= 850))
         {
-            return res.status(403).send("Threshold is not within (0-65535)")
+            return res.status(403).send("Threshold is not within (350-850)")
         }
         if (!transaction) {
             return res.status(404).send('Transaction not found');
@@ -40,7 +40,7 @@ router.post('/trigger-threshold', verifyToken, validateParams, async (req, res) 
         res.status(200).json(updatedTransaction);
     } catch (error) {
         console.error('Error triggering threshold event:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).send("Threshold didn't reach the server. Please re-enter it again.");
     }
 });
 

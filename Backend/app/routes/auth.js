@@ -50,7 +50,7 @@ router.post('/signup', async (req, res) => {
       res.status(201).send('User created successfully');
     } catch (error) {
       console.error('Error creating user:', error);
-      res.status(500).send('Internal server error');
+      res.status(500).send("Couldn't signup. Please try again.");
     }
   });
   
@@ -76,7 +76,7 @@ router.post('/login', async (req, res) => {
       res.status(200).json({ token });
     } catch (error) {
       console.error('Error logging in:', error);
-      res.status(500).send('Internal server error');
+      res.status(500).send("Couldn't login. Please Try again.");
     }
   });
   
@@ -96,7 +96,7 @@ router.get('/', verifyToken, async (req, res) => {
     res.json({ username, createdAt, accountId });
   } catch (error) {
     console.error('Error verifying token:', error);
-    res.status(403).json({ message: 'Invalid token.' });
+    res.status(403).send('Invalid token.');
   }
 });
 

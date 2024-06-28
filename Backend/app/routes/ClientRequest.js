@@ -31,7 +31,7 @@ router.post('/issue-transaction', verifyToken, validateIssueTXParams, async (req
         res.status(201).json({ message: 'Transaction issued successfully', transaction: transaction });
     } catch (error) {
         console.error('Error issuing transaction:', error.message);
-        res.status(500).json({ error: error.message });
+        res.status(500).send("Couldn't issue transaction. Please try again.");
     }
 });
 
@@ -49,20 +49,20 @@ router.post('/generate-proof', verifyToken, validateProofParams, async (req, res
         const result = await sendClientInfo(transaction, address, birthdate, ssn);
 
         if (result.status === 'success') {
-            res.status(200).json({ message: 'Client information received successfully', transaction: result.transaction });
+            res.status(200).send({ message: 'Client information received successfully', transaction: result.transaction });
         } else if (result.status === 'timeout') {
-            res.status(408).json({ message: result.message });
+            res.status(408).json(result.message);
         }
         else if(result.status = "Mismatch")
         {
-            res.status(400).json({message: "Invalid client data"});
+            res.status(400).send("Invalid client data");
         }
         else {
             res.status(400).json({ message: result.message, details: result.details });
         }
     } catch (error) {
         console.error('Error handling client information:', error.message);
-        res.status(500).json({ error: error.message });
+        res.status(500).send("Couldn't generate proof. Please re-enter your data and try again.");
     }
 });
 
