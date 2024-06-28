@@ -3,3 +3,4 @@
 Frontend/.env.local
 Backend/app/out
 Paths.txt
+Backend/app/server.cert
