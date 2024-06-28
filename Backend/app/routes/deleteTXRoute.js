@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Transaction = require('../models/Transaction');
 const TxDeletionState = require('../models/TransactionDeletionState');
-const verifyToken = require('../Services/authMiddleware');
+const verifyToken = require('../middlewares/authMiddleware');
 const { deleteTxByClient, deleteTxByCreditor, deleteClientTxs, deleteCreditorTxs } = require('../Services/deleteTx');
 
 

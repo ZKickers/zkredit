@@ -1,34 +1,29 @@
 const express = require('express');
 const router = express.Router();
-const verifyToken = require('../Services/authMiddleware');
+const verifyToken = require('../middlewares/authMiddleware');
 const { validateTx } = require('../Services/validateTx');
 const Transaction = require('../models/Transaction');
+const { validateTransactionUpdate } = require('../middlewares/verifyTxValidation');
 
-router.post('/', verifyToken, async (req, res) => {
+router.post('/', verifyToken, validateTransactionUpdate, async (req, res) => {
     try {
-        const accepted = req.body.accepted; 
-        console.log(req.body);
-        const txId = req.body.txId;
-        if (typeof accepted !== 'boolean' || !txId) {
-            return res.status(400).json({ error: 'Invalid parameters' });
-        }
+        const { accepted, txId } = req.body;
         const existingTransaction = await Transaction.findById(txId);
         if (!existingTransaction) {
-            throw new Error('Transaction not found');
+            return res.status(404).json({ error: 'Transaction not found' });
         }
-        if(req.user.accountId !== existingTransaction.creditorAccountId)
-        {
-            return res.status(403).send('Forbidden: You are not authorized to verify transaction');
+        if (req.user.accountId !== existingTransaction.creditorAccountId) {
+            return res.status(403).send('Forbidden: You are not authorized to verify this transaction');
         }
-        if(existingTransaction.status != "Pending_Verification")
-        {
+        if (existingTransaction.status !== "Pending_Verification") {
             return res.status(403).send('Transaction status cannot be verified as it is not Pending_Verification');
         }
         await validateTx(txId, accepted);
-        res.status(200).json({ message: 'Transaction updated successfully' });
-    }catch (error) {
-        console.error('Error validate transaction:', error);
-        res.status(500).json({ message: 'Transaction update failed ' });
+        const updatedTransaction = await Transaction.findById(txId);
+        res.status(200).json({ message: 'Transaction updated successfully', transaction: updatedTransaction});
+    } catch (error) {
+        console.error('Error validating transaction:', error);
+        res.status(500).json({ message: 'Transaction update failed' });
     }
 });
 
