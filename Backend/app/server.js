@@ -11,7 +11,7 @@ const thresholdRoute = require('./routes/thresholdRoute')
 const verificationRoutes = require('./routes/verificationRoutes')
 const verificationKeyRoute = require('./routes/verificationKeyRoute')
 const getProofRoute = require('./routes/getProofRoute')
-const { BACKEND_PORT, FRONTEND_URL, MONGODB_URI } = require('../config');
+const { BACKEND_PORT, CREDIT_BUREAU_API, FRONTEND_URL, MONGODB_URI } = require('../config');
 
 app.use(cors({
   origin: FRONTEND_URL
@@ -34,4 +34,5 @@ app.use('/getProof', getProofRoute);
 
 app.listen(BACKEND_PORT, () => {
   console.log(`Backend Server is running on port ${BACKEND_PORT}`);
+  console.log(`Listening to FBAPI on ${CREDIT_BUREAU_API}`)
 });
