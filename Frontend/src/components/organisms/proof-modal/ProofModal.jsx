@@ -1,9 +1,14 @@
 import React from "react";
+import "./ProofModal.css"
 import extractProof from "./proofParser";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 
 export default function ProofModal({ proof, handleClose }) {
   const { threshold, result, timestamp, clientFullName } = extractProof(proof);
+
+  const thresholdInt = Number(threshold)
+
+  console.log("ProofModal fn -->", thresholdInt)
 
   // Format the timestamp
   const date = new Date(Number(timestamp));
@@ -14,7 +19,7 @@ export default function ProofModal({ proof, handleClose }) {
     <div className="proof-modal">
       <h2>Proof Details</h2>
       <p>
-        <strong>Threshold:</strong> {threshold}
+        <strong>Threshold:</strong> {thresholdInt}
       </p>
       <p>
         <strong>Exceeding the Threshold:</strong> {result ? "True" : "False"}

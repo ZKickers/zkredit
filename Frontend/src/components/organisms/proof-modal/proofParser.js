@@ -49,6 +49,8 @@ const extractProof = (proof) => {
   const timestamp = concatenateBytesToLong(inputs.slice(3, 11));
   const clientFullName = concatenateBytesToString(inputs.slice(11));
 
+  console.log("ExactProof Fn -->", threshold);
+
   return {
     threshold,
     result,
