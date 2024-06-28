@@ -1,31 +1,24 @@
-import { useState } from "react";
 import axiosInstance from "./axios";
+import { showSnackbar } from "../features/snackbar/snackbarSlice";
+import { showSuccessSnackbar } from "../features/snackbar/successSnackbarSlice";
+import { useDispatch } from "react-redux";
 
-export const useSendThreshold = () => {
-  const url = "/Creditor/trigger-threshold";
-  const [proof, setProof] = useState(null);
-  const [error, setError] = useState(null);
-
-  const sendThreshold = async (threshold, txId) => {
+export const useGetProof = () => {
+  const dispatch = useDispatch();
+  const getProof = async (txId) => {
+    const url = `/getProof/${txId}`;
     try {
-      const response = await axiosInstance.post(url, {
-        threshold: threshold,
-        txId: txId,
-      });
-      if (response.status === 200) {
-        console.log(response);
-        setProof(response.data);
-      } else {
-        setError("Problem connecting with the server!");
-      }
+      const response = await axiosInstance.get(url);
+      return response.data.proof;
     } catch (error) {
-      setError(error.message);
+      console.log(error);
+      dispatch(showSnackbar(error.message));
     }
   };
-  return { proof, error, sendThreshold };
+  return getProof;
 };
 
-export const sendProofStatus = async (transactionId, isAccepted) => {
+export const validateProof = async (transactionId, isAccepted) => {
   const url = "/verifyTx";
   const data = {
     txId: transactionId,
@@ -34,13 +27,11 @@ export const sendProofStatus = async (transactionId, isAccepted) => {
 
   const response = await axiosInstance.post(url, data).catch((error) => {
     console.log(error);
-    throw new Error("Problem connecting with the server!");
   });
 
   if (response.status !== 200) {
     const message = response.data;
     throw new Error(message);
   }
-
   return response.data;
 };

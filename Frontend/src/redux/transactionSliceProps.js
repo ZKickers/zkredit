@@ -15,6 +15,11 @@ const txReducers = {
       Object.assign(existingTransaction, updates);
     }
   },
+  clearTransactions(state) {
+    state.transactions = [];
+    state.status = "idle";
+    state.error = null;
+  },
   deleteTransaction(state, action) {
     const { id } = action.payload;
     state.transactions = state.transactions.filter((tx) => tx._id !== id);
