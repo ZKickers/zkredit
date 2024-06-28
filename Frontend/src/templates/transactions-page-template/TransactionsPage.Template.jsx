@@ -99,8 +99,8 @@ export default function TPTemplate({ isCreditor }) {
         return TransactionStateEnum.PENDING_PROOF;
       case "Pending_Verification" || TransactionStateEnum.PENDING_VERIFICATION:
         return TransactionStateEnum.PENDING_VERIFICATION;
-      case "Insufficient" || TransactionStateEnum.INSUFFICIENT:
-        return TransactionStateEnum.INSUFFICIENT;
+      case "Invalid" || TransactionStateEnum.INVALID:
+        return TransactionStateEnum.INVALID;
     }
   };
   const setCurrentTxStatus = (status) => {

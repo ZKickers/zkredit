@@ -3,6 +3,7 @@ import "./Transaction.css";
 import { LockIcon, LockOpenIcon, CloseIcon } from "assets";
 import { datePrettier } from "./datePrettier";
 import TransactionStateEnum from "utils/TransactionStateEnum";
+import PriorityHigh from "@mui/icons-material/PriorityHigh";
 
 export default function Transaction({
   txId,
@@ -17,6 +18,7 @@ export default function Transaction({
   const state = {
     Passed: status === TransactionStateEnum.PASSED,
     Failed: status === TransactionStateEnum.FAILED,
+    Invalid: status === TransactionStateEnum.INVALID,
     Pending_Threshold: status === TransactionStateEnum.PENDING_THRESHOLD,
     Pending_Client_Data: status === TransactionStateEnum.PENDING_CLIENT_DATA,
     Pending_Proof: status === TransactionStateEnum.PENDING_PROOF,
@@ -29,16 +31,17 @@ export default function Transaction({
   const base = "tx row container w-100 p-md-2 p-sm-3 my-md-1 my-sm-3";
   const classes = classNames(base, {
     "tx-passed": state.Passed,
-    "tx-failed": state.Failed,
+    "tx-failed": state.Failed || state.Invalid,
     "tx-pending-client-data": state.Pending_Client_Data,
     "tx-pending-proof": state.Pending_Proof,
     "tx-pending-threshold": state.Pending_Threshold,
-    "tx-pending-verification": state.Pending_Verification
+    "tx-pending-verification": state.Pending_Verification,
   });
 
   const statusText = classNames({
     Passed: state.Passed,
     Failed: state.Failed,
+    Invalid: state.Invalid,
     "Pending Threshold": state.Pending_Threshold,
     "Pending Verification": state.Pending_Verification,
     "Pending Proof": state.Pending_Proof,
@@ -47,7 +50,7 @@ export default function Transaction({
 
   const color = classNames({
     "#009A2B": state.Passed,
-    "#F62525": state.Failed,
+    "#F62525": state.Failed || state.Invalid,
     "#FFB800": state.Pending_Threshold,
     "#33A1DE": state.Pending_Verification,
     "#8E44AD": state.Pending_Proof,
@@ -65,6 +68,8 @@ export default function Transaction({
       return <LockIcon className="rounded-circle p-2" sx={iconStyle} />;
     if (state.Failed)
       return <CloseIcon className="rounded-circle p-2" sx={iconStyle} />;
+    if (state.Invalid)
+      return <PriorityHigh className="rounded-circle p-2" sx={iconStyle} />;
     if (
       state.Pending_Client_Data ||
       state.Pending_Proof ||

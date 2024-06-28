@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./DashboardPage.Template.css";
-import { LockIcon, LockOpenIcon } from "assets";
+import { CallReceivedIcon, EnhancedEncryptionIcon, LockIcon, LockOpenIcon, SendIcon } from "assets";
 import CachedIcon from "@mui/icons-material/Cached";
 import ModalPage from "pages/modal-page/ModalPage";
 import Link from "components/atoms/navigation/Link";
@@ -97,35 +97,33 @@ export default function DashboardPageTemplate() {
           </div>
         </div>
         <div className={classNames(rightClasses, "justify-content-center")}>
-          <div className="client-session-container">
-            <button className="w-75" onClick={handleShowSession}>
+          <div className="dashboard-button new-session">
+            <button className="w-100" onClick={handleShowSession}>
               <h2
-                className="d-flex justify-content-between align-items-center w-100"
+                className="d-flex justify-content-between align-items-center w-75 mx-auto"
                 style={{ fontWeight: "bold", color: "#009A2B" }}
               >
-                <LockIcon sx={{ fontSize: "56px" }} />
-                New Client Session
+                <EnhancedEncryptionIcon sx={{ fontSize: "56px" }} /> Client Session
               </h2>
             </button>
           </div>
-          <div className="creditor-proofs-container">
-            <Link to="/sent" className="w-75">
+          <div className="dashboard-button sent-proofs">
+            <Link to="/sent" className="w-100">
               <h2
-                className="d-flex justify-content-between align-items-center w-100"
-                style={{ fontWeight: "bold", color: "#0000CD" }}
+                className="d-flex justify-content-between align-items-center w-75 mx-auto"
+                style={{ fontWeight: "bold", color: "black" }}
               >
-                <LockOpenIcon sx={{ fontSize: "56px" }} /> Browse Sent Proofs
+                <SendIcon sx={{ fontSize: "56px" }} /> Sent Proofs
               </h2>
             </Link>
           </div>
-          <div className="creditor-proofs-container">
-            <Link to="/received" className="w-75">
+          <div className="dashboard-button rcvd-proofs">
+            <Link to="/received" className="w-100">
               <h2
-                className="d-flex justify-content-between align-items-center w-100"
-                style={{ fontWeight: "bold", color: "#0000CD" }}
+                className="d-flex justify-content-between align-items-center w-75 mx-auto"
+                style={{ fontWeight: "bold", color: "#8b5eff" }}
               >
-                <LockOpenIcon sx={{ fontSize: "56px" }} /> Browse Received
-                Proofs
+                <CallReceivedIcon sx={{ fontSize: "56px" }} /> <div>Received Proofs</div>
               </h2>
             </Link>
           </div>

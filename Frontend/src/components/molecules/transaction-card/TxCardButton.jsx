@@ -16,6 +16,8 @@ import { showSnackbar } from "features/snackbar/snackbarSlice";
 const TxCardButton = (props) => {
   const { isClient, state, setTransactionState, color, txId } = props;
 
+  console.log(color);
+
   const [proof, setProof] = useState(null);
   const [showProof, setShowProof] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -78,9 +80,6 @@ const TxCardButton = (props) => {
       );
     }
   };
-  console.log("isVerified", isVerified, verificationResult);
-  console.log("proof", !!proof);
-  console.log("isClient", isClient);
 
   if (isClient) {
     if (state.Pending_Client_Data)
@@ -94,8 +93,6 @@ const TxCardButton = (props) => {
       if (!proof) return renderGetProofButton(color, txId, setProof);
       // if proof is available
       if (isVerified === null || isVerified === false) {
-        console.log("isVerified", isVerified, verificationResult);
-        console.log("proof", !!proof);
         return renderValidationButton(color, handleVerification);
       }
     }
