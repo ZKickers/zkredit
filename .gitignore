@@ -1,6 +1,5 @@
 .vscode
 .DS_Store
-Frontend/.env.local
+.env
 Backend/app/out
 Paths.txt
-Frontend/.env.local
