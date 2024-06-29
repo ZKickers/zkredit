@@ -10,6 +10,8 @@ import {
 } from "hooks/signup-form-hooks/signup-form-hooks";
 import useSignUp from "API/useSignup";
 import "react-toastify/dist/ReactToastify.css";
+import { useRecaptcha } from "../../../API/useRecaptcha";
+import { toast } from "react-toastify";
 
 export default function SignupForm({ handleClose }) {
   const [username, setUsername] = useState("");
@@ -17,6 +19,8 @@ export default function SignupForm({ handleClose }) {
 
   const [email, setEmail] = useState("");
   const { emailError, validateEmail } = useEmailValidation();
+
+  const onSubmitWithRecaptcha = useRecaptcha();
 
   const {
     passwordError,
@@ -32,13 +36,26 @@ export default function SignupForm({ handleClose }) {
     e.preventDefault();
     if (validData()) {
       try {
+        const captchaResponse = await onSubmitWithRecaptcha();
+        
+        if (!captchaResponse.data.success) {
+          throw new Error("Error while verifying reCAPTCHA:", captchaResponse.data.message);
+        }
+
         await signupUser({
           email,
           username,
           password,
         });
+
+        toast.info("Created an account successfully", {
+          autoClose: 5000,
+        });
       } catch (error) {
-        console.log(error.message);
+        console.log(error);
+        toast.error("Error while creating an account", {
+          autoClose: 5000,
+        });
       }
     }
   };
@@ -159,7 +176,7 @@ export default function SignupForm({ handleClose }) {
             />
           </div>
         </div>
-        <div className="my-5 mx-auto" style={{ width: "fit-content" }}>
+        <div className="my-3 w-100 d-flex justify-content-around align-items-center">
           <SubmitButton style={{ fontSize: "20px" }}>
             <span>Sign Up</span>
           </SubmitButton>

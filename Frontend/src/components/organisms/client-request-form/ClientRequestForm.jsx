@@ -4,15 +4,14 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { Home, CalendarMonth } from "@mui/icons-material";
-import { maskIcon, signatureIcon, idCardIcon } from "assets";
-
+import { idCardIcon } from "assets";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ClientRequestValidationSchema } from "utils/validators/ClientRequestValidationSchema";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { toast, ToastContainer } from "react-toastify";
-import { useSelector } from "react-redux";
 import useClientRequest from "API/useClientRequest";
+import { useRecaptcha } from "../../../API/useRecaptcha";
 
 //  Sample JSON data for the form {
 //   "address": "123 Oak Saint Anytown, WI. 1111",
@@ -33,21 +32,28 @@ export default function ClientRequestForm({ handleClose, txId }) {
 
   const postClientData = useClientRequest();
 
+  const onSubmitWithRecaptcha = useRecaptcha();
+
   const onRequestSubmit = async (data) => {
-    const response = await postClientData({ ...data, txId });
-    console.log(response);
     try {
+      const captchaResponse = await onSubmitWithRecaptcha();
+
+      if (!captchaResponse.data.success) {
+        throw new Error("Error while verifying reCAPTCHA");
+      }
+
+      await postClientData({ ...data, txId });
       toast.success("Request initiated successfully!", {
         autoClose: 3000,
       });
     } catch (error) {
       console.error(error);
-      toast.error(error.message, {
+      toast.error("Error while submitting data", {
         autoClose: 5000,
       });
     }
 
-    //clear form
+    // Clear form
     setValue("address", "");
     setValue("birthdate", "");
     setValue("ssn", "");
@@ -187,13 +193,16 @@ export default function ClientRequestForm({ handleClose, txId }) {
             />
           </div>
         </div>
-        <div className="my-5 mx-auto" style={{ width: "fit-content" }}>
+        <div
+          className="my-4 mx-auto d-flex flex-column align-items-center"
+          style={{ width: "fit-content" }}
+        >
           <SubmitButton
-            className="submissionButton"
+            className="my-4"
             type="submit"
             style={{ width: "200px", fontSize: "20px" }}
           >
-            Initiate Request
+            Send Data
           </SubmitButton>
         </div>
       </form>
