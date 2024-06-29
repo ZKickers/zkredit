@@ -12,5 +12,8 @@ export const ERROR_MSG = {
     "login" : {
         "invalidPassword" : 'Invalid password',
         "unexpected" : "Couldn't login. Please Try again.",
-    }
+    },
+    "getTx" : "unexpected",
+    
+
 }

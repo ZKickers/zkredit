@@ -3,29 +3,39 @@ const router = express.Router();
 const Transaction = require("../models/Transaction");
 const verifyToken = require("../Services/authMiddleware");
 const User = require("../models/User");
+const { reqlog, successLog, errlog } = require("../Services/logging");
+const { ERROR_MSG } = require("../Services/errorHandling");
 
 // Route to get transactions by client ID
 router.get("/client/", verifyToken, async (req, res) => {
+  const action = "getTx"
+  const action_child = action + "Client"
+  reqlog(action_child)
   try {
     const transactions = await Transaction.find({
       clientAccountId: req.user.accountId,
     });
+    successLog(req.user.accountId, action_child)
     res.status(200).json(transactions);
   } catch (error) {
-    console.error("Error retrieving transactions by client ID:", error);
-    res.status(500).send("Couldn't retrieve transactions. Please try again.");
+    errlog(action_child,error)
+    res.status(500).send(ERROR_MSG["getTx"]);
   }
 });
 
 router.get("/creditor/", verifyToken, async (req, res) => {
+  const action = "getTx"
+  const action_child = action + "Creditor"
+  reqlog(action_child)
   try {
     const transactions = await Transaction.find({
       creditorAccountId: req.user.accountId,
     });
+    successLog(req.user.accountId, action_child)
     res.status(200).json(transactions);
   } catch (error) {
-    console.error("Error retrieving transactions by client ID:", error);
-    res.status(500).send("Couldn't retrieve transactions. Please try refreshing.");
+    errlog(action_child,error)
+    res.status(500).send(ERROR_MSG["getTx"]);
   }
 });
 
