@@ -1,7 +1,6 @@
 import axiosInstance from "./axios";
 import { useDispatch } from "react-redux";
-import { showSnackbar } from '../features/snackbar/snackbarSlice';
-import { showSuccessSnackbar } from '../features/snackbar/successSnackbarSlice';
+import { showSnackbar } from "../features/snackbar/snackbarSlice";
 import {
   transactionsLoading as creditorTxLoading,
   transactionsReceived as creditorTxReceived,
@@ -12,7 +11,7 @@ import {
   transactionsReceived as clientTxReceived,
   transactionsFailed as clientTxFailed,
 } from "../redux/clientTransactionSlice";
-import DOMPurify from 'dompurify';
+import DOMPurify from "dompurify";
 
 const useFetchTransactions = () => {
   const dispatch = useDispatch();
@@ -41,17 +40,18 @@ const useFetchTransactions = () => {
     try {
       const response = await axiosInstance.get(url.replace(":type", type), {
         params: { clientId: accountId },
-        withCredentials: true // Ensure cookies are sent with requests
       });
 
       if (!response || response.status !== 200) {
-        const sanitizedResp = DOMPurify.sanitize(response?.data || 'Unknown error');
+        const sanitizedResp = DOMPurify.sanitize(
+          response?.data || "Unknown error"
+        );
         dispatch(showSnackbar(sanitizedResp));
         return;
       }
 
       const sanitizedResp = DOMPurify.sanitize(response.data);
-      dispatch(transactionsReceived(sanitizedResp));
+      dispatch(transactionsReceived(response.data));
     } catch (error) {
       const sanitizedResp = DOMPurify.sanitize(error.message);
       dispatch(showSnackbar(sanitizedResp));
