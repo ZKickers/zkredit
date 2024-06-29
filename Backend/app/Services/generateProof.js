@@ -1,16 +1,17 @@
+require('dotenv').config();
 const axios = require("axios");
 const Serial = require("./serialize");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 const Transaction = require("../models/Transaction");
-const { CREDIT_BUREAU_API } = require("../../config");
 const fs = require("fs");
 const path = require("path");
-
 const index = __dirname.indexOf("/Services");
 const PK_X_PATH = __dirname.substring(0, index) + "/static/publicKeyBJJ_X.pem";
 const PK_Y_PATH = __dirname.substring(0, index) + "/static/publicKeyBJJ_Y.pem";
 const PROOFS_PATH = __dirname.substring(0, index) + "/proofs/";
+
+const bureauApi = process.env.EXPRESS_APP_CREDIT_BUREAU_API
 
 async function invalidateTransaction(txId) {
   await Transaction.findOneAndUpdate(
@@ -135,8 +136,7 @@ async function sendClientInfo(transaction, address, birthdate, ssn) {
 
   try {
     console.log("received, ", clientInfo);
-    console.log(CREDIT_BUREAU_API);
-    const response = await axios.post(CREDIT_BUREAU_API, clientInfo, {
+    const response = await axios.post(bureauApi, clientInfo, {
       timeout: 2000,
     });
     console.log(response);

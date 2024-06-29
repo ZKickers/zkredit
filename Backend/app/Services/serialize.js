@@ -1,20 +1,19 @@
 const fs = require("fs")
 const path = require("path");
-const { DATA_BYTES } = require("../../config");
 
-
+const dataBytes = JSON.parse(process.env.EXPRESS_APP_DATA_BYTES);
 
 function serializeResponse(apiResponse) {
   console.log("Serializing Response")
   // Extract relevant fields from the API response
   const { fullname, address, birthdate, ssn, score, timestamp, signature } = apiResponse;
   const response = {
-      name: serializePadded(fullname,DATA_BYTES.name),
-      address: serializePadded(address,DATA_BYTES.address),
+      name: serializePadded(fullname, dataBytes.name),
+      address: serializePadded(address, dataBytes.address),
       birthdate: [...birthdate].map(char => char.charCodeAt(0).toString()),
       ssn: [...ssn].map(char => char.charCodeAt(0).toString()),
-      score:  intToBytes(score, DATA_BYTES.score),
-      timestamp: intToBytes(timestamp, DATA_BYTES.timestamp),
+      score:  intToBytes(score, dataBytes.score),
+      timestamp: intToBytes(timestamp, dataBytes.timestamp),
       sig: {
         R: signature.R.map(big => BigInt('0x' + big).toString()),
         S: BigInt('0x' + signature.S).toString()
@@ -27,8 +26,8 @@ function serializeClientData(clientInput) {
   // Extract relevant fields from the API response
   const { fullname, address, birthdate, ssn } = clientInput;
   const clientData = {
-    name: serializePadded(fullname,DATA_BYTES.name),
-    address: serializePadded(address,DATA_BYTES.address),
+    name: serializePadded(fullname, dataBytes.name),
+    address: serializePadded(address, dataBytes.address),
     birthdate: [...birthdate].map(char => char.charCodeAt(0).toString()),
     ssn: [...ssn].map(char => char.charCodeAt(0).toString()),
   }
