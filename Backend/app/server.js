@@ -23,7 +23,7 @@ const { BACKEND_PORT, FRONTEND_URL, MONGODB_URI } = require('../config');
 const corsOptions = {
   origin: FRONTEND_URL,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
+  // credentials: true,
   optionsSuccessStatus: 204
 };
 

@@ -62,13 +62,13 @@ router.post('/login', validateLogin, async (req, res) => {
     }, process.env.JWT_SECRET, { expiresIn: '2d' });
 
     // Set the token in an HttpOnly, Secure, SameSite cookie
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: true, // Ensures cookie is sent over HTTPS
-      sameSite: 'Strict'
-    });
+    // res.cookie('token', token, {
+    //   httpOnly: true,
+    //   secure: true, // Ensures cookie is sent over HTTPS
+    //   sameSite: 'Strict'
+    // });
 
-    res.status(200).json({ message: 'Login successful' });
+    res.status(200).json({ message: 'Login successful', token: token });
   } catch (error) {
     console.error('Error logging in:', error);
     res.status(500).send('Internal server error');
