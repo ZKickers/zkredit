@@ -9,3 +9,19 @@ export function reqlog (action) {
 export function successLog(username,action) {
     console.log(`${username} successfull ${action}`)
 }
+
+export function paramsMissingLog(params) {
+    console.log(`Missing required parameters :  ${params}`)
+}
+
+export function issueTxLog(tx,clientUsername) {
+    const {_id, creditorUsername, fullNameOfClient} = tx
+    console.log(`TX ${_id} created 
+               | issuedBy : ${clientUsername}
+               | using fullname : ${fullNameOfClient}
+               | to : ${creditorUsername}`)
+}
+
+export function txStatusUpdateLog(txid,newS,oldS=null) {
+    console.log(`Transaction ${txid} Status Update : ${oldS!==null ? `${oldS}-->` : ''} ${newS}`)
+}

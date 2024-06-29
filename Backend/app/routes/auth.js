@@ -14,35 +14,35 @@ router.post('/signup', async (req, res) => {
   reqlog(action)
     try {
       if (!req.body.username || !req.body.email || !req.body.password) {
-        const errorMsg = ERROR_MSG[action]["param"]
+        const errorMsg = ERROR_MSG[action].param
         errlog(action,errorMsg)
         return res.status(400).send(errorMsg);
       }
   
       const existingUsername = await User.findOne({ username: req.body.username });
       if (existingUsername) {
-        const errorMsg = ERROR_MSG[action]["userTaken"]
+        const errorMsg = ERROR_MSG[action].userTaken
         errlog(action,errorMsg)
         return res.status(400).send(errorMsg);
       }
   
       const existingEmail = await User.findOne({ email: req.body.email });
       if (existingEmail) {
-        const errorMsg = ERROR_MSG[action]["emailTaken"]
+        const errorMsg = ERROR_MSG[action].emailTaken
         errlog(action,errorMsg)
         return res.status(400).send(errorMsg);
       }
   
       const emailRegex = /\S+@\S+\.\S+/;
       if (!emailRegex.test(req.body.email)) {
-        const errorMsg = ERROR_MSG[action]["emailInvalid"]
+        const errorMsg = ERROR_MSG[action].emailInvalid
         errlog(action,errorMsg)
         return res.status(400).send(errorMsg);
       }
   
       const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,}$/;
       if (!passwordRegex.test(req.body.password)) {
-        const errorMsg = ERROR_MSG[action]["weakPassword"]
+        const errorMsg = ERROR_MSG[action].weakPassword
         errlog(action,errorMsg)
         return res.status(400).send(errorMsg);
       }
@@ -63,7 +63,7 @@ router.post('/signup', async (req, res) => {
       successLog(user.username,action)
       res.status(201).send('User created successfully');
     } catch (error) {
-      const errorMsg = ERROR_MSG[action]["unexpected"]
+      const errorMsg = ERROR_MSG[action].unexpected
       errlog(action,errorMsg)
       res.status(500).send(errorMsg);
     }
@@ -77,13 +77,13 @@ router.post('/login', async (req, res) => {
       const user = await User.findOne({ username: req.body.username });
   
       if (!user) {
-        const errorMsg = ERROR_MSG["notFound"]
+        const errorMsg = ERROR_MSG.userNotFound
         errlog(action,errorMsg)
         return res.status(404).send(errorMsg);
       }
       const passwordMatch = await bcrypt.compare(req.body.password + user.salt, user.password);
       if (!passwordMatch) {
-        const errorMsg = ERROR_MSG[action]["invalidPassword"]
+        const errorMsg = ERROR_MSG[action].invalidPassword
         errlog(action,errorMsg)
         return res.status(401).send(errorMsg);
       }
@@ -97,7 +97,7 @@ router.post('/login', async (req, res) => {
       res.status(200).json({ token });
     } catch (error) {
       errlog(action,error)
-      res.status(500).send(ERROR_MSG[action]["unexpected"]);
+      res.status(500).send(ERROR_MSG[action].unexpected);
     }
   });
   
@@ -111,7 +111,7 @@ router.get('/', verifyToken, async (req, res) => {
   try {
     const user = await User.findOne({ accountId: req.user.accountId });
     if (!user) {
-      const errorMsg = ERROR_MSG["notFound"]
+      const errorMsg = ERROR_MSG.userNotFound
       errlog(action,errorMsg)
       return res.status(404).send(errorMsg);
     }
@@ -121,7 +121,7 @@ router.get('/', verifyToken, async (req, res) => {
     res.json({ username, createdAt, accountId });
   } catch (error) {
     errlog(action,error)
-    res.status(403).send(ERROR_MSG["invalidToken"]);
+    res.status(403).send(ERROR_MSG.invalidToken);
   }
 });
 

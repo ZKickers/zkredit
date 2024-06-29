@@ -18,7 +18,7 @@ function verifyToken(req, res, next) {
         successLog(req.user.username,action)
     } catch (error) {
         errlog(action,error)
-        res.status(403).send(ERROR_MSG["invalidToken"]);
+        res.status(403).send(ERROR_MSG.invalidToken);
     }
 }
 

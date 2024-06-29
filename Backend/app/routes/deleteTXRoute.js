@@ -16,12 +16,12 @@ router.delete('/client/:id', verifyToken, async (req, res) => {
         const transaction = await Transaction.findById(req.params.id);
         const deletionsState = await TxDeletionState.find({txId: req.params.id})
         if (!transaction || deletionsState == 1) {
-            const errorMsg = ERROR_MSG[action]["notFound"]
+            const errorMsg = ERROR_MSG.txNotFound
             errlog(action_child,errorMsg)
             return res.status(404).send(errorMsg);
         }
         if (req.user.accountId !== transaction.clientAccountId.toString()) {
-            const errorMsg = ERROR_MSG[action]["unauth"]
+            const errorMsg = ERROR_MSG[action].unauth
             errlog(action_child,errorMsg)
             return res.status(403).send(errorMsg);
         }
@@ -30,7 +30,7 @@ router.delete('/client/:id', verifyToken, async (req, res) => {
         res.status(200).json({ message: 'Transaction deleted successfully' });
     } catch (error) {
         errlog(action_child,error)
-        res.status(500).send(ERROR_MSG[action]["unexpected"]);
+        res.status(500).send(ERROR_MSG[action].unexpected);
     }
 });
 
@@ -42,12 +42,12 @@ router.delete('/creditor/:id', verifyToken, async (req, res) => {
         const transaction = await Transaction.findById(req.params.id);
         const deletionsState = await TxDeletionState.find({txId: req.params.id})
         if (!transaction || deletionsState == 2) {
-            const errorMsg = ERROR_MSG[action]["notFound"]
+            const errorMsg = ERROR_MSG.txNotFound
             errlog(action_child,errorMsg)
             return res.status(404).send(errorMsg);
         }
         if (req.user.accountId !== transaction.creditorAccountId.toString()) {
-            const errorMsg = ERROR_MSG[action]["unauth"]
+            const errorMsg = ERROR_MSG[action].unauth
             errlog(action_child,errorMsg)
             return res.status(403).send(errorMsg);
         }
@@ -56,7 +56,7 @@ router.delete('/creditor/:id', verifyToken, async (req, res) => {
         res.status(200).json({ message: 'Transaction deleted successfully' });
     } catch (error) {
         errlog(action_child,error)
-        res.status(500).send(ERROR_MSG[action]["unexpected"]);
+        res.status(500).send(ERROR_MSG[action].unexpected);
     }
 });
 
@@ -66,7 +66,7 @@ router.delete('/transactions/client/:clientId', verifyToken, async (req, res) =>
     reqlog(action_child)
     try {
         if (req.user.accountId !== req.params.clientId) {
-            const errorMsg = ERROR_MSG[action]["unauth"]
+            const errorMsg = ERROR_MSG[action].unauth
             errlog(action_child,errorMsg)
             return res.status(403).send(errorMsg);
         }
@@ -76,7 +76,7 @@ router.delete('/transactions/client/:clientId', verifyToken, async (req, res) =>
         res.status(200).json({ message: 'Transactions deleted successfully' });
     } catch (error) {
         errlog(action_child,error)
-        res.status(500).send(ERROR_MSG[action]["unexpected"]);
+        res.status(500).send(ERROR_MSG[action].unexpected);
     }
 });
 
@@ -86,7 +86,7 @@ router.delete('/transactions/creditor/:creditorId', verifyToken, async (req, res
     reqlog(action_child)
     try {
         if (req.user.accountId !== req.params.creditorId) {
-            const errorMsg = ERROR_MSG[action]["unauth"]
+            const errorMsg = ERROR_MSG[action].unauth
             errlog(action_child,errorMsg)
             return res.status(403).send(errorMsg);
         }
@@ -96,7 +96,7 @@ router.delete('/transactions/creditor/:creditorId', verifyToken, async (req, res
         res.status(200).json({ message: 'Transactions deleted successfully' });
     } catch (error) {
         errlog(action_child,error)
-        res.status(500).send(ERROR_MSG[action]["unexpected"]);
+        res.status(500).send(ERROR_MSG[action].unexpected);
     }
 });
 

@@ -7,6 +7,7 @@ const { CREDIT_BUREAU_API, CREDIT_BUREAU_TIMEOUT } = require("../../config");
 const fs = require("fs");
 const path = require("path");
 const { deleteProof } = require("./deleteTx");
+const { txStatusUpdateLog: txUpdateLog, errlog, txStatusUpdateLog, successLog } = require("./logging");
 
 const index = __dirname.indexOf("/Services");
 const PK_X_PATH = __dirname.substring(0, index) + "/static/publicKeyBJJ_X.pem";
@@ -19,17 +20,18 @@ async function invalidateTransaction(txId) {
     { status: "Invalid" },
     { new: true }
   );
+  txUpdateLog(txid,"Invalid")
 }
 
 async function runCommand(command) {
   try {
     const { stdout, stderr } = await exec(command);
     if (stderr) {
-      console.error(`stderr: ${stderr}`);
+      errlog("runCommand",stderr)
     }
     return stdout;
   } catch (error) {
-    console.error(`Error: ${error.message}`);
+    errlog("runCommand",stderr)
     throw error;
   }
 }
@@ -44,6 +46,7 @@ async function fileExists(filePath) {
 }
 
 async function isWitnessComputed(txid) {
+
     outPath = `./proofs/${txid}/o.txt`
     try {
         const data = await fs.promises.readFile(outPath,'utf-8');
@@ -52,7 +55,7 @@ async function isWitnessComputed(txid) {
             return false;
         return lines[1].trim() === `Witness file written to 'proofs/${txid}/witness'`;
     } catch (error) {
-        console.error(`While computing witness, This error occured : ${error}`)
+        errlog("checkOutputFileForWitness",error)
         return false;
     }
 }
@@ -89,12 +92,15 @@ async function generateProof(
         `./proofs/${transaction._id.toString()}/input.json`
     );
     if (await fileExists(witnessFilePath) && await isWitnessComputed(transaction._id)) {
+        successLog(`TX ${transaction._id}`,"witness computation")
         await runCommand(generateProofCommand);
+        successLog(`TX ${transaction._id}`,"Proof generation")
         await Transaction.findOneAndUpdate(
             { _id: transaction._id },
             { status: "Pending_Verification" },
             { new: true }
         );
+        txUpdateLog(transaction._id,"Pending_Verification","Pending_Proof")
         await fs.promises.unlink(
             `./proofs/${transaction._id.toString()}/witness`
         );
@@ -132,6 +138,7 @@ async function sendClientInfo(transaction, address, birthdate, ssn) {
         { status: "Pending_Proof" },
         { new: true }
     );
+    txUpdateLog(transaction._id,"Pending_Proof","Pending_Client_Data")
     generateProof(serialized_clientData, serialized_resp, transaction)
     return { status: "success", transaction: updatedTransaction };
 
@@ -140,12 +147,11 @@ async function sendClientInfo(transaction, address, birthdate, ssn) {
         console.error(`Timeout of ${CREDIT_BUREAU_TIMEOUT}ms reached on request to credit bureau`)
         return { status: "Error" };
     } else if (error.code === "ERR_BAD_REQUEST"){
-        console.error(`Client ${transaction.clientAccountId} entered invalid data`)
         await deleteProof(transaction._id)
         await invalidateTransaction(transaction._id);
         return { status: "Data Invalid" };
     }
-    console.error(error)
+    errlog("genProof",error)
     return { status: "Error" };
   }
 }
