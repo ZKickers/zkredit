@@ -1,1 +1,4 @@
-export const BACKEND_URL = "http://localhost:5000";
+export const DATA_LIMITS = {
+    "fullname" : 70,
+    "address" : 100
+}

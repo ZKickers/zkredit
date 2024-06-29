@@ -16,7 +16,7 @@ import ClientConnectRequestForm from "components/organisms/client-connect-reques
 import Skeleton from "components/molecules/skeleton/Skeleton";
 import classNames from "classnames";
 import { useSelector } from "react-redux";
-import useFetchTransactions from "API/useFetchTransactions";
+import useFetchTransactions from "api/useFetchTransactions";
 
 export default function DashboardPageTemplate() {
   const [showSession, setShowSession] = useState(false);
@@ -63,7 +63,7 @@ export default function DashboardPageTemplate() {
       ...creditorTransactions.transactions.map(tx => ({ ...tx, isClient: false })),
       ...clientTransactions.transactions.map(tx => ({ ...tx, isClient: true })),
     ].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-    
+
 
     return transactions.map((tx) => (
       <Transaction

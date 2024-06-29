@@ -1,12 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const verifyToken = require('../Services/authMiddleware');
+const verifyToken = require('../middlewares/authMiddleware');
 const Transaction = require('../models/Transaction');
 const getProof = require('../Services/getProof');
+const mongoose = require('mongoose');
 
 router.get('/:txId', verifyToken, async (req, res) => {
     try {
         const txId = req.params.txId;
+        if(!mongoose.Types.ObjectId.isValid(txId)){
+            return res.status(404).send('Transaction not found');
+        }
         const existingTransaction = await Transaction.findById(txId);
         if (!existingTransaction) {
             return res.status(404).send('Transaction not found');

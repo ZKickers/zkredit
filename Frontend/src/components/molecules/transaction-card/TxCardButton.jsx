@@ -8,7 +8,7 @@ import {
 } from "./TxCardComps";
 import useVerify from "utils/useVerify";
 import TransactionStateEnum from "utils/TransactionStateEnum";
-import { validateProof } from "API/proofsAPIs";
+import { validateProof } from "api/proofsAPIs";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "features/snackbar/snackbarSlice";

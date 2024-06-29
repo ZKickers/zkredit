@@ -3,3 +3,5 @@
 .env
 Backend/app/out
 Paths.txt
+Backend/app/server.cert
+Backend/app/server.cert

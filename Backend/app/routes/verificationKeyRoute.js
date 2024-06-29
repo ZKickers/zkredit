@@ -2,7 +2,7 @@ const express = require('express');
 const fs = require("fs")
 const router = express.Router();
 const path = require('path');
-const verifyToken = require('../Services/authMiddleware');
+const verifyToken = require('../middlewares/authMiddleware');
 
 router.get('/', verifyToken, async (req, res) => {
     try {
