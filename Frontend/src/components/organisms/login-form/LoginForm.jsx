@@ -5,7 +5,7 @@ import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { signinIcon } from "assets";
 import useLogin from "api/useLogin";
 import "react-toastify/dist/ReactToastify.css";
-import { useRecaptcha } from "../../../API/useRecaptcha";
+import { useRecaptcha } from "../../../api/useRecaptcha";
 import { toast } from "react-toastify";
 
 export default function LoginForm() {
@@ -19,13 +19,9 @@ export default function LoginForm() {
   const loginHandler = async (e) => {
     e.preventDefault();
     try {
-      const captchaResponse = await onSubmitWithRecaptcha();
+      const recaptchaToken = await onSubmitWithRecaptcha();
 
-      if (!captchaResponse.data.success) {
-        throw new Error("Error while verifying reCAPTCHA");
-      }
-
-      await loginUser({ username, password });
+      await loginUser({ username, password, recaptchaToken });
     } catch (error) {
       console.error(error);
       toast.error("Error while signing in", {

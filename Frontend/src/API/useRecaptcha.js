@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axiosInstance from 'API/axios';
+import axiosInstance from 'api/axios';
 
 export const useRecaptcha = () => {
   const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
@@ -33,12 +33,10 @@ export const useRecaptcha = () => {
         });
       });
 
-      const response = await axiosInstance.post('/recaptcha/submit-recaptcha-token', { recaptchaToken });
-
-      return response;
+      return recaptchaToken;
     } catch (error) {
       console.error('Error during reCAPTCHA execution:', error);
-      return error;
+      throw error;
     }
   };
 

@@ -10,7 +10,7 @@ import {
 } from "hooks/signup-form-hooks/signup-form-hooks";
 import useSignUp from "api/useSignup";
 import "react-toastify/dist/ReactToastify.css";
-import { useRecaptcha } from "../../../API/useRecaptcha";
+import { useRecaptcha } from "../../../api/useRecaptcha";
 import { toast } from "react-toastify";
 
 export default function SignupForm({ handleClose }) {
@@ -36,16 +36,13 @@ export default function SignupForm({ handleClose }) {
     e.preventDefault();
     if (validData()) {
       try {
-        const captchaResponse = await onSubmitWithRecaptcha();
-        
-        if (!captchaResponse.data.success) {
-          throw new Error("Error while verifying reCAPTCHA:", captchaResponse.data.message);
-        }
+        const recaptchaToken = await onSubmitWithRecaptcha();
 
         await signupUser({
           email,
           username,
           password,
+          recaptchaToken,
         });
 
         toast.info("Created an account successfully", {

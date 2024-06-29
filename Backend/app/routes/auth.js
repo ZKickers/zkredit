@@ -4,11 +4,12 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { validateSignup, validateLogin } = require('../middlewares/authValidation');
 const verifyToken = require("../middlewares/authMiddleware");
+const verifyRecaptchaToken = require('../middlewares/recaptchaMiddleware')
 require('dotenv').config();
 
 const router = express.Router();
 
-router.post('/signup', validateSignup, async (req, res) => {
+router.post('/signup', validateSignup, verifyRecaptchaToken, async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
@@ -42,7 +43,7 @@ router.post('/signup', validateSignup, async (req, res) => {
   }
 });
 
-router.post('/login', validateLogin, async (req, res) => {
+router.post('/login', validateLogin, verifyRecaptchaToken, async (req, res) => {
   try {
     const { username, password } = req.body;
 

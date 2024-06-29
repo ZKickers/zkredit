@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const verifyToken = require('../middlewares/authMiddleware');
+const verifyRecaptchaToken = require('../middlewares/recaptchaMiddleware')
 const { validateIssueTXParams, validateProofParams } = require('../middlewares/clientReqValidation');
 const sendClientInfo = require('../Services/generateProof');
 const createTransaction = require('../Services/issueTx');
@@ -17,7 +18,7 @@ router.post('/issue-transaction', verifyToken, validateIssueTXParams, async (req
   }
 });
 
-router.post('/generate-proof', verifyToken, validateProofParams, async (req, res) => {
+router.post('/generate-proof', verifyToken, validateProofParams, verifyRecaptchaToken, async (req, res) => {
   try {
     const { txId, address, birthdate, ssn } = req.body; 
     const transaction = await Transaction.findById(txId);

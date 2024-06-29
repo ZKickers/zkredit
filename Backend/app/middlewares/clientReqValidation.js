@@ -37,6 +37,8 @@ const validateProofParams = [
     .notEmpty().withMessage('SSN is required')
     .isLength({ min: 9, max: 9 }).withMessage('SSN must be exactly 9 digits')
     .customSanitizer(value => sanitizer.escape(value)),
+  check('recaptchaToken')
+    .notEmpty().withMessage('ReCAPTCHA Token is required'),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

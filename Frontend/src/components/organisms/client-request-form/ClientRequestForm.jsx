@@ -10,8 +10,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { ClientRequestValidationSchema } from "utils/validators/ClientRequestValidationSchema";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { toast, ToastContainer } from "react-toastify";
-import useClientRequest from "API/useClientRequest";
-import { useRecaptcha } from "../../../API/useRecaptcha";
+import useClientRequest from "api/useClientRequest";
+import { useRecaptcha } from "../../../api/useRecaptcha";
 
 //  Sample JSON data for the form {
 //   "address": "123 Oak Saint Anytown, WI. 1111",
@@ -36,13 +36,9 @@ export default function ClientRequestForm({ handleClose, txId }) {
 
   const onRequestSubmit = async (data) => {
     try {
-      const captchaResponse = await onSubmitWithRecaptcha();
+      const recaptchaToken = await onSubmitWithRecaptcha();
 
-      if (!captchaResponse.data.success) {
-        throw new Error("Error while verifying reCAPTCHA");
-      }
-
-      await postClientData({ ...data, txId });
+      await postClientData({ ...data, txId, recaptchaToken });
       toast.success("Request initiated successfully!", {
         autoClose: 3000,
       });
