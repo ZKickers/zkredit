@@ -63,7 +63,7 @@ router.post('/signup', async (req, res) => {
       successLog(user.username,action)
       res.status(201).send('User created successfully');
     } catch (error) {
-      const errorMsg = ERROR_MSG[action].unexpected
+      const errorMsg = ERROR_MSG[action]["unexpected"]
       errlog(action,errorMsg)
       res.status(500).send(errorMsg);
     }
@@ -77,7 +77,7 @@ router.post('/login', async (req, res) => {
       const user = await User.findOne({ username: req.body.username });
   
       if (!user) {
-        const errorMsg = ERROR_MSG.userNotFound
+        const errorMsg = ERROR_MSG["userNotFound"]
         errlog(action,errorMsg)
         return res.status(404).send(errorMsg);
       }
@@ -97,7 +97,7 @@ router.post('/login', async (req, res) => {
       res.status(200).json({ token });
     } catch (error) {
       errlog(action,error)
-      res.status(500).send(ERROR_MSG[action].unexpected);
+      res.status(500).send(ERROR_MSG[action]["unexpected"]);
     }
   });
   
@@ -111,7 +111,7 @@ router.get('/', verifyToken, async (req, res) => {
   try {
     const user = await User.findOne({ accountId: req.user.accountId });
     if (!user) {
-      const errorMsg = ERROR_MSG.userNotFound
+      const errorMsg = ERROR_MSG["userNotFound"]
       errlog(action,errorMsg)
       return res.status(404).send(errorMsg);
     }

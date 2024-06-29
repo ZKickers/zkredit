@@ -15,7 +15,7 @@ router.get("/client/", verifyToken, async (req, res) => {
     const transactions = await Transaction.find({
       clientAccountId: req.user.accountId,
     });
-    successLog(req.user.accountId, action_child)
+    successLog(req.user.username, action_child)
     res.status(200).json(transactions);
   } catch (error) {
     errlog(action_child,error)
@@ -31,7 +31,7 @@ router.get("/creditor/", verifyToken, async (req, res) => {
     const transactions = await Transaction.find({
       creditorAccountId: req.user.accountId,
     });
-    successLog(req.user.accountId, action_child)
+    successLog(req.user.username, action_child)
     res.status(200).json(transactions);
   } catch (error) {
     errlog(action_child,error)

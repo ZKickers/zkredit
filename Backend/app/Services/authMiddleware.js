@@ -4,11 +4,12 @@ const { ERROR_MSG } = require('./errorHandling');
 
 function verifyToken(req, res, next) {
     const action = "verifyToken"
-    reqlog(action)
     const token = req.header('Authorization');
 
     if (!token) {
-        return res.status(401).json('Access denied. Token is required.');
+        const errorMsg = ERROR_MSG.noToken
+        errlog(action,errorMsg)
+        return res.status(401).send();
     }
 
     try {

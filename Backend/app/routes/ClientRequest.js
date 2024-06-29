@@ -35,7 +35,7 @@ router.post('/issue-transaction', verifyToken, validateIssueTXParams, async (req
         res.status(201).json({ message: 'Transaction issued successfully', transaction: transaction });
     } catch (error) {
         errlog(action,error)
-        res.status(500).send(ERROR_MSG[action].unexpected);
+        res.status(500).send(ERROR_MSG[action]["unexpected"]);
     }
 });
 
@@ -66,13 +66,14 @@ router.post('/generate-proof', verifyToken, validateProofParams, async (req, res
             errlog(action,errorMsg)
             res.status(400).send(errorMsg)
         } else {
-            const errorMsg = ERROR_MSG[action].unexpected
+            const errorMsg = ERROR_MSG[action]["unexpected"]
             errlog(action,errorMsg)
             res.status(400).send(errorMsg)
         }
     } catch (error) {
         errlog(action,error)
-        res.status(500).send(ERROR_MSG[action].unexpected);
+        const errorMsg = ERROR_MSG[action]["unexpected"]
+        res.status(500).send(errorMsg);
     }
 });
 

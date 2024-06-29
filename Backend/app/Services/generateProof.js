@@ -7,7 +7,7 @@ const { CREDIT_BUREAU_API, CREDIT_BUREAU_TIMEOUT } = require("../../config");
 const fs = require("fs");
 const path = require("path");
 const { deleteProof } = require("./deleteTx");
-const { txStatusUpdateLog: txUpdateLog, errlog, txStatusUpdateLog, successLog } = require("./logging");
+const { txUpdateLog, errlog, successLog, inProgLog } = require("./logging");
 
 const index = __dirname.indexOf("/Services");
 const PK_X_PATH = __dirname.substring(0, index) + "/static/publicKeyBJJ_X.pem";
@@ -87,12 +87,14 @@ async function generateProof(
     const witnessFilePath =
         PROOFS_PATH + transaction._id.toString() + "/witness";
 
+    inProgLog("Computing Witness")
     await runCommand(witnessCommand);
     await fs.promises.unlink(
         `./proofs/${transaction._id.toString()}/input.json`
     );
     if (await fileExists(witnessFilePath) && await isWitnessComputed(transaction._id)) {
         successLog(`TX ${transaction._id}`,"witness computation")
+        inProgLog("Proof Generation")
         await runCommand(generateProofCommand);
         successLog(`TX ${transaction._id}`,"Proof generation")
         await Transaction.findOneAndUpdate(

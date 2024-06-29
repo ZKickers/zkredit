@@ -13,7 +13,7 @@ function deleteProof(txId) {
             if (err) {
                 throw new Error(`Error deleting directory ${directoryPath}:`, err);
             } else {
-                console.log(`Directory ${directoryPath} deleted successfully`);
+                console.log(`Directory ./proofs/${txId} deleted successfully`);
             }
         });
     }

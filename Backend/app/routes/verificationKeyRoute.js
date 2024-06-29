@@ -3,7 +3,7 @@ const fs = require("fs")
 const router = express.Router();
 const path = require('path');
 const verifyToken = require('../Services/authMiddleware');
-const { successLog } = require('../Services/logging');
+const { successLog, reqlog, errlog } = require('../Services/logging');
 const { ERROR_MSG } = require('../Services/errorHandling');
 
 router.get('/', verifyToken, async (req, res) => {
@@ -18,7 +18,7 @@ router.get('/', verifyToken, async (req, res) => {
         res.status(200).json(vk);
     } catch (error) {
         errlog(action,error)
-        res.status(500).send(ERROR_MSG[action].unexpected);
+        res.status(500).send(ERROR_MSG[action]["unexpected"]);
     }
 });
 

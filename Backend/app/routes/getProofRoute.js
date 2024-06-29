@@ -4,7 +4,7 @@ const verifyToken = require('../Services/authMiddleware');
 const Transaction = require('../models/Transaction');
 const getProof = require('../Services/getProof');
 const { ERROR_MSG } = require('../Services/errorHandling');
-const { errlog, successLog } = require('../Services/logging');
+const { errlog, successLog, reqlog } = require('../Services/logging');
 
 router.get('/:txId', verifyToken, async (req, res) => {
     const action = "getPRoof"
@@ -34,7 +34,7 @@ router.get('/:txId', verifyToken, async (req, res) => {
         res.status(200).json({ proof: proof });
     } catch (error) {
         errlog(action,error)
-        return res.status(500).send(ERROR_MSG[action].unexpected)
+        return res.status(500).send(ERROR_MSG[action]["unexpected"])
     }
 });
 

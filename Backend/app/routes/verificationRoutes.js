@@ -4,7 +4,7 @@ const verifyToken = require('../Services/authMiddleware');
 const { validateTx } = require('../Services/validateTx');
 const Transaction = require('../models/Transaction');
 const { ERROR_MSG } = require('../Services/errorHandling');
-const { successLog } = require('../Services/logging');
+const { successLog, errlog, reqlog } = require('../Services/logging');
 
 router.post('/', verifyToken, async (req, res) => {
     action = "confirmVerify"
@@ -40,7 +40,7 @@ router.post('/', verifyToken, async (req, res) => {
         res.status(200).json({ message: `${existingTransaction["fullNameOfClient"]} can now see result of his credit check.` });
     }catch (error) {
         errlog(action,error)
-        return res.status(500).send(ERROR_MSG[action].unexpected)
+        return res.status(500).send(ERROR_MSG[action]["unexpected"])
     }
 });
 

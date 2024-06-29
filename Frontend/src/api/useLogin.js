@@ -15,16 +15,10 @@ const useLogin = () => {
         url, 
         user
       ).catch((error) => {
-        if (error.response.status === 401) {
-          dispatch(showSnackbar("Invalid credentials"));
-        }
         dispatch(showSnackbar(DOMPurify.sanitize(error.response.data)));
         throw error;
-      });
-      console.log(response);
-      
+      });    
       const sanitizedResp = DOMPurify.sanitize(response.data)
-
       if (response.status !== 200) {
         dispatch(showSnackbar(sanitizedResp));
       }

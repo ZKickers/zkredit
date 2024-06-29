@@ -5,7 +5,7 @@ const TxDeletionState = require('../models/TransactionDeletionState');
 const verifyToken = require('../Services/authMiddleware');
 const { deleteTxByClient, deleteTxByCreditor, deleteClientTxs, deleteCreditorTxs } = require('../Services/deleteTx');
 const { ERROR_MSG } = require('../Services/errorHandling');
-const { errlog, successLog } = require('../Services/logging');
+const { errlog, successLog, reqlog } = require('../Services/logging');
 
 
 router.delete('/client/:id', verifyToken, async (req, res) => {
@@ -30,7 +30,7 @@ router.delete('/client/:id', verifyToken, async (req, res) => {
         res.status(200).json({ message: 'Transaction deleted successfully' });
     } catch (error) {
         errlog(action_child,error)
-        res.status(500).send(ERROR_MSG[action].unexpected);
+        res.status(500).send(ERROR_MSG[action]["unexpected"]);
     }
 });
 
@@ -56,7 +56,7 @@ router.delete('/creditor/:id', verifyToken, async (req, res) => {
         res.status(200).json({ message: 'Transaction deleted successfully' });
     } catch (error) {
         errlog(action_child,error)
-        res.status(500).send(ERROR_MSG[action].unexpected);
+        res.status(500).send(ERROR_MSG[action]["unexpected"]);
     }
 });
 
@@ -76,7 +76,7 @@ router.delete('/transactions/client/:clientId', verifyToken, async (req, res) =>
         res.status(200).json({ message: 'Transactions deleted successfully' });
     } catch (error) {
         errlog(action_child,error)
-        res.status(500).send(ERROR_MSG[action].unexpected);
+        res.status(500).send(ERROR_MSG[action]["unexpected"]);
     }
 });
 
@@ -96,7 +96,7 @@ router.delete('/transactions/creditor/:creditorId', verifyToken, async (req, res
         res.status(200).json({ message: 'Transactions deleted successfully' });
     } catch (error) {
         errlog(action_child,error)
-        res.status(500).send(ERROR_MSG[action].unexpected);
+        res.status(500).send(ERROR_MSG[action]["unexpected"]);
     }
 });
 

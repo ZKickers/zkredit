@@ -1,20 +1,20 @@
-export function errlog (action, errorMsg) {
+function errlog (action, errorMsg) {
     console.error(`${action} failed with Error: ${errorMsg}`);
 }
 
-export function reqlog (action) {
+function reqlog (action) {
     console.log(`${action} attempt`)
 }
 
-export function successLog(username,action) {
-    console.log(`${username} successfull ${action}`)
+function successLog(username,action) {
+    console.log(`${username} - ${action} { Success }`)
 }
 
-export function paramsMissingLog(params) {
+function paramsMissingLog(params) {
     console.log(`Missing required parameters :  ${params}`)
 }
 
-export function issueTxLog(tx,clientUsername) {
+function issueTxLog(tx,clientUsername) {
     const {_id, creditorUsername, fullNameOfClient} = tx
     console.log(`TX ${_id} created 
                | issuedBy : ${clientUsername}
@@ -23,6 +23,12 @@ export function issueTxLog(tx,clientUsername) {
     txUpdateLog(tx._id,"Pending_Threshold")
 }
 
-export function txUpdateLog(txid,newS,oldS=null) {
-    console.log(`Transaction ${txid} Status Update : ${oldS!==null ? `${oldS}-->` : ''} ${newS}`)
+function txUpdateLog(txid,newS,oldS=null) {
+    console.log(`TX ${txid} Status Update : ${oldS!==null ? `${oldS}-->` : ''} ${newS}`)
 }
+
+function inProgLog(action){
+    console.log(`${action} in progress . . .`)
+}
+
+module.exports = { issueTxLog, successLog, txUpdateLog, paramsMissingLog, reqlog, errlog, inProgLog}

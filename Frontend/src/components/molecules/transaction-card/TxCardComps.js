@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { useState } from "react";
-import { TextField } from "@mui/material";
+import { Snackbar, TextField } from "@mui/material";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { DataThresholdingIcon } from "assets";
 import useSendThreshold from "api/useSendThreshold";
@@ -13,12 +13,10 @@ const renderThresholdField = ({ color, txId, threshold, setThreshold }) => {
   const { sendThreshold } = useSendThreshold();
 
   const handleThresholdSubmit = async () => {
-    if (threshold > 0 && threshold <= 850) {
+    try {
       sendThreshold(threshold, txId);
-      // ! Either ignore or log the response.
-    } else {
-      // TODP:: Snackbar
-      alert("Threshold must be between 1 and 850");
+    }catch(error){
+      console.log(error);
     }
   };
 
