@@ -32,5 +32,11 @@ export const ERROR_MSG = {
         wrongStatus : 'Transaction is not Pending_Client_Data',
         dataInvalid : "You entered invalid data. Please recheck your data before submitting.",
         unexpected : "Couldn't generate proof. Please re-enter your data and try again."
+    },
+    "triggerThres" : {
+        outOfBound : "Threshold is not within (350-850)",
+        unauth : 'Forbidden: You are not authorized to verify transaction',
+        wrongStatus : "Transaction is not Pending_Threshold",
+        unexpected : "Threshold didn't reach server. Please re-enter it."
     }
 }

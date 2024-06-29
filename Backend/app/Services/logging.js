@@ -20,8 +20,9 @@ export function issueTxLog(tx,clientUsername) {
                | issuedBy : ${clientUsername}
                | using fullname : ${fullNameOfClient}
                | to : ${creditorUsername}`)
+    txUpdateLog(tx._id,"Pending_Threshold")
 }
 
-export function txStatusUpdateLog(txid,newS,oldS=null) {
+export function txUpdateLog(txid,newS,oldS=null) {
     console.log(`Transaction ${txid} Status Update : ${oldS!==null ? `${oldS}-->` : ''} ${newS}`)
 }

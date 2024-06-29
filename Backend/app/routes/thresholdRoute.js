@@ -3,6 +3,8 @@ const router = express.Router();
 const verifyToken = require('../Services/authMiddleware');
 const Transaction = require('../models/Transaction');
 const { handleThresholdEvent } = require('../Services/thresholdHandler');
+const { ERROR_MSG } = require('../Services/errorHandling');
+const { errlog, successLog } = require('../Services/logging');
 
 
 const validateParams = (req, res, next) => {
@@ -15,29 +17,40 @@ const validateParams = (req, res, next) => {
 };
 
 router.post('/trigger-threshold', verifyToken, validateParams, async (req, res) => {
+    const action = "triggerThres"
+    reqlog(action)
     try {
         const { txId, threshold } = req.body;
         const transaction = await Transaction.findById(txId);
         if (!(threshold >= 350 && threshold <= 850))
         {
-            return res.status(403).send("Threshold is not within (350-850)")
+            const errorMsg = ERROR_MSG[action].outOfBound
+            errlog(action,errorMsg)
+            return res.status(403).send(errorMsg)
         }
         if (!transaction) {
-            return res.status(404).send('Transaction not found');
+            const errorMsg = ERROR_MSG.txNotFound
+            errlog(action,errorMsg)
+            return res.status(404).send(errorMsg);
         }
         if(req.user.accountId !== transaction.creditorAccountId)
         {
-            return res.status(403).send('Forbidden: You are not authorized to verify transaction');
+            const errorMsg = ERROR_MSG[action].unauth
+            errlog(action,errorMsg)
+            return res.status(403).send(errorMsg);
         }
         if(transaction.status != "Pending_Threshold")
         {
-            return res.status(403).send('Transaction is not Pending_Threshold');
+            const errorMsg = ERROR_MSG[action].wrongStatus
+            errlog(action,errorMsg)
+            return res.status(403).send(errorMsg);
         }
         updatedTransaction = await handleThresholdEvent(transaction, threshold)
+        successLog(req.user.username, action)
         res.status(200).json(updatedTransaction);
     } catch (error) {
-        console.error('Error triggering threshold event:', error);
-        res.status(500).send("Threshold didn't reach the server. Please re-enter it again.");
+        errlog(action,error)
+        return res.status(403).send(ERROR_MSG[action].unexpected);
     }
 });
 

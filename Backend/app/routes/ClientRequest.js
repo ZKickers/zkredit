@@ -46,10 +46,14 @@ router.post('/generate-proof', verifyToken, validateProofParams, async (req, res
         const { txId, address, birthdate, ssn } = req.body; 
         const transaction = await Transaction.findById(txId);
         if (!transaction) {
-            return res.status(404).send(ERROR_MSG["txNotFound"]);
+            const errorMsg = ERROR_MSG[action].txNotFound
+            errlog(action,errorMsg)
+            return res.status(404).send(errorMsg);
         }
         if (transaction.status != "Pending_Client_Data") {
-            return res.status(403).send(ERROR_MSG[action].wrongStatus);
+            const errorMsg = ERROR_MSG[action].wrongStatus
+            errlog(action,errorMsg)
+            return res.status(403).send(errorMsg);
         }
 
         const result = await sendClientInfo(transaction, address, birthdate, ssn);
