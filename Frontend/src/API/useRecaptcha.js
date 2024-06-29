@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axiosInstance from 'API/axios';
+import axiosInstance from 'api/axios';
 
 export const useRecaptcha = () => {
   const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);

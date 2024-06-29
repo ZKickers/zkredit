@@ -5,7 +5,7 @@ import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { signinIcon } from "assets";
 import useLogin from "api/useLogin";
 import "react-toastify/dist/ReactToastify.css";
-import { useRecaptcha } from "../../../API/useRecaptcha";
+import { useRecaptcha } from "../../../api/useRecaptcha";
 import { toast } from "react-toastify";
 
 export default function LoginForm() {

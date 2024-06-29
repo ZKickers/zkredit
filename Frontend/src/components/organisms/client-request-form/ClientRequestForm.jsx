@@ -10,8 +10,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { ClientRequestValidationSchema } from "utils/validators/ClientRequestValidationSchema";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { toast, ToastContainer } from "react-toastify";
-import useClientRequest from "API/useClientRequest";
-import { useRecaptcha } from "../../../API/useRecaptcha";
+import useClientRequest from "api/useClientRequest";
+import { useRecaptcha } from "../../../api/useRecaptcha";
 
 //  Sample JSON data for the form {
 //   "address": "123 Oak Saint Anytown, WI. 1111",
