@@ -3,6 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.BACKEND_URL = void 0;
-var BACKEND_URL = "http://localhost:5000";
-exports.BACKEND_URL = BACKEND_URL;
+exports.DATA_LIMITS = void 0;
+var DATA_LIMITS = {
+  "fullname": 70,
+  "address": 100
+};
+exports.DATA_LIMITS = DATA_LIMITS;

@@ -1,7 +1,10 @@
 import * as yup from "yup";
+import { DATA_LIMITS } from "config";
 
 export const ClientRequestValidationSchema = yup.object().shape({
-  address: yup.string().required("Address is required"),
+  address: yup.string()
+    .max(DATA_LIMITS["address"],"Address limit is 100 characters")
+    .required("Address is required"),
   birthdate: yup
     .string()
     .matches(/^\d{2}-\d{2}-\d{4}$/, "Invalid date format")
