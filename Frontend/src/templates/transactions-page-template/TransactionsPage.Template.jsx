@@ -35,7 +35,7 @@ export default function TPTemplate({ isCreditor }) {
 
   const renderCard = (txId) => {
     setCurrentTx(transactions.transactions.find((tx) => tx._id === txId));
-    console.log(transactions.transactions.find((tx) => tx._id === txId));
+    console.log(currentTx);
   };
 
   const fetchTransactions = useFetchTransactions();

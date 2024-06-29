@@ -10,8 +10,6 @@ export default function ProofModal({ proof, handleClose }) {
 
   const thresholdInt = Number(threshold);
 
-  console.log("ProofModal fn -->", thresholdInt);
-
   // Format the timestamp
   const date = new Date(Number(timestamp));
   const formattedDate = date.toLocaleString();
