@@ -5,35 +5,34 @@ import { showSuccessSnackbar } from '../features/snackbar/successSnackbarSlice';
 import { useDispatch } from "react-redux";
 import DOMPurify from 'dompurify';
 
-
 const useLogin = () => {
   const getUser = useGetUser();
   const url = '/auth/login';
   const dispatch = useDispatch();
+  
   const login = async (user) => {
-    const response = await axiosInstance.post(
-        url, 
-        user
-      ).catch((error) => {
-        if (error.response.status === 401) {
-          dispatch(showSnackbar("Invalid credentials"));
-        }
-        dispatch(showSnackbar(DOMPurify.sanitize(error.response.data.message)));
-        throw error;
-      });
-      console.log(response);
+    try {
+      const response = await axiosInstance.post(url, user);
       
-      const sanitizedResp = DOMPurify.sanitize(response.data)
-
-      if (response.status !== 200) {
+      if (!response || response.status !== 200) {
+        const sanitizedResp = DOMPurify.sanitize(response?.data?.message || 'Unknown error');
         dispatch(showSnackbar(sanitizedResp));
+        return;
       }
-      const token = DOMPurify.sanitize(response.data["token"]);
-      
-      sessionStorage.setItem("token", token);
-      localStorage.setItem("token", token);
+
+      // const token = DOMPurify.sanitize(response.data["token"]);
+      // sessionStorage.setItem("token", token);
+      // localStorage.setItem("token", token);
       
       getUser();
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        dispatch(showSnackbar("Invalid credentials"));
+      } else {
+        const sanitizedResp = DOMPurify.sanitize(error.response?.data || error.message);
+        dispatch(showSnackbar(sanitizedResp));
+      }
+    }
   };
 
   return login;

@@ -7,11 +7,9 @@ const getTX = require('./routes/getTX');
 const cors = require('cors');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
-const csurf = require('csurf');
 const fs = require('fs');
 const app = express();
 const deleteTX = require('./routes/deleteTXRoute');
-const csrfRoute = require('./routes/csrf');
 const ClientRequest = require('./routes/ClientRequest');
 const thresholdRoute = require('./routes/thresholdRoute');
 const verificationRoutes = require('./routes/verificationRoutes');
@@ -21,11 +19,15 @@ const verifyToken = require('./middlewares/authMiddleware');
 const { ipGeneralLimiter, ipProofLimiter, generalAccountLimiter, proofAccountLimiter } = require('./middlewares/rateLimiter');
 const { BACKEND_PORT, FRONTEND_URL, MONGODB_URI } = require('../config');
 
-app.use(cors({
+// CORS configuration
+const corsOptions = {
   origin: FRONTEND_URL,
-  credentials: true // Ensure cookies are sent with requests
-}));
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204
+};
 
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(cookieParser());
 app.use(bodyParser.json({ limit: '1mb' }));
@@ -33,27 +35,9 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
 app.use(ipGeneralLimiter);
 app.use('/ClientRequest/generate-proof', ipProofLimiter);
 
-const csrfProtection = csurf({
-  cookie: {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'strict'
-  }
-});
-
-app.use(csrfProtection);
-app.use((req, res, next) => {
-  const csrfToken = req.csrfToken();
-  console.log('Generated CSRF Token: ', req.csrfToken());
-  res.cookie('XSRF-TOKEN', csrfToken); // Set CSRF token in cookie
-  res.locals.csrfToken = csrfToken;
-  next();
-});
-
-app.use('/csrf-token', csrfRoute);
 app.use('/auth', authRoutes);
 
-app.use(verifyToken, generalAccountLimiter);
+// app.use(verifyToken, generalAccountLimiter);
 app.use('/ClientRequest/generate-proof', verifyToken, proofAccountLimiter);
 
 mongoose.connect(MONGODB_URI)
@@ -67,16 +51,6 @@ app.use('/Creditor', thresholdRoute);
 app.use('/verifyTx', verificationRoutes);
 app.use('/verification-key', verificationKeyRoute);
 app.use('/getProof', getProofRoute);
-
-app.use((err, req, res, next) => {
-  if (err.code === 'EBADCSRFTOKEN') {
-    // console.log("FFF   "+ );
-    console.error('CSRF token validation failed');
-    res.status(403).json({ message: 'CSRF token validation failed' });
-  } else {
-    next(err);
-  }
-});
 
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 413 && 'body' in err) {

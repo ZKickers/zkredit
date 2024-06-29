@@ -13,15 +13,15 @@ export default function App() {
   const getUser = useGetUser();
   const user = useSelector((state) => state.user);
   console.log(user);
-  useEffect(async () => {
-    if (!sessionStorage.getItem("csrfToken")) {
-      await getCSRF();
-    }
-    if (localStorage.getItem("token")) {
-      sessionStorage.setItem("token", localStorage.getItem("token"));
-      getUser();
-    }
-  }, []);
+  // useEffect(async () => {
+  //   // if (!sessionStorage.getItem("csrfToken")) {
+  //   //   await getCSRF();
+  //   // }
+  //   // if (localStorage.getItem("token")) {
+  //   //   sessionStorage.setItem("token", localStorage.getItem("token"));
+  //   //   getUser();
+  //   // }
+  // }, []);
 
   return (
     <NavigationProvider>

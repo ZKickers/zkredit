@@ -2,23 +2,22 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const verifyToken = require('../middlewares/authMiddleware');
 const { validateSignup, validateLogin } = require('../middlewares/authValidation');
+const verifyToken = require("../middlewares/authMiddleware");
 require('dotenv').config();
 
 const router = express.Router();
 
 router.post('/signup', validateSignup, async (req, res) => {
-  console.log("Calling signup");
   try {
     const { username, email, password } = req.body;
 
-    const existingUsername = await User.findOne({ username: username });
+    const existingUsername = await User.findOne({ username });
     if (existingUsername) {
       return res.status(400).send('Username is already taken');
     }
 
-    const existingEmail = await User.findOne({ email: email });
+    const existingEmail = await User.findOne({ email });
     if (existingEmail) {
       return res.status(400).send('Email is already registered');
     }
@@ -44,11 +43,10 @@ router.post('/signup', validateSignup, async (req, res) => {
 });
 
 router.post('/login', validateLogin, async (req, res) => {
-  console.log("Calling login");
   try {
     const { username, password } = req.body;
 
-    const user = await User.findOne({ username: username });
+    const user = await User.findOne({ username });
     if (!user) {
       return res.status(404).send('User not found');
     }
@@ -63,21 +61,25 @@ router.post('/login', validateLogin, async (req, res) => {
       username: user.username
     }, process.env.JWT_SECRET, { expiresIn: '2d' });
 
-    res.status(200).json({ token });
+    // Set the token in an HttpOnly, Secure, SameSite cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: true, // Ensures cookie is sent over HTTPS
+      sameSite: 'Strict'
+    });
+
+    res.status(200).json({ message: 'Login successful' });
   } catch (error) {
     console.error('Error logging in:', error);
     res.status(500).send('Internal server error');
   }
 });
 
-function generateAccountId() {
-  return 'acc_' + Math.random().toString(36).substr(2, 9);
-}
-
 router.get('/', verifyToken, async (req, res) => {
   console.log("Calling getUsername");
   try {
     const user = await User.findOne({ accountId: req.user.accountId });
+    console.log("User: ", user);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -88,5 +90,9 @@ router.get('/', verifyToken, async (req, res) => {
     res.status(403).json({ message: 'Invalid token.' });
   }
 });
+
+function generateAccountId() {
+  return 'acc_' + Math.random().toString(36).substr(2, 9);
+}
 
 module.exports = router;
