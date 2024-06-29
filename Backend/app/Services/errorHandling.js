@@ -14,6 +14,15 @@ export const ERROR_MSG = {
         "unexpected" : "Couldn't login. Please Try again.",
     },
     "getTx" : "unexpected",
-    
+    "deleteTx" : {
+        "notFound" : "Transaction not found",
+        "unauth" : 'Forbidden: You are not authorized to delete this transaction',
+        "unexpected" : "Couldn't delete transaction. Please try again."
+    },
+    "deleteTxAll" : {
+        "unauth" : 'Forbidden: You are not authorized to delete these transactions',
+        "unexpected" : "Couldn't delete transactions. Please try again."
+    }
+
 
 }
