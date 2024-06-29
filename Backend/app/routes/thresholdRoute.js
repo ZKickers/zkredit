@@ -9,7 +9,7 @@ const validateParams = (req, res, next) => {
     const requiredParams = ["txId", "threshold"];
     const missingParams = requiredParams.filter(param => !req.body[param]);
     if (missingParams.length > 0) {
-      return res.status(400).json({ error: `Missing required parameters: ${missingParams.join(', ')}` });
+      return res.status(400).send(`Missing required parameters: ${missingParams.join(', ')}`);
     }
     next();
 };

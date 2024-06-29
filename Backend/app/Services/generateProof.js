@@ -3,9 +3,10 @@ const Serial = require("./serialize");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 const Transaction = require("../models/Transaction");
-const { CREDIT_BUREAU_API } = require("../../config");
+const { CREDIT_BUREAU_API, CREDIT_BUREAU_TIMEOUT } = require("../../config");
 const fs = require("fs");
 const path = require("path");
+const { deleteProof } = require("./deleteTx");
 
 const index = __dirname.indexOf("/Services");
 const PK_X_PATH = __dirname.substring(0, index) + "/static/publicKeyBJJ_X.pem";
@@ -20,26 +21,9 @@ async function invalidateTransaction(txId) {
   );
 }
 
-function generateNonce() {
-  const nonce = Buffer.alloc(32);
-  for (let i = 0; i < 32; i++) {
-    nonce[i] = Math.floor(Math.random() * 256);
-  }
-  return nonce;
-}
-
-function nonceToArray(nonce) {
-  const nonceArray = [];
-  for (let i = 0; i < nonce.length; i++) {
-    nonceArray.push(nonce[i].toString());
-  }
-  return nonceArray;
-}
-
 async function runCommand(command) {
   try {
     const { stdout, stderr } = await exec(command);
-    // console.log(`stdout:\n${stdout}`);
     if (stderr) {
       console.error(`stderr: ${stderr}`);
     }
@@ -57,6 +41,20 @@ async function fileExists(filePath) {
   } catch (err) {
     return false;
   }
+}
+
+async function isWitnessComputed(txid) {
+    outPath = `./proofs/${txid}/o.txt`
+    try {
+        const data = await fs.readFile(outPath, 'utf-8');
+        const lines = data.split('\n');
+        if (lines.length < 2)
+            return false;
+        return lines[1] === `Witness file written to 'proofs/${txid}/witness'`;
+    } catch (error) {
+        console.error(`While computing witness, This error occured : ${error}`)
+        return false;
+    }
 }
 
 async function generateProof(
@@ -83,9 +81,6 @@ async function generateProof(
 
     const filePath = PROOFS_PATH + transaction._id.toString() + "/input.json";
     await fs.promises.writeFile(filePath, JSON.stringify(proof_arr, null, 2));
-
-    console.log("JSON file has been saved successfully.");
-
     const witnessCommand = `cat ./proofs/${transaction._id.toString()}/input.json | zokrates compute-witness --abi --output proofs/${transaction._id.toString()}/witness  --stdin  > proofs/${transaction._id.toString()}/o.txt`;
     const generateProofCommand = `zokrates generate-proof --proof-path proofs/${transaction._id.toString()}/proof.json --witness proofs/${transaction._id.toString()}/witness`;
 
@@ -96,7 +91,7 @@ async function generateProof(
     await fs.promises.unlink(
       `./proofs/${transaction._id.toString()}/input.json`
     );
-    if (await fileExists(witnessFilePath)) {
+    if (await fileExists(witnessFilePath) && isWitnessComputed(transaction._id)) {
       await runCommand(generateProofCommand);
       await Transaction.findOneAndUpdate(
         { _id: transaction._id },
@@ -106,14 +101,13 @@ async function generateProof(
       await fs.promises.unlink(
         `./proofs/${transaction._id.toString()}/witness`
       );
-
-      console.log("File removed successfully");
     } else {
-      console.log("Witness not created");
-      await invalidateTransaction(transaction._id);
+        await deleteProof(transaction._id);
+        await invalidateTransaction(transaction._id);
     }
   } catch (error) {
-    console.error("Error handling proof generation:", error);
+    await deleteProof(transaction._id);
+    console.error(`While proof generation, this error occured : ${error}`);
     await invalidateTransaction(transaction._id);
   }
 }
@@ -121,7 +115,6 @@ async function generateProof(
 function serializeData(clientInfo, responseData) {
   const serialized_clientData = Serial.clientData(clientInfo);
   const serialized_resp = Serial.response(responseData);
-  console.log("Serialization completed");
   return { serialized_clientData, serialized_resp };
 }
 
@@ -134,53 +127,37 @@ async function sendClientInfo(transaction, address, birthdate, ssn) {
   };
 
   try {
-    console.log("received, ", clientInfo);
-    console.log(CREDIT_BUREAU_API);
     const response = await axios.post(CREDIT_BUREAU_API, clientInfo, {
-      timeout: 2000,
+      timeout: CREDIT_BUREAU_TIMEOUT,
     });
-    console.log(response);
-    if (response && response.data) {
-      const { serialized_clientData, serialized_resp } = serializeData(
+    const { serialized_clientData, serialized_resp } = serializeData(
         clientInfo,
         response.data
-      );
-      console.log(serialized_clientData);
-      console.log(serialized_resp);
-      const updatedTransaction = await Transaction.findOneAndUpdate(
+    );
+    const updatedTransaction = await Transaction.findOneAndUpdate(
         { _id: transaction._id },
         { status: "Pending_Proof" },
         { new: true }
-      );
-      generateProof(serialized_clientData, serialized_resp, transaction)
-        .then(() => {
-          console.log("Proof generation completed");
-        })
-        .catch((error) => {
-          throw new Error("Error generating proof:", error);
-        });
+    );
+    generateProof(serialized_clientData, serialized_resp, transaction)
+    .then(() => {
+        console.log("Proof generation completed");
+    })
+    return { status: "success", transaction: updatedTransaction };
 
-      return { status: "success", transaction: updatedTransaction };
-    } else {
-      throw new Error("No response received from the server");
-    }
   } catch (error) {
-    if (error.code === "ECONNREFUSED") {
-      return { status: "timeout", message: "The request timed out" };
-    } else if (error.response.data.error === "Data mismatch") {
-      await invalidateTransaction(transaction._id);
-      return {
-        status: "Mismatch",
-        message: "An error occurred",
-        details: error.message,
-      };
-    } else {
-      return {
-        status: "error",
-        message: "An error occurred",
-        details: error.message,
-      };
+    console.log(error)
+    if (error.code === "ECONNABORTED" || error.code === "EHOSTUNREACH") {
+        console.error(`Timeout of ${CREDIT_BUREAU_TIMEOUT}ms reached on request to credit bureau`)
+        return { status: "Error" };
+    } else if (error.code === "ERR_BAD_REQUEST"){
+        console.error(`Client ${transaction.clientAccountId} entered invalid data`)
+        await deleteProof(transaction._id)
+        await invalidateTransaction(transaction._id);
+        return { status: "Data Invalid" };
     }
+    console.error(error)
+    return { status: "Error" };
   }
 }
 

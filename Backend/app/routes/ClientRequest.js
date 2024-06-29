@@ -9,7 +9,7 @@ const validateIssueTXParams = (req, res, next) => {
     const requiredParams = ["creditorUsername", "clientFullName"];
     const missingParams = requiredParams.filter(param => !req.body[param]);
     if (missingParams.length > 0) {
-      return res.status(400).json({ error: `Missing required parameters: ${missingParams.join(', ')}` });
+      return res.status(400).send(`Missing required parameters: ${missingParams.join(', ')}`);
     }
     next();
 };
@@ -18,7 +18,7 @@ const validateProofParams = (req, res, next) => {
     const requiredParams = ["txId", "address", "birthdate", "ssn"];
     const missingParams = requiredParams.filter(param => !req.body[param]);
     if (missingParams.length > 0) {
-      return res.status(400).json({ error: `Missing required parameters: ${missingParams.join(', ')}` });
+      return res.status(400).send(`Missing required parameters: ${missingParams.join(', ')}`);
     }
     next();
 };
@@ -49,19 +49,14 @@ router.post('/generate-proof', verifyToken, validateProofParams, async (req, res
         const result = await sendClientInfo(transaction, address, birthdate, ssn);
 
         if (result.status === 'success') {
-            res.status(200).send({ message: 'Client information received successfully', transaction: result.transaction });
-        } else if (result.status === 'timeout') {
-            res.status(408).json(result.message);
-        }
-        else if(result.status = "Mismatch")
-        {
-            res.status(400).send("Invalid client data");
-        }
-        else {
-            res.status(400).json({ message: result.message, details: result.details });
+            res.status(200).send({ message: 'Client information received and proof is being generated', transaction: result.transaction });
+        } else if(result.status === "Data Invalid"){
+            res.status(400).send("You entered invalid data. Please recheck your data before submitting.");
+        } else {
+            res.status(400).send("Couldn't generate proof. Please re-enter your data and try again.");
         }
     } catch (error) {
-        console.error('Error handling client information:', error.message);
+        console.log(error)
         res.status(500).send("Couldn't generate proof. Please re-enter your data and try again.");
     }
 });

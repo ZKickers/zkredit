@@ -1,6 +1,6 @@
 const BACKEND_PORT = 5002;
 const FRONTEND_URL = "http://localhost:3000";
-const CREDIT_BUREAU_API = "http://192.168.1.46:8061";
+const CREDIT_BUREAU_API = "http://192.168.1.113:8061";
 const MONGODB_URI = "mongodb://0.0.0.0:27017/zkredit"
 
 const DATA_BYTES = {
@@ -10,4 +10,6 @@ const DATA_BYTES = {
     timestamp: 8
   };
 
-module.exports = {BACKEND_PORT, FRONTEND_URL, CREDIT_BUREAU_API, MONGODB_URI, DATA_BYTES}
+const CREDIT_BUREAU_TIMEOUT = 5000
+
+module.exports = {BACKEND_PORT, FRONTEND_URL, CREDIT_BUREAU_API, CREDIT_BUREAU_TIMEOUT, MONGODB_URI, DATA_BYTES}

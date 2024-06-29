@@ -9,7 +9,6 @@ const PROOFS_PATH = __dirname.substring(0, index) + "/proofs/";
 function deleteProof(txId) {
     const directoryPath = PROOFS_PATH + txId.toString();
     if (fs.existsSync(directoryPath)) {
-        console.log("dddddd")
         fs.rm(directoryPath, { recursive: true, force: true }, (err) => {
             if (err) {
                 throw new Error(`Error deleting directory ${directoryPath}:`, err);

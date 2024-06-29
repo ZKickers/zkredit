@@ -90,7 +90,7 @@ router.get('/', verifyToken, async (req, res) => {
     const user = await User.findOne({ accountId: req.user.accountId });
     console.log("User: ", user);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).send('User not found');
     }
     const { username, createdAt, accountId } = user;
     res.json({ username, createdAt, accountId });
