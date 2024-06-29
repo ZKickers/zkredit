@@ -22,8 +22,7 @@ const useClientRequest = () => {
       return response.data;
     }
     catch(error){
-      console.log(error.response.data)
-      dispatch(showSnackbar(error.response.data));
+      dispatch(showSnackbar(DOMPurify.sanitize(error)));
     };
   };
 

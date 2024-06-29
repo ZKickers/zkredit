@@ -12,7 +12,7 @@ const useGetUser = () => {
 
   const getUser = async () => {
     const response = await axiosInstance.get(url).catch((error) => {
-      dispatch(showSnackbar(DOMPurify.sanitize(error.message)));
+      dispatch(showSnackbar(DOMPurify.sanitize(error)));
     });
     const sanitizedResp = DOMPurify.sanitize(response.data)
     if (response.status !== 200) {

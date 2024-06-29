@@ -3,6 +3,7 @@ import { showSnackbar } from "../features/snackbar/snackbarSlice";
 import { showSuccessSnackbar } from "../features/snackbar/successSnackbarSlice";
 import { addTransaction } from "../redux/clientTransactionSlice";
 import { useDispatch } from "react-redux";
+import DOMPurify from "dompurify";
 
 const useClientConnectReq = () => {
   const url = "/ClientRequest/issue-transaction";
@@ -16,7 +17,7 @@ const useClientConnectReq = () => {
       return response.data;
     } catch (error) {
       dispatch(
-        showSnackbar(error.response?.data?.error || "An error occurred")
+        showSnackbar(DOMPurify.sanitize(error))
       );
       throw error;
     }

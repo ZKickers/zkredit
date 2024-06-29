@@ -8,7 +8,7 @@ router.post('/', verifyToken, async (req, res) => {
     try {
         const accepted = req.body.accepted; 
         const txId = req.body.txId;
-        if (typeof accepted !== 'boolean' || !txId) {
+        if (typeof accepted !== 'boolean' && accepted != "true" && accepted != "false" || !txId) {
             return res.status(400).send('Invalid parameters');
         }
         const existingTransaction = await Transaction.findById(txId);

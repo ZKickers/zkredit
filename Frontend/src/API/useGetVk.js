@@ -18,7 +18,6 @@ const useGetVK = () => {
     const sanitizedResp = DOMPurify.sanitize(response.data);
     if (response.status !== 200) {
       dispatch(showSnackbar(sanitizedResp));
-      console.error("Error fetching the verification key:", sanitizedResp);
       vkFailed(sanitizedResp);
     }else{
       dispatch(vkReceived(response.data));

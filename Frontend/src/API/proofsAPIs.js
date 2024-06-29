@@ -12,26 +12,26 @@ export const useGetProof = () => {
       const response = await axiosInstance.get(url);
       return response.data.proof;
     } catch (error) {
-      dispatch(showSnackbar(DOMPurify.sanitize(error.message)));
+      dispatch(showSnackbar(DOMPurify.sanitize(error)));
     }
   };
   return getProof;
 };
 
+
 export const validateProof = async (transactionId, isAccepted) => {
   const url = "/verifyTx";
   const data = {
-    txId: DOMPurify.sanitize(transactionId),
-    accepted: DOMPurify.sanitize(isAccepted),
+    txId: transactionId,
+    accepted: isAccepted,
   };
-
   const response = await axiosInstance.post(url, data).catch((error) => {
     console.log(error);
   });
-
-  if (response.status !== 200) {
-    const message = response.data;
-    throw new Error(DOMPurify.sanitize(message));
+  if ( response.status === 200) {
+    dispatch(showSnackbar(DOMPurify.sanitize(response.data.message)));
+  } else {
+    dispatch(showSnackbar(DOMPurify.sanitize(response.data)));
   }
   return response.data;
 };

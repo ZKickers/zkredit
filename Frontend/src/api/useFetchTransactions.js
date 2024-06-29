@@ -51,7 +51,7 @@ const useFetchTransactions = () => {
 
       dispatch(transactionsReceived(response.data));
     } catch (error) {
-      const sanitizedResp = DOMPurify.sanitize(error.message);
+      const sanitizedResp = DOMPurify.sanitize(error);
       dispatch(showSnackbar(sanitizedResp));
       dispatch(transactionsFailed(sanitizedResp));
     }
