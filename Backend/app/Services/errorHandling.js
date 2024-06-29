@@ -38,5 +38,10 @@ export const ERROR_MSG = {
         unauth : 'Forbidden: You are not authorized to verify transaction',
         wrongStatus : "Transaction is not Pending_Threshold",
         unexpected : "Threshold didn't reach server. Please re-enter it."
-    }
+    },
+    "getProof" : {
+        unauth : 'Forbidden: You are not authorized to verify transaction',
+        wrongStatus : 'Could not get proof due to transaction status',
+        unexpected : 'Getting Proof failed. Refreash and try again please.'
+    },
 }
