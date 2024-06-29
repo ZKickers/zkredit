@@ -5,18 +5,11 @@ const axiosInstance = axios.create({
   baseURL: baseUrl,
 });
 
-axiosInstance.interceptors.request.use(async (config) => {
+axiosInstance.interceptors.request.use((config) => {
   const token = sessionStorage.getItem("token");
   if (token) {
     config.headers["Authorization"] = token;
   }
-
-  const csrfToken = sessionStorage.getItem("csrfToken");
-  if (csrfToken) {
-    console.log("CSRF Token: ", csrfToken);
-    config.headers["X-CSRF-Token"] = csrfToken;
-  }
-
   return config;
 });
 
