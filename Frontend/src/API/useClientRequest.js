@@ -3,28 +3,28 @@ import { useDispatch } from "react-redux";
 import { showSnackbar } from '../features/snackbar/snackbarSlice';
 import { showSuccessSnackbar } from '../features/snackbar/successSnackbarSlice';
 import { updateTransactionStatus } from "../redux/clientTransactionSlice";
+import DOMPurify from "dompurify";
 
 const useClientRequest = () => {
   const url = "/ClientRequest/generate-proof";
   const dispatch = useDispatch();
 
   const clientRequest = async (data) => {
-    let error = false;
-    const response = await axiosInstance.post(url, data).catch((error) => {
-      dispatch(showSnackbar(error.response.data));
-      error = true;
-    });
-    if(!error){
+    try {
+      const response = await axiosInstance.post(url, data)
       dispatch(showSuccessSnackbar('Data Sent successfully'));
       dispatch(
         updateTransactionStatus({
-          id: response.data.transaction._id,
-          status: response.data.transaction.status,
+          id: DOMPurify.sanitize(response.data.transaction._id),
+          status: DOMPurify.sanitize(response.data.transaction.status),
         })
       );
       return response.data;
     }
-
+    catch(error){
+      console.log(error.response.data)
+      dispatch(showSnackbar(error.response.data));
+    };
   };
 
   return clientRequest;

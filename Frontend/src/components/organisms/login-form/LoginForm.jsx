@@ -3,7 +3,7 @@ import "./LoginForm.css";
 import { useState } from "react";
 import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { signinIcon } from "assets";
-import useLogin from "API/useLogin";
+import useLogin from "api/useLogin";
 import "react-toastify/dist/ReactToastify.css";
 import { useRecaptcha } from "../../../API/useRecaptcha";
 import { toast } from "react-toastify";
