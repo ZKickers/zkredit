@@ -8,7 +8,6 @@ const { deleteTxByClient, deleteTxByCreditor, deleteClientTxs, deleteCreditorTxs
 
 router.delete('/client/:id', verifyToken, async (req, res) => {
     try {
-        console.log()
         const transaction = await Transaction.findById(req.params.id);
         const deletionsState = await TxDeletionState.find({txId: req.params.id})
         if (!transaction || deletionsState == 1) {

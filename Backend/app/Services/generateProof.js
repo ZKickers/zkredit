@@ -46,11 +46,11 @@ async function fileExists(filePath) {
 async function isWitnessComputed(txid) {
     outPath = `./proofs/${txid}/o.txt`
     try {
-        const data = await fs.readFile(outPath, 'utf-8');
+        const data = await fs.promises.readFile(outPath,'utf-8');
         const lines = data.split('\n');
         if (lines.length < 2)
             return false;
-        return lines[1] === `Witness file written to 'proofs/${txid}/witness'`;
+        return lines[1].trim() === `Witness file written to 'proofs/${txid}/witness'`;
     } catch (error) {
         console.error(`While computing witness, This error occured : ${error}`)
         return false;
@@ -62,21 +62,18 @@ async function generateProof(
   serialized_resp,
   transaction
 ) {
-  const directoryPath = path.join(PROOFS_PATH, transaction._id.toString());
-  if (!fs.existsSync(directoryPath)) {
-    await fs.promises.mkdir(directoryPath, { recursive: true });
-  }
-
-  try {
+    const directoryPath = path.join(PROOFS_PATH, transaction._id.toString());
+    if (!fs.existsSync(directoryPath)) {
+        await fs.promises.mkdir(directoryPath, { recursive: true });
+    }
     let proof_arr = [];
     proof_arr.push(serialized_clientData);
     proof_arr.push(serialized_resp);
     proof_arr.push(await Serial.serializePK(PK_X_PATH, PK_Y_PATH));
     proof_arr.push(await Serial.serializeThreshold(transaction.threshold));
 
-    const directoryPath = PROOFS_PATH + transaction._id.toString() + "/";
     if (!fs.existsSync(directoryPath)) {
-      await fs.mkdirSync(directoryPath);
+        await fs.mkdirSync(directoryPath);
     }
 
     const filePath = PROOFS_PATH + transaction._id.toString() + "/input.json";
@@ -85,31 +82,27 @@ async function generateProof(
     const generateProofCommand = `zokrates generate-proof --proof-path proofs/${transaction._id.toString()}/proof.json --witness proofs/${transaction._id.toString()}/witness`;
 
     const witnessFilePath =
-      PROOFS_PATH + transaction._id.toString() + "/witness";
+        PROOFS_PATH + transaction._id.toString() + "/witness";
 
     await runCommand(witnessCommand);
     await fs.promises.unlink(
-      `./proofs/${transaction._id.toString()}/input.json`
+        `./proofs/${transaction._id.toString()}/input.json`
     );
-    if (await fileExists(witnessFilePath) && isWitnessComputed(transaction._id)) {
-      await runCommand(generateProofCommand);
-      await Transaction.findOneAndUpdate(
-        { _id: transaction._id },
-        { status: "Pending_Verification" },
-        { new: true }
-      );
-      await fs.promises.unlink(
-        `./proofs/${transaction._id.toString()}/witness`
-      );
+    if (await fileExists(witnessFilePath) && await isWitnessComputed(transaction._id)) {
+        await runCommand(generateProofCommand);
+        await Transaction.findOneAndUpdate(
+            { _id: transaction._id },
+            { status: "Pending_Verification" },
+            { new: true }
+        );
+        await fs.promises.unlink(
+            `./proofs/${transaction._id.toString()}/witness`
+        );
     } else {
         await deleteProof(transaction._id);
         await invalidateTransaction(transaction._id);
+        throw new Error("Witness copmutation failed");
     }
-  } catch (error) {
-    await deleteProof(transaction._id);
-    console.error(`While proof generation, this error occured : ${error}`);
-    await invalidateTransaction(transaction._id);
-  }
 }
 
 function serializeData(clientInfo, responseData) {
@@ -140,13 +133,9 @@ async function sendClientInfo(transaction, address, birthdate, ssn) {
         { new: true }
     );
     generateProof(serialized_clientData, serialized_resp, transaction)
-    .then(() => {
-        console.log("Proof generation completed");
-    })
     return { status: "success", transaction: updatedTransaction };
 
   } catch (error) {
-    console.log(error)
     if (error.code === "ECONNABORTED" || error.code === "EHOSTUNREACH") {
         console.error(`Timeout of ${CREDIT_BUREAU_TIMEOUT}ms reached on request to credit bureau`)
         return { status: "Error" };

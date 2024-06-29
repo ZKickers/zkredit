@@ -18,7 +18,6 @@ router.post('/trigger-threshold', verifyToken, validateParams, async (req, res) 
     try {
         const { txId, threshold } = req.body;
         const transaction = await Transaction.findById(txId);
-        console.log(transaction)
         if (!(threshold >= 350 && threshold <= 850))
         {
             return res.status(403).send("Threshold is not within (350-850)")
@@ -32,11 +31,9 @@ router.post('/trigger-threshold', verifyToken, validateParams, async (req, res) 
         }
         if(transaction.status != "Pending_Threshold")
         {
-            console.log(transaction.status )
             return res.status(403).send('Transaction is not Pending_Threshold');
         }
         updatedTransaction = await handleThresholdEvent(transaction, threshold)
-        console.log(updatedTransaction)
         res.status(200).json(updatedTransaction);
     } catch (error) {
         console.error('Error triggering threshold event:', error);

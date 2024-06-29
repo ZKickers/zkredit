@@ -25,8 +25,6 @@ const validateProofParams = (req, res, next) => {
 
 router.post('/issue-transaction', verifyToken, validateIssueTXParams, async (req, res) => {
     try {
-        console.log(req.body);
-        console.log(req.user.accountId);
         const transaction = await createTransaction(req.body.clientFullName, req.body.creditorUsername, req.user.accountId);
         res.status(201).json({ message: 'Transaction issued successfully', transaction: transaction });
     } catch (error) {
@@ -56,7 +54,7 @@ router.post('/generate-proof', verifyToken, validateProofParams, async (req, res
             res.status(400).send("Couldn't generate proof. Please re-enter your data and try again.");
         }
     } catch (error) {
-        console.log(error)
+        console.error(error)
         res.status(500).send("Couldn't generate proof. Please re-enter your data and try again.");
     }
 });
