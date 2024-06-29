@@ -44,4 +44,10 @@ export const ERROR_MSG = {
         wrongStatus : 'Could not get proof due to transaction status',
         unexpected : 'Getting Proof failed. Refreash and try again please.'
     },
+    "confirmVerify" : {
+        param : "Invalid Parameters",
+        unauth : 'Forbidden: You are not authorized to verify transaction',
+        wrongStatus : "Transaction is not Pending_Verification",
+        unexpected : 'Proof Status did not reach server. Refreash and try again please.'
+    }
 }

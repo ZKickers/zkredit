@@ -3,31 +3,44 @@ const router = express.Router();
 const verifyToken = require('../Services/authMiddleware');
 const { validateTx } = require('../Services/validateTx');
 const Transaction = require('../models/Transaction');
+const { ERROR_MSG } = require('../Services/errorHandling');
+const { successLog } = require('../Services/logging');
 
 router.post('/', verifyToken, async (req, res) => {
+    action = "confirmVerify"
+    reqlog(action)
     try {
         const accepted = req.body.accepted; 
         const txId = req.body.txId;
         if (typeof accepted !== 'boolean' && accepted != "true" && accepted != "false" || !txId) {
-            return res.status(400).send('Invalid parameters');
+            const errorMsg = ERROR_MSG[action].param
+            errlog(action,errorMsg)
+            return res.status(400).send(errorMsg);
         }
         const existingTransaction = await Transaction.findById(txId);
         if (!existingTransaction) {
-            throw new Error('Transaction not found');
+            const errorMsg = ERROR_MSG.txNotFound
+            errlog(action,errorMsg)
+            return res.status(404).send(errorMsg);
         }
         if(req.user.accountId !== existingTransaction.creditorAccountId)
         {
-            return res.status(403).send('Forbidden: You are not authorized to verify transaction');
+            const errorMsg = ERROR_MSG[action].unauth
+            errlog(action,errorMsg)
+            return res.status(403).send(errorMsg);
         }
         if(existingTransaction.status != "Pending_Verification")
         {
-            return res.status(403).send('Transaction status cannot be verified as it is not Pending_Verification');
+            const errorMsg = ERROR_MSG[action].wrongStatus
+            errlog(action,errorMsg)
+            return res.status(400).send(errorMsg);
         }
         await validateTx(txId, accepted);
+        successLog(req.user.username,action)
         res.status(200).json({ message: `${existingTransaction["fullNameOfClient"]} can now see result of his credit check.` });
     }catch (error) {
-        console.error('Error validate transaction:', error);
-        res.status(500).send("Couldn't update transaction.");
+        errlog(action,error)
+        return res.status(500).send(ERROR_MSG[action].unexpected)
     }
 });
 
