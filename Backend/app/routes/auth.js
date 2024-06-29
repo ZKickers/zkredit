@@ -3,34 +3,48 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const verifyToken = require('../Services/authMiddleware');
+const { ERROR_MSG } = require('../Services/errorHandling');
+const { errlog, reqlog, successLog } = require('../Services/logging');
 
 const router = express.Router();
 
+
 router.post('/signup', async (req, res) => {
-    console.log("Calling signup")  
+  const action = "signup"
+  reqlog(action)
     try {
       if (!req.body.username || !req.body.email || !req.body.password) {
-        return res.status(400).send('Username, email, and password are required');
+        const errorMsg = ERROR_MSG[action]["param"]
+        errlog(action,errorMsg)
+        return res.status(400).send(errorMsg);
       }
   
       const existingUsername = await User.findOne({ username: req.body.username });
       if (existingUsername) {
-        return res.status(400).send('Username is already taken');
+        const errorMsg = ERROR_MSG[action]["userTaken"]
+        errlog(action,errorMsg)
+        return res.status(400).send(errorMsg);
       }
   
       const existingEmail = await User.findOne({ email: req.body.email });
       if (existingEmail) {
-        return res.status(400).send('Email is already registered');
+        const errorMsg = ERROR_MSG[action]["emailTaken"]
+        errlog(action,errorMsg)
+        return res.status(400).send(errorMsg);
       }
   
       const emailRegex = /\S+@\S+\.\S+/;
       if (!emailRegex.test(req.body.email)) {
-        return res.status(400).send('Invalid email format');
+        const errorMsg = ERROR_MSG[action]["emailInvalid"]
+        errlog(action,errorMsg)
+        return res.status(400).send(errorMsg);
       }
   
       const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,}$/;
       if (!passwordRegex.test(req.body.password)) {
-        return res.status(400).send('Password must be at least 7 characters long and contain at least one uppercase letter, one lowercase letter, and one special character');
+        const errorMsg = ERROR_MSG[action]["weakPassword"]
+        errlog(action,errorMsg)
+        return res.status(400).send(errorMsg);
       }
       const accountId = generateAccountId();
   
@@ -45,27 +59,33 @@ router.post('/signup', async (req, res) => {
         password: hashedPassword,
         salt,
       });
-  
       await user.save();
+      successLog(user.username,action)
       res.status(201).send('User created successfully');
     } catch (error) {
-      console.error('Error creating user:', error);
-      res.status(500).send("Couldn't signup. Please try again.");
+      const errorMsg = ERROR_MSG[action]["unexpected"]
+      errlog(action,errorMsg)
+      res.status(500).send(errorMsg);
     }
   });
   
 
 router.post('/login', async (req, res) => {
-  console.log("Calling login")  
-    try {
+  const action = 'login'
+  reqlog(action)
+  try {
       const user = await User.findOne({ username: req.body.username });
   
       if (!user) {
-        return res.status(404).send('User not found');
+        const errorMsg = ERROR_MSG["notFound"]
+        errlog(action,errorMsg)
+        return res.status(404).send(errorMsg);
       }
       const passwordMatch = await bcrypt.compare(req.body.password + user.salt, user.password);
       if (!passwordMatch) {
-        return res.status(401).send('Invalid password');
+        const errorMsg = ERROR_MSG[action]["invalidPassword"]
+        errlog(action,errorMsg)
+        return res.status(401).send(errorMsg);
       }
   
       const token = jwt.sign({ 
@@ -73,10 +93,11 @@ router.post('/login', async (req, res) => {
         username: user.username
        }, 'secret');
   
+       successLog(user.username,action)
       res.status(200).json({ token });
     } catch (error) {
-      console.error('Error logging in:', error);
-      res.status(500).send("Couldn't login. Please Try again.");
+      errlog(action,error)
+      res.status(500).send(ERROR_MSG[action]["unexpected"]);
     }
   });
   
@@ -85,17 +106,22 @@ function generateAccountId() {
 }
 
 router.get('/', verifyToken, async (req, res) => {
-  console.log("Calling getUsername");
+  const action = "fetchUser"
+  reqlog(action)
   try {
     const user = await User.findOne({ accountId: req.user.accountId });
     if (!user) {
-      return res.status(404).send('User not found');
+      const errorMsg = ERROR_MSG["notFound"]
+      errlog(action,errorMsg)
+      return res.status(404).send(errorMsg);
     }
+    
     const { username, createdAt, accountId } = user;
+    successLog(username,action)
     res.json({ username, createdAt, accountId });
   } catch (error) {
-    console.error('Error verifying token:', error);
-    res.status(403).send('Invalid token.');
+    errlog(action,error)
+    res.status(403).send(ERROR_MSG["invalidToken"]);
   }
 });
 
