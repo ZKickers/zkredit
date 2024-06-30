@@ -16,7 +16,6 @@ import { showSnackbar } from "features/snackbar/snackbarSlice";
 const TxCardButton = (props) => {
   const { isClient, state, setTransactionState, color, txId } = props;
 
-  console.log(color);
 
   const [proof, setProof] = useState(null);
   const [showProof, setShowProof] = useState(null);
@@ -65,7 +64,6 @@ const TxCardButton = (props) => {
   const sendProofStatusHandler = async (verificationResult) => {
     try {
       const response = await validateProof(txId, verificationResult);
-      console.log("response", response);
     } catch (error) {
       dispatch(showSnackbar(error.message));
     }

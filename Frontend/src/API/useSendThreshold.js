@@ -10,19 +10,19 @@ const useSendThreshold = () => {
 
   const sendThreshold = async (threshold, txId) => {
     const data = { threshold, txId };
-
-    const response = await axiosInstance.post(url, data)
-    .then(() => {
+    try {
+      const response = await axiosInstance.post(url, data)
       dispatch(
         updateTransactionStatus({
           id: DOMPurify.sanitize(txId),
           status: DOMPurify.sanitize(response.data.status),
         })
-      );
-    }).catch((error) => {
+      )
+    }catch(error) {
+      console.log(error)
       const serializedResp = DOMPurify.sanitize(error.response.data);
       dispatch(showSnackbar(serializedResp));
-    });
+    }
   };
   return { sendThreshold };
 };

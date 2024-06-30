@@ -35,7 +35,6 @@ export default function ClientRequestForm({ handleClose, txId }) {
 
   const onRequestSubmit = async (data) => {
     const response = await postClientData({ ...data, txId });
-    console.log(response);
     try {
       toast.success("Request initiated successfully!", {
         autoClose: 3000,

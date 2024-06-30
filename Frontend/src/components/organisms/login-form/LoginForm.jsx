@@ -15,7 +15,6 @@ export default function LoginForm() {
     e.preventDefault();
     try {
       await loginUser({ username, password });
-      console.log("You have logged in successfully");
     } catch (error) {
       console.error(error.message);
     }

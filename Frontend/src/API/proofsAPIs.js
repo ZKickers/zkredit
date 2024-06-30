@@ -12,7 +12,10 @@ export const useGetProof = () => {
       const response = await axiosInstance.get(url);
       return response.data.proof;
     } catch (error) {
-      dispatch(showSnackbar(DOMPurify.sanitize(error)));
+      if (error.response && error.response.data)
+        dispatch(showSnackbar(DOMPurify.sanitize(error.response.data)));
+      else
+        dispatch(showSnackbar(DOMPurify.sanitize(error)));
     }
   };
   return getProof;
@@ -20,6 +23,7 @@ export const useGetProof = () => {
 
 
 export const validateProof = async (transactionId, isAccepted) => {
+  const dispatch = useDispatch();
   const url = "/verifyTx";
   const data = {
     txId: transactionId,

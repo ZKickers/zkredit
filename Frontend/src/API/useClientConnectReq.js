@@ -16,9 +16,10 @@ const useClientConnectReq = () => {
       dispatch(addTransaction(response.data.transaction));
       return response.data;
     } catch (error) {
-      dispatch(
-        showSnackbar(DOMPurify.sanitize(error))
-      );
+      if (error.response && error.response.data)
+        dispatch(showSnackbar(DOMPurify.sanitize(error.response.data)));
+      else
+        dispatch(showSnackbar(DOMPurify.sanitize(error)));
       throw error;
     }
   };

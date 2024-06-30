@@ -57,6 +57,3 @@
 //         console.log('JSON file has been saved successfully.');
 //     }
 // });
-
-const currentDirectory = __dirname;
-console.log("Current working directory:", currentDirectory);

@@ -54,6 +54,3 @@ const ERROR_MSG = {
 }
 
 module.exports = { ERROR_MSG }
-
-const action = "triggerThres"
-console.log(ERROR_MSG[action]["unexpected"])

@@ -18,9 +18,11 @@ const useLogin = () => {
         dispatch(showSnackbar(DOMPurify.sanitize(error.response.data)));
         throw error;
       });    
-      const sanitizedResp = DOMPurify.sanitize(response.data)
       if (response.status !== 200) {
-        dispatch(showSnackbar(sanitizedResp));
+        if (response.data)
+          dispatch(showSnackbar(DOMPurify.sanitize(response.data)));
+        else
+          dispatch(showSnackbar("An error occured."));
       }
       const token = DOMPurify.sanitize(response.data["token"]);
       
