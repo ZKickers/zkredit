@@ -6,12 +6,43 @@ const Transaction = require("../models/Transaction");
 const { CREDIT_BUREAU_API } = require("../../config");
 const fs = require("fs");
 const path = require("path");
-
+const async = require('async');
 const index = __dirname.indexOf("/Services");
 const PK_X_PATH = __dirname.substring(0, index) + "/static/publicKeyBJJ_X.pem";
 const PK_Y_PATH = __dirname.substring(0, index) + "/static/publicKeyBJJ_Y.pem";
 const PROOFS_PATH = __dirname.substring(0, index) + "/proofs/";
+let totalQueueingTime = 0;
+let totalTasksProcessed = 0;
+const queue = async.queue(async (task) => {
+  const startTime = Date.now();
+  try {
+    await task();
+    const queueTime = Date.now() - startTime;
+  } catch (error) {
+    console.error('Error processing task:', error);
+  }
+}, 3);
 
+queue.drain(() => {
+  console.log('All tasks have been processed');
+  console.log('Total queueing time for all tasks:', totalQueueingTime, 'ms');
+  console.log('Average queueing time per task:', totalQueueingTime / totalTasksProcessed, 'ms');
+});
+
+const addToQueue = (serialized_clientData, serialized_resp, transaction) => {
+  const startTime = Date.now();
+  queue.push(() => generateProof(serialized_clientData, serialized_resp, transaction), (err) => {
+    if (err) {
+      console.error('Task failed:', err);
+    } else {
+      const queueTime = Date.now() - startTime;
+      totalQueueingTime += queueTime; // Accumulate total queueing time
+      totalTasksProcessed++;
+      console.log('Task completed. Queueing time:', queueTime, 'ms');
+    }
+    console.log(`Pending tasks: ${queue.length()}`);
+  });
+};
 async function invalidateTransaction(txId) {
   await Transaction.findOneAndUpdate(
     { _id: txId },
@@ -152,13 +183,14 @@ async function sendClientInfo(transaction, address, birthdate, ssn) {
         { status: "Pending_Proof" },
         { new: true }
       );
-      generateProof(serialized_clientData, serialized_resp, transaction)
-        .then(() => {
-          console.log("Proof generation completed");
-        })
-        .catch((error) => {
-          throw new Error("Error generating proof:", error);
-        });
+      addToQueue(serialized_clientData, serialized_resp, transaction);
+      // generateProof(serialized_clientData, serialized_resp, transaction)
+      //   .then(() => {
+      //     console.log("Proof generation completed");
+      //   })
+      //   .catch((error) => {
+      //     throw new Error("Error generating proof:", error);
+      //   });
 
       return { status: "success", transaction: updatedTransaction };
     } else {
