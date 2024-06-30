@@ -10,9 +10,9 @@ const useLogin = () => {
   const url = "/auth/login";
   const dispatch = useDispatch();
 
-  const login = async (user) => {
+  const login = async (data) => {
     try {
-      const response = await axiosInstance.post(url, user);
+      const response = await axiosInstance.post(url, data);
 
       if (!response || response.status !== 200) {
         const sanitizedResp = DOMPurify.sanitize(

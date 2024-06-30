@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const https = require('https');
 const mongoose = require('mongoose');
@@ -14,14 +15,19 @@ const ClientRequest = require('./routes/ClientRequest');
 const thresholdRoute = require('./routes/thresholdRoute');
 const verificationRoutes = require('./routes/verificationRoutes');
 const verificationKeyRoute = require('./routes/verificationKeyRoute');
+const recaptchaRoute = require('./routes/recaptchaRoute');
 const getProofRoute = require('./routes/getProofRoute');
 const verifyToken = require('./middlewares/authMiddleware');
 const { ipGeneralLimiter, ipProofLimiter, generalAccountLimiter, proofAccountLimiter } = require('./middlewares/rateLimiter');
-const { BACKEND_PORT, FRONTEND_URL, MONGODB_URI } = require('../config');
+
+const port = process.env.EXPRESS_APP_BACKEND_PORT
+const bureauApi = process.env.EXPRESS_APP_CREDIT_BUREAU_API
+const frontendUrl = process.env.EXPRESS_APP_FRONTEND_URL
+const mongoDbUri = process.env.EXPRESS_APP_MONGODB_URI
 
 // CORS configuration
 const corsOptions = {
-  origin: FRONTEND_URL,
+  origin: frontendUrl,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   // credentials: true,
   optionsSuccessStatus: 204
@@ -40,7 +46,7 @@ app.use('/auth', authRoutes);
 // app.use(verifyToken, generalAccountLimiter);
 app.use('/ClientRequest/generate-proof', verifyToken, proofAccountLimiter);
 
-mongoose.connect(MONGODB_URI)
+mongoose.connect(mongoDbUri)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
@@ -51,6 +57,7 @@ app.use('/Creditor', thresholdRoute);
 app.use('/verifyTx', verificationRoutes);
 app.use('/verification-key', verificationKeyRoute);
 app.use('/getProof', getProofRoute);
+app.use('/recaptcha', recaptchaRoute)
 
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 413 && 'body' in err) {
@@ -62,9 +69,10 @@ app.use((err, req, res, next) => {
 
 const sslOptions = {
   key: fs.readFileSync('server.key'),
-  cert: fs.readFileSync('server.cert')
+  cert: fs.readFileSync('server.crt')
 };
 
-https.createServer(sslOptions, app).listen(BACKEND_PORT, () => {
-  console.log(`Backend Server is running on port ${BACKEND_PORT}`);
+https.createServer(sslOptions, app).listen(port, () => {
+  console.log(`Backend Server is running on port ${port}`);
+  console.log(`Listening to FBAPI on ${bureauApi}`)
 });

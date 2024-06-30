@@ -43,7 +43,7 @@ export default function LPTemplate() {
         </div>
         <div className="col-md-1 col-sm-12 separator"></div>
         <div className="col-md-4 col-sm-12 sign-in">
-          <div className="computer-img mb-4">
+          <div className="computer-img mb-2">
             <img src={computer} alt="computer" />
           </div>
           <LoginForm />

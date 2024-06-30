@@ -1,7 +1,7 @@
 import axiosInstance from "./axios";
 import useLogin from "./useLogin";
-import { showSnackbar } from '../features/snackbar/snackbarSlice';
-import { showSuccessSnackbar } from '../features/snackbar/successSnackbarSlice';
+import { showSnackbar } from "../features/snackbar/snackbarSlice";
+import { showSuccessSnackbar } from "../features/snackbar/successSnackbarSlice";
 import { useDispatch } from "react-redux";
 import DOMPurify from 'dompurify';
 
