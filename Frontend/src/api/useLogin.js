@@ -4,6 +4,9 @@ import { showSnackbar } from "../features/snackbar/snackbarSlice";
 import { showSuccessSnackbar } from "../features/snackbar/successSnackbarSlice";
 import { useDispatch } from "react-redux";
 import DOMPurify from "dompurify";
+import axios from "axios";
+
+const backendUrl = process.env.REACT_APP_BACKEND_SERVER
 
 const useLogin = () => {
   const getUser = useGetUser();
@@ -14,6 +17,10 @@ const useLogin = () => {
     try {
       console.log(data);
       const response = await axiosInstance.post(url, data);
+
+      const respo = await axios.post(`${backendUrl}/auth/login`, data);
+
+      console.log(respo);
 
       if (!response || response.status !== 200) {
         const sanitizedResp = DOMPurify.sanitize(
