@@ -69,7 +69,7 @@ app.use((err, req, res, next) => {
 
 const sslOptions = {
   key: fs.readFileSync('server.key'),
-  cert: fs.readFileSync('server.cert')
+  cert: fs.readFileSync('server.crt')
 };
 
 https.createServer(sslOptions, app).listen(port, () => {
