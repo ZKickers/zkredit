@@ -36,13 +36,15 @@ export default function SignupForm({ handleClose }) {
     e.preventDefault();
     if (validData()) {
       try {
-        const recaptchaToken = await onSubmitWithRecaptcha();
+        const signUpToken = await onSubmitWithRecaptcha();
+        const loginToken = await onSubmitWithRecaptcha();
 
         await signupUser({
           email,
           username,
           password,
-          recaptchaToken,
+          signUpToken,
+          loginToken
         });
 
         toast.info("Created an account successfully", {
