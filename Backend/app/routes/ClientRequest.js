@@ -19,7 +19,7 @@ router.post('/issue-transaction', verifyToken, validateIssueTXParams, async (req
 });
 
 router.post('/generate-proof', verifyToken, validateProofParams, verifyRecaptchaToken, async (req, res) => {
-  try {
+  // try {
     const { txId, address, birthdate, ssn } = req.body; 
     const transaction = await Transaction.findById(txId);
     if (!transaction) {
@@ -40,10 +40,10 @@ router.post('/generate-proof', verifyToken, validateProofParams, verifyRecaptcha
     } else {
       res.status(400).json({ message: result.message, details: result.details });
     }
-  } catch (error) {
-    console.error('Error handling client information:', error.message);
-    res.status(500).json({ error: error.message });
-  }
+  // } catch (error) {
+  //   console.error('Error handling client information:', error.message);
+  //   res.status(500).json({ error: error.message });
+  // }
 });
 
 module.exports = router;
