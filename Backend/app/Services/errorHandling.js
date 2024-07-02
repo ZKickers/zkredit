@@ -3,6 +3,7 @@ const ERROR_MSG = {
     txNotFound : 'Transaction not found',
     invalidToken : "Invalid Token",
     noToken : 'Access denied. Token is required.',
+    idInvalid : 'TX ID is not valid',
     signup : {
         param : 'Username, email, and password are required',
         userTaken : 'Username is already taken',
