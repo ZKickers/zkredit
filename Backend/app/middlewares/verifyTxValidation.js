@@ -5,8 +5,6 @@ const validateTransactionUpdate = [
     check('txId')
         .notEmpty().withMessage('Transaction ID is required')
         .custom(value => mongoose.Types.ObjectId.isValid(value)).withMessage('Invalid transaction ID format'),
-    check('accepted')
-        .isBoolean().withMessage('Accepted must be a boolean'),
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
