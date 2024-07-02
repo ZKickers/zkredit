@@ -16,7 +16,10 @@ import { showSnackbar } from "features/snackbar/snackbarSlice";
 const TxCardButton = (props) => {
   const { isClient, state, setTransactionState, color, txId } = props;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3a2698de602a527b63d9a62834725b03e6714b18
   const [proof, setProof] = useState(null);
   const [showProof, setShowProof] = useState(null);
   const [showForm, setShowForm] = useState(false);

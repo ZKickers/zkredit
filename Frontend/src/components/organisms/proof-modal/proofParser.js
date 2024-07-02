@@ -49,7 +49,10 @@ const extractProof = (proof) => {
   const timestamp = concatenateBytesToLong(inputs.slice(3, 11));
   const clientFullName = concatenateBytesToString(inputs.slice(11));
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3a2698de602a527b63d9a62834725b03e6714b18
   return {
     threshold,
     result,

@@ -2,14 +2,16 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const verifyToken = require('../Services/authMiddleware');
+const verifyToken = require("../middlewares/authMiddleware");
+const verifyRecaptchaToken = require('../middlewares/recaptchaMiddleware')
+require('dotenv').config();
 const { ERROR_MSG } = require('../Services/errorHandling');
 const { errlog, reqlog, successLog } = require('../Services/logging');
 
 const router = express.Router();
 
 
-router.post('/signup', async (req, res) => {
+router.post('/signup', verifyRecaptchaToken,  async (req, res) => {
   const action = "signup"
   reqlog(action)
     try {
@@ -70,7 +72,7 @@ router.post('/signup', async (req, res) => {
   });
   
 
-router.post('/login', async (req, res) => {
+router.post('/login', verifyRecaptchaToken,  async (req, res) => {
   const action = 'login'
   reqlog(action)
   try {
@@ -88,10 +90,10 @@ router.post('/login', async (req, res) => {
         return res.status(401).send(errorMsg);
       }
   
-      const token = jwt.sign({ 
+      const token = jwt.sign({
         accountId: user.accountId,
         username: user.username
-       }, 'secret');
+      }, process.env.JWT_SECRET, { expiresIn: '2d' });
   
        successLog(user.username,action)
       res.status(200).json({ token });
@@ -99,12 +101,7 @@ router.post('/login', async (req, res) => {
       errlog(action,error)
       res.status(500).send(ERROR_MSG[action]["unexpected"]);
     }
-  });
-  
-function generateAccountId() {
-  return 'acc_' + Math.random().toString(36).substr(2, 9);
-}
-
+});
 router.get('/', verifyToken, async (req, res) => {
   const action = "fetchUser"
   reqlog(action)
@@ -125,5 +122,8 @@ router.get('/', verifyToken, async (req, res) => {
   }
 });
 
+function generateAccountId() {
+  return 'acc_' + Math.random().toString(36).substr(2, 9);
+}
 
 module.exports = router;

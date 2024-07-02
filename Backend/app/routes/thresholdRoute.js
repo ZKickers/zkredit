@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const verifyToken = require('../Services/authMiddleware');
+const verifyToken = require('../middlewares/authMiddleware');
 const Transaction = require('../models/Transaction');
 const { handleThresholdEvent } = require('../Services/thresholdHandler');
 const { ERROR_MSG } = require('../Services/errorHandling');
@@ -53,6 +53,5 @@ router.post('/trigger-threshold', verifyToken, validateParams, async (req, res) 
         return res.status(403).send(ERROR_MSG[action]["unexpected"]);
     }
 });
-
 
 module.exports = router;

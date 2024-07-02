@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const verifyToken = require('../Services/authMiddleware');
+const verifyToken = require('../middlewares/authMiddleware');
 const { validateTx } = require('../Services/validateTx');
 const Transaction = require('../models/Transaction');
 const { ERROR_MSG } = require('../Services/errorHandling');

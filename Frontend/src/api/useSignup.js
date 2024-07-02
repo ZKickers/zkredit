@@ -1,17 +1,18 @@
 import axiosInstance from "./axios";
 import useLogin from "./useLogin";
-import { showSnackbar } from '../features/snackbar/snackbarSlice';
-import { showSuccessSnackbar } from '../features/snackbar/successSnackbarSlice';
+import { showSnackbar } from "../features/snackbar/snackbarSlice";
+import { showSuccessSnackbar } from "../features/snackbar/successSnackbarSlice";
 import { useDispatch } from "react-redux";
-import DOMPurify from 'dompurify';
-
+import DOMPurify from "dompurify";
 
 const useSignUp = () => {
   const login = useLogin();
   const url = "/auth/signup";
   const dispatch = useDispatch();
   const signup = async (user) => {
-    const response = await axiosInstance.post(url, user).catch((error) => {
+    const { email, username, password, loginToken, signUpToken } = user;
+
+    const response = await axiosInstance.post(url, {email, username, password, recaptchaToken: loginToken}).catch((error) => {
       console.log(error);
       dispatch(showSnackbar(DOMPurify.sanitize(error.response.data)));
     });
@@ -23,8 +24,9 @@ const useSignUp = () => {
     }
 
     login({
-      username: user.username,
-      password: user.password,
+      username,
+      password,
+      recaptchaToken: signUpToken,
     });
   };
 

@@ -1,19 +1,17 @@
 import axiosInstance from "./axios";
 import { useDispatch } from "react-redux";
-import { showSnackbar } from '../features/snackbar/snackbarSlice';
-import { showSuccessSnackbar } from '../features/snackbar/successSnackbarSlice';
+import { showSnackbar } from "../features/snackbar/snackbarSlice";
 import {
   transactionsLoading as creditorTxLoading,
-  transactionsReceived as creditorTxRecieved,
+  transactionsReceived as creditorTxReceived,
   transactionsFailed as creditorTxFailed,
 } from "../redux/creditorTransactionSlice";
 import {
   transactionsLoading as clientTxLoading,
-  transactionsReceived as clientTxRecieved,
+  transactionsReceived as clientTxReceived,
   transactionsFailed as clientTxFailed,
 } from "../redux/clientTransactionSlice";
-import DOMPurify from 'dompurify';
-
+import DOMPurify from "dompurify";
 
 const useFetchTransactions = () => {
   const dispatch = useDispatch();
@@ -26,14 +24,15 @@ const useFetchTransactions = () => {
 
     if (type === "creditor") {
       transactionsLoading = creditorTxLoading;
-      transactionsReceived = creditorTxRecieved;
+      transactionsReceived = creditorTxReceived;
       transactionsFailed = creditorTxFailed;
     } else if (type === "client") {
       transactionsLoading = clientTxLoading;
-      transactionsReceived = clientTxRecieved;
+      transactionsReceived = clientTxReceived;
       transactionsFailed = clientTxFailed;
     } else {
-      dispatch(showSnackbar(DOMPurify.sanitize(error.message)));
+      dispatch(showSnackbar(DOMPurify.sanitize("Invalid transaction type")));
+      return;
     }
 
     dispatch(transactionsLoading());
@@ -43,12 +42,15 @@ const useFetchTransactions = () => {
         params: { clientId: accountId },
       });
 
-      const sanitizedResp = DOMPurify.sanitize(response.data);
-
-      if (response.status !== 200) {
+      if (!response || response.status !== 200) {
+        const sanitizedResp = DOMPurify.sanitize(
+          response?.data || "Unknown error"
+        );
         dispatch(showSnackbar(sanitizedResp));
+        return;
       }
 
+      const sanitizedResp = DOMPurify.sanitize(response.data);
       dispatch(transactionsReceived(response.data));
     } catch (error) {
       if (error.response && error.response.data)

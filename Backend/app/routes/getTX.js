@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Transaction = require("../models/Transaction");
-const verifyToken = require("../Services/authMiddleware");
+const verifyToken = require("../middlewares/authMiddleware");
 const User = require("../models/User");
 const { reqlog, successLog, errlog } = require("../Services/logging");
 const { ERROR_MSG } = require("../Services/errorHandling");

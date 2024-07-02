@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const verifyToken = require('../Services/authMiddleware');
+const verifyToken = require('../middlewares/authMiddleware');
+const verifyRecaptchaToken = require('../middlewares/recaptchaMiddleware')
+const { validateIssueTXParams, validateProofParams } = require('../middlewares/clientReqValidation');
 const sendClientInfo = require('../Services/generateProof');
 const createTransaction = require('../Services/issueTx');
 const Transaction = require('../models/Transaction');
@@ -39,7 +41,7 @@ router.post('/issue-transaction', verifyToken, validateIssueTXParams, async (req
     }
 });
 
-router.post('/generate-proof', verifyToken, validateProofParams, async (req, res) => {
+router.post('/generate-proof', verifyToken, validateProofParams, verifyRecaptchaToken,  async (req, res) => {
     const action = "genProof"
     reqlog(action)
     try {
@@ -75,6 +77,6 @@ router.post('/generate-proof', verifyToken, validateProofParams, async (req, res
         const errorMsg = ERROR_MSG[action]["unexpected"]
         res.status(500).send(errorMsg);
     }
-});
+  });
 
 module.exports = router;

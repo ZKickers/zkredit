@@ -113,17 +113,17 @@ export default function DashboardPageTemplate() {
                 className="d-flex justify-content-between align-items-center w-75 mx-auto"
                 style={{ fontWeight: "bold", color: "black" }}
               >
-                <SendIcon sx={{ fontSize: "56px" }} /> Sent Proofs
+                <SendIcon sx={{ fontSize: "56px" }} /> Sent Transactions
               </h2>
             </Link>
           </div>
           <div className="dashboard-button rcvd-proofs">
             <Link to="/received" className="w-100">
               <h2
-                className="d-flex justify-content-between align-items-center w-75 mx-auto"
-                style={{ fontWeight: "bold", color: "#8b5eff" }}
+                className="d-flex justify-content-between align-items-center mx-auto"
+                style={{ fontWeight: "bold", color: "#8b5eff", width: "85%" }}
               >
-                <CallReceivedIcon sx={{ fontSize: "56px" }} /> <div>Received Proofs</div>
+                <CallReceivedIcon sx={{ fontSize: "56px" }} /> <div>Received Transactions</div>
               </h2>
             </Link>
           </div>

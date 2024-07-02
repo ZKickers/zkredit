@@ -5,18 +5,32 @@ import SubmitButton from "components/atoms/submit-button/SubmitButton";
 import { signinIcon } from "assets";
 import useLogin from "api/useLogin";
 import "react-toastify/dist/ReactToastify.css";
+import { useRecaptcha } from "../../../api/useRecaptcha";
+import { toast } from "react-toastify";
 
 export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
   const loginUser = useLogin();
+
+  const onSubmitWithRecaptcha = useRecaptcha();
 
   const loginHandler = async (e) => {
     e.preventDefault();
     try {
+<<<<<<< HEAD
       await loginUser({ username, password });
+=======
+      const recaptchaToken = await onSubmitWithRecaptcha();
+
+      await loginUser({ username, password, recaptchaToken });
+>>>>>>> 3a2698de602a527b63d9a62834725b03e6714b18
     } catch (error) {
-      console.error(error.message);
+      console.error(error);
+      toast.error("Error while signing in", {
+        autoClose: 5000,
+      });
     }
   };
 
@@ -79,12 +93,10 @@ export default function LoginForm() {
         >
           Forgot Password?
         </button>
-        <div className="mt-1 mb-4" style={{ width: "90%" }}>
-          <SubmitButton>
+          <SubmitButton className="my-4">
             <img src={signinIcon} alt="sign-in-icon" />
             <span>Log In</span>
           </SubmitButton>
-        </div>
       </form>
     </div>
   );

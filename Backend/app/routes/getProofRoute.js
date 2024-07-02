@@ -1,16 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const verifyToken = require('../Services/authMiddleware');
+const verifyToken = require('../middlewares/authMiddleware');
 const Transaction = require('../models/Transaction');
 const getProof = require('../Services/getProof');
 const { ERROR_MSG } = require('../Services/errorHandling');
 const { errlog, successLog, reqlog } = require('../Services/logging');
+const mongoose = require('mongoose');
 
 router.get('/:txId', verifyToken, async (req, res) => {
     const action = "getPRoof"
     reqlog(action)
     try {
         const txId = req.params.txId;
+        if(!mongoose.Types.ObjectId.isValid(txId)){
+            const errorMsg = ERROR_MSG.idInvalid;
+            return res.status(404).send(errorMsg);
+        }
         const existingTransaction = await Transaction.findById(txId);
         if (!existingTransaction) {
             const errorMsg = ERROR_MSG.txNotFound
