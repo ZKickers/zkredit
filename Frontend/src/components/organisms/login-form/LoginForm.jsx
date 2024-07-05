@@ -19,9 +19,13 @@ export default function LoginForm() {
   const loginHandler = async (e) => {
     e.preventDefault();
     try {
+<<<<<<< HEAD
+      await loginUser({ username, password });
+=======
       const recaptchaToken = await onSubmitWithRecaptcha();
 
       await loginUser({ username, password, recaptchaToken });
+>>>>>>> 3a2698de602a527b63d9a62834725b03e6714b18
     } catch (error) {
       console.error(error);
       toast.error("Error while signing in", {

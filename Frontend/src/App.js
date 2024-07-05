@@ -11,7 +11,6 @@ import SuccessSnackbar from "./components/atoms/Snackbar/SuccessSnackbar";
 export default function App() {
   const getUser = useGetUser();
   const user = useSelector((state) => state.user);
-  console.log(user);
   useEffect(() => {
     if (localStorage.getItem("token")) {
       sessionStorage.setItem("token", localStorage.getItem("token"));

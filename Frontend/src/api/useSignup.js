@@ -16,7 +16,6 @@ const useSignUp = () => {
       console.log(error);
       dispatch(showSnackbar(DOMPurify.sanitize(error.response.data)));
     });
-    console.log(response);
 
     if (response.status !== 201) {
       const sanitizedResp = response.data;

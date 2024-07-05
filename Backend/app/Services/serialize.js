@@ -4,8 +4,6 @@ const path = require("path");
 const dataBytes = JSON.parse(process.env.EXPRESS_APP_DATA_BYTES);
 
 function serializeResponse(apiResponse) {
-  console.log("Serializing Response")
-  // Extract relevant fields from the API response
   const { fullname, address, birthdate, ssn, score, timestamp, signature } = apiResponse;
   const response = {
       name: serializePadded(fullname, dataBytes.name),

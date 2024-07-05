@@ -9,6 +9,21 @@ const useLogin = () => {
   const getUser = useGetUser();
   const url = "/auth/login";
   const dispatch = useDispatch();
+<<<<<<< HEAD
+  const login = async (user) => {
+    const response = await axiosInstance.post(
+        url, 
+        user
+      ).catch((error) => {
+        dispatch(showSnackbar(DOMPurify.sanitize(error.response.data)));
+        throw error;
+      });    
+      if (response.status !== 200) {
+        if (response.data)
+          dispatch(showSnackbar(DOMPurify.sanitize(response.data)));
+        else
+          dispatch(showSnackbar("An error occured."));
+=======
 
   const login = async (data) => {
     try {
@@ -20,6 +35,7 @@ const useLogin = () => {
         );
         dispatch(showSnackbar(sanitizedResp));
         return;
+>>>>>>> 3a2698de602a527b63d9a62834725b03e6714b18
       }
       const token = DOMPurify.sanitize(response.data["token"]);
       sessionStorage.setItem("token", token);

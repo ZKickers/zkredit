@@ -35,6 +35,10 @@ export default function ClientRequestForm({ handleClose, txId }) {
   const onSubmitWithRecaptcha = useRecaptcha();
 
   const onRequestSubmit = async (data) => {
+<<<<<<< HEAD
+    const response = await postClientData({ ...data, txId });
+=======
+>>>>>>> 3a2698de602a527b63d9a62834725b03e6714b18
     try {
       const recaptchaToken = await onSubmitWithRecaptcha();
 

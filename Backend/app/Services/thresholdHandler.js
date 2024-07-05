@@ -1,5 +1,6 @@
 const Serial = require('../Services/serialize');
 const Transaction = require('../models/Transaction');
+const { txUpdateLog } = require('./logging');
 
 async function handleThresholdEvent(transaction, threshold)
 {
@@ -10,6 +11,7 @@ async function handleThresholdEvent(transaction, threshold)
               threshold: threshold
             },
             { new: true });
+        txUpdateLog(transaction._id,"Pending_Client_Data","Pending_Threshold")
         return updatedTransaction;
     } catch (error) {
         console.error('Error handling threshold event:', error);

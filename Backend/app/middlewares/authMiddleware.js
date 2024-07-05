@@ -1,19 +1,25 @@
 const jwt = require('jsonwebtoken');
+const { successLog, errlog } = require('./logging');
+const { ERROR_MSG } = require('./errorHandling');
 require('dotenv').config();
 
 function verifyToken(req, res, next) {
+    const action = "verifyToken"
     const token = req.header('Authorization');
     if (!token) {
-        return res.status(401).json({ message: 'Access denied. Token is required.' });
+        const errorMsg = ERROR_MSG.noToken
+        errlog(action,errorMsg)
+        return res.status(401).send();
     }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded;
         next();
+        successLog(req.user.username,action)
     } catch (error) {
-        console.error('Error verifying token:', error);
-        res.status(403).json({ message: 'Invalid token.' });
+        errlog(action,error)
+        res.status(403).send(ERROR_MSG.invalidToken);
     }
 }
 

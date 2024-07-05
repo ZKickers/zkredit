@@ -4,7 +4,6 @@ const { deleteProof } = require('../Services/deleteTx');
 
 async function validateTx(txId, accepted)
 {
-    console.log(accepted);
     try {
         let status;
         if (accepted) {

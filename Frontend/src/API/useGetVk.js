@@ -15,10 +15,11 @@ const useGetVK = () => {
       dispatch(showSnackbar(sanitizedError));
       vkFailed(sanitizedError);
     });
-    const sanitizedResp = DOMPurify.sanitize(response.data);
     if (response.status !== 200) {
-      dispatch(showSnackbar(sanitizedResp));
-      console.error("Error fetching the verification key:", sanitizedResp);
+      if (response.data)
+        dispatch(showSnackbar(DOMPurify.sanitize(response.data)));
+      else
+        dispatch(showSnackbar("An error occured."));
       vkFailed(sanitizedResp);
     }else{
       dispatch(vkReceived(response.data));

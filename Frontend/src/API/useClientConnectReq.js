@@ -3,6 +3,7 @@ import { showSnackbar } from "../features/snackbar/snackbarSlice";
 import { showSuccessSnackbar } from "../features/snackbar/successSnackbarSlice";
 import { addTransaction } from "../redux/clientTransactionSlice";
 import { useDispatch } from "react-redux";
+import DOMPurify from "dompurify";
 
 const useClientConnectReq = () => {
   const url = "/ClientRequest/issue-transaction";
@@ -15,9 +16,10 @@ const useClientConnectReq = () => {
       dispatch(addTransaction(response.data.transaction));
       return response.data;
     } catch (error) {
-      dispatch(
-        showSnackbar(error.response?.data?.error || "An error occurred")
-      );
+      if (error.response && error.response.data)
+        dispatch(showSnackbar(DOMPurify.sanitize(error.response.data)));
+      else
+        dispatch(showSnackbar(DOMPurify.sanitize(error)));
       throw error;
     }
   };
